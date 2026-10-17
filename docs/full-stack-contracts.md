@@ -8,7 +8,7 @@ This guide connects the Laravel/Zolta API and Nuxt/BFF documentation. Use it whe
 
 ```text
 API request/DTO → Application outcome/resource → Laravel JSON envelope
-  → @zoltasoft/api-client → BFF service/mapper → client shared type
+  → @talred/api-client → BFF service/mapper → client shared type
   → state/store/model composable → page/component
 ```
 
@@ -29,6 +29,35 @@ For every cross-stack change, inspect and update the affected points:
 
 A change is incomplete when one representation changes without tracing its consumers.
 
+## Workspace resource contract
+
+Workspaces own typed references to externally managed resources. The current
+resource type is `identity_project`; the Platform API stores only its Identity
+Project id and link provenance. `GET /api/platform/v1/workspaces/{workspaceId}/overview`
+returns `resources.identity_projects` with live, caller-authorized summaries.
+Available projects are listed at
+`GET /api/platform/v1/workspaces/{workspaceId}/resources/identity-projects/available`;
+link and unlink use `POST` and `DELETE` under
+`/workspaces/{workspaceId}/resources/identity-projects`. Workspace owner/admin
+roles control only these Platform links and never add Identity permissions.
+The Identity Console remains responsible for Identity Project configuration
+and lifecycle.
+
+The global Starter Home also reads
+`GET /api/platform/v1/identity-projects`, a read-only directory of Identity
+Project summaries visible to the current user's Identity bearer. It does not
+depend on Workspace links and does not persist a local Identity projection.
+The Home renders this directory independently from the existing membership-
+scoped Workspace list; Identity failures do not suppress Workspace results.
+`/dashboard/workspaces` remains the dedicated Workspace directory and creation
+flow.
+
+The Home application directory reads the Identity-hosted application URLs and
+resolves the Starter's bundled demo destinations consistently with Identity
+Console: Fresh SaaS opens `/saas`, Tasks opens `/projects`, and the Starter app
+opens the site root. The Identity `application_url` remains the base origin;
+these demo route prefixes are presentation destinations, not callback URLs.
+
 ## Contract-testing pattern
 
 Test each seam with fixtures that represent the actual envelope:
@@ -46,6 +75,12 @@ it('maps the API collection into the client shape', async () => {
 Add API feature tests for request/response and authorization, BFF tests for upstream/error/mapping behavior, and client tests for composable state transitions. Use a small shared fixture or generated schema when practical; do not import PHP or server-only types into the browser bundle.
 
 ## Shared security checklist
+
+The Tasks example returns 404 for absent or other-owner projects/tasks, 409
+for reopening a completed task or reusing an owned project key, and 422 for
+invalid business input. Its API transport adapter maps the domain exceptions;
+the Nuxt BFF preserves these statuses instead of turning them into upstream
+gateway errors. Rejected writes must leave persisted state unchanged.
 
 - Credentials and secrets remain server-only; never expose API client secrets or identity credentials in public runtime config.
 - Browser mutations use the authenticated fetch helper and CSRF header.

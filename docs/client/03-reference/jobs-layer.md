@@ -55,7 +55,7 @@ Pages select layout/middleware, create the page model, coordinate route/query sy
 
 The jobs BFF separates each endpoint by HTTP method and resource (`index.get`, `index.post`, `[id].get`, `[id].put`, `[id].delete`, collection/summary routes, and provider-search routes). Routes validate schemas, require a session for protected operations, apply rate limits to expensive public searches, and delegate to feature services.
 
-`job.client.service.ts` calls Laravel through the shared authenticated API client and translates `ZoltaApiError` into stable BFF errors. `job.mapper.ts` converts snake_case/server records into the feature’s client shape. `job.service.ts` owns orchestration: it can enrich a saved record from a cached provider record, filter saved records by external IDs, and coordinate multiple upstream calls. A provider service owns external search and provider-specific caching; it never leaks provider response shapes to the client.
+`job.client.service.ts` calls Laravel through the shared authenticated API client and translates `TalredApiError` into stable BFF errors. `job.mapper.ts` converts snake_case/server records into the feature’s client shape. `job.service.ts` owns orchestration: it can enrich a saved record from a cached provider record, filter saved records by external IDs, and coordinate multiple upstream calls. A provider service owns external search and provider-specific caching; it never leaks provider response shapes to the client.
 
 ### Merge and cache pattern
 

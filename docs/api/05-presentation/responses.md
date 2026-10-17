@@ -170,6 +170,27 @@ The installed Laravel path normalizes the successful result as `ResponsePayload(
 
 `message` is route metadata for a human-readable operation message, not domain state. `success` describes transport outcome. `data` is the resource's public shape. `errors` is reserved for failure responses, and debug information must never be exposed outside the configured development mode.
 
+### Domain failures at the HTTP boundary
+
+Installed behavior verified in `talred/http` v2.1.4: the Laravel attribute
+`RouteInvoker` catches failures before the application's global Laravel
+exception renderer. Its `ExceptionResponseFactory` preserves Symfony HTTP
+exceptions and Zolta renderable exceptions, but treats an ordinary domain
+exception as an unexpected 500. A global `withExceptions()` callback alone
+therefore does not map failures inside these attribute routes.
+
+Keep domain exceptions framework-independent. Where this installed router
+lacks a configurable domain mapper, an API-owned invokable service adapter can
+wrap the application use case and translate known failures into 404 (absent or
+not owned), 409 (state/uniqueness conflict), or 422 (invalid business input).
+Point `#[Service]` at that adapter and keep `#[Request]` and `#[Response]`
+declarative. The adapter returns the same output DTO; it does not orchestrate
+business work or replace the Application service. A single adapter may cover
+a small, explicit set of related DTO/use-case pairs when they share one error
+contract. Unknown failures remain server errors rather than exposing their
+messages. Verify the real route and persisted state in a feature test, then
+verify that the BFF preserves the intended client error.
+
 ### Data-shape rules
 
 - Choose one stable root shape per endpoint: a singular resource (`record`), a collection (`records` plus `meta`), or an explicit acknowledgement.

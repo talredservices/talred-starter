@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred Agile Delivery"
+  short_description: "Coordinate Talred feature delivery"
+  default_prompt: "Use $talred-agile-delivery to plan and deliver a Talred feature iteration."

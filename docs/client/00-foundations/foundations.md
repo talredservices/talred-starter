@@ -59,7 +59,7 @@ A Nuxt starter should provide reusable foundations even when it contains no prod
 - `app/composables/useApiFormValidation.ts` extracts stable API validation errors and converts field messages to Nuxt UI form errors.
 - `app/middleware/` contains only cross-layer navigation/session guards; feature guards remain in their layer.
 - `app/components/` contains shell and reusable primitives such as panels, action dialogs, resource lists, empty states, headers, menus, and settings rows.
-- `server/http/` owns upstream API clients and error translation (`ZoltaApiError` to safe H3 errors).
+- `server/http/` owns upstream API clients and error translation (`TalredApiError` to safe H3 errors).
 - `server/validation/` owns Zod request validation and field-error conversion.
 - `server/authorization/` owns reusable BFF authorization helpers with explicit `all`/`any` permission matching.
 - `server/cache/` exposes a driver boundary (memory for local use, Redis when configured); feature services own keys and invalidation.
@@ -72,7 +72,7 @@ These are starter capabilities, not product features. A new feature should consu
 
 The root `nuxt.config.ts` is the composition point. It extends feature layers and package layers, registers modules, defines public versus private runtime configuration, configures i18n/route rules, and sets compatibility/devtools options. A layer’s `nuxt.config.ts` owns only its aliases and feature-local runtime needs.
 
-A typical baseline includes Nuxt, Vue, TypeScript, `@nuxt/eslint`, Nuxt UI/icon support, VueUse, Zod, Vitest, `@zoltasoft/api-client`, and (when selected) `@zoltasoft/identity-consumer-nuxt`, CSRF/session modules, i18n, image/content, and cache/client utilities. Pin compatible versions and inspect package peer requirements before adding modules.
+A typical baseline includes Nuxt, Vue, TypeScript, `@nuxt/eslint`, Nuxt UI/icon support, VueUse, Zod, Vitest, `@talred/api-client`, and (when selected) `@talred/identity-consumer-nuxt`, CSRF/session modules, i18n, image/content, and cache/client utilities. Pin compatible versions and inspect package peer requirements before adding modules.
 
 Keep secrets in private `runtimeConfig` or environment variables. Only browser-safe values belong under `runtimeConfig.public`. Avoid putting feature-specific modules into the root config until more than one layer needs them.
 

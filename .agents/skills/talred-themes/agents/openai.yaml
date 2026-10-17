@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred Themes"
+  short_description: "Create isolated project themes"
+  default_prompt: "Use $talred-themes to define an isolated project or hosted-auth theme."
