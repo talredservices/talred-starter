@@ -58,11 +58,15 @@ source check, not a guarantee that every possible secret format is detected.
 
 ## Boundaries and remaining publication gates
 
-- These were clean **working-tree candidate snapshots**, not a checkout of an
-  already published beta commit. Existing staged and unstaged work was retained.
-- No commit, push, merge, tag, image publication, or GitHub release was performed.
-  The reviewed `main` commit must still pass provider CI, then be tagged and
-  checked through the public clone/pull paths in [the release checklist](releasing.md).
+- The candidate is now recorded in five grouped local commits through
+  `f5c7454`. The full repository guard passed on that committed tree with Node
+  24 through the shared workspace wrapper. An earlier attempt with Node 25 failed
+  because its `better-sqlite3` native addon was built for another ABI.
+- The branch push did not complete: the workspace has no working GitHub HTTPS
+  credential helper or SSH key. No PR, merge, beta tag, image publication, or
+  GitHub release exists yet. Push from an authenticated Git environment, allow
+  provider CI to pass, then follow the reviewed-`main` release gates in
+  [the release checklist](releasing.md).
 - No production environment was changed. Temporary verification servers and
   containers were stopped; verification database/storage volumes were retained.
 - The local stack logs mail and exposes development invitation/reset tokens;
