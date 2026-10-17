@@ -9,20 +9,11 @@ web() {
   CI=true pnpm install --frozen-lockfile
   pnpm lint
   pnpm test
+  node "$root/scripts/tests/audit-web-dependencies.test.mjs"
   pnpm build
-  pnpm audit --prod
+  pnpm run audit
 }
 
-identity_console() {
-  cd "$root/apps/identity-console"
-  NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-ci-only-session-password-with-at-least-32-characters}" \
-    CI=true pnpm install --frozen-lockfile
-  NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-ci-only-session-password-with-at-least-32-characters}" \
-    pnpm lint
-  NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-ci-only-session-password-with-at-least-32-characters}" \
-    pnpm build
-  pnpm audit --prod
-}
 
 php_app() {
   local app="$1"
@@ -43,10 +34,15 @@ fast() {
   cd "$root"
   git diff --check
   ./scripts/check-tracked-secrets.sh
+  python3 scripts/check-release-tree.py
+  php -l scripts/init-stack.php
+  ./scripts/init-stack --help
+  bash -n scripts/init-stack docker/up.sh docker/down.sh docker/credentials.sh docker/mysql/initialize-databases.sh
+  docker compose --env-file docker/.env.example --env-file runtime/identity/.env.release.example -f docker/compose.yaml config --quiet
   web
-  identity_console
+  python3 "$root/scripts/validate-identity-release.py"
   php_app apps/api
-  php_app apps/identity-server
+  php_app apps/platform-api
 }
 
 case "${1:-pre-push}" in

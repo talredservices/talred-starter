@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "exceptions": [
+    {
+      "ghsa": "GHSA-86w9-cpqp-85rv",
+      "package": "node-forge",
+      "version": "1.4.0",
+      "via": "listhen",
+      "expires": "2026-11-15",
+      "reason": "Development HTTPS certificate generation only; signature verification is not used by Starter. Excluded from the production Rollup graph and traced runtime packages."
+    },
+    {
+      "ghsa": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "version": "3.0.3",
+      "via": "micromatch",
+      "expires": "2026-11-15",
+      "reason": "Build tooling processes repository-controlled glob patterns. Excluded from the production Rollup graph and traced runtime packages."
+    }
+  ]
+}

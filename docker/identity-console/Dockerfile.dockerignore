@@ -1,0 +1,4 @@
+**
+!integrations/
+!integrations/identity-hosted-auth/
+!integrations/identity-hosted-auth/**

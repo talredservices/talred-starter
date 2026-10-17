@@ -21,15 +21,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image: identity-console
-            dockerfile: apps/identity-console/docker/identity-console/Dockerfile
-            context: apps/identity-console
-          - image: identity-server
-            dockerfile: apps/identity-server/docker/identity-server/Dockerfile
-            context: apps/identity-server
-          - image: identity-nginx
-            dockerfile: apps/identity-server/docker/identity-server/nginx.Dockerfile
-            context: apps/identity-server
           - image: zolta-starter-web
             dockerfile: apps/web/docker/nuxt/Dockerfile
             context: apps/web
@@ -39,6 +30,12 @@ jobs:
           - image: zolta-starter-api-nginx
             dockerfile: apps/api/docker/laravel/nginx.Dockerfile
             context: apps/api
+          - image: zolta-starter-platform-api
+            dockerfile: apps/platform-api/docker/laravel/Dockerfile
+            context: apps/platform-api
+          - image: zolta-starter-platform-api-nginx
+            dockerfile: apps/platform-api/docker/laravel/nginx.Dockerfile
+            context: apps/platform-api
     steps:
       - uses: actions/checkout@v7
 

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "repository": "https://github.com/talredservices/identity",
+  "sourceOwner": "identity",
+  "images": {
+    "server": "ghcr.io/talredservices/identity-server",
+    "nginx": "ghcr.io/talredservices/identity-nginx",
+    "console": "ghcr.io/talredservices/identity-console"
+  },
+  "selection": "runtime/identity/.env.release",
+  "localBuilder": "../identity/scripts/build-local-release",
+  "upstreamCI": "https://github.com/talredservices/identity/actions/workflows/ci.yml",
+  "publishedReleaseRequiredForDeployment": true
+}

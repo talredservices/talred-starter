@@ -1,10 +1,9 @@
 Talred Starter
 Copyright 2026 Redouane Taleb
 
-This repository includes the Zolta Identity console and server as the
-`apps/identity-console` and `apps/identity-server` applications. They are
-licensed under Apache License 2.0 and are maintained, tested, and released
-from this repository; there is no Identity Git submodule.
+Talred Identity is maintained and released separately by
+https://github.com/talredservices/identity under Apache License 2.0.
+Starter consumes Identity artifacts selected by identity-release.json.
 
 Third-party dependencies are not relicensed by this repository. Their license
 terms are available in their respective packages and source distributions.

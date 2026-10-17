@@ -1,1 +1,0 @@
-export default defineEventHandler(async event => identityApi(event, `/api/v1/identity/projects/${getRouterParam(event, 'id')}/permissions/${getRouterParam(event, 'permission')}/publish`, { method: 'POST' }))
