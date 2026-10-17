@@ -1,3 +1,3 @@
 export function shouldNoIndexStarterPath(pathname: string) {
-  return pathname.includes('/auth/')
+  return pathname.split('/').some(segment => segment === 'auth' || segment === 'dashboard')
 }

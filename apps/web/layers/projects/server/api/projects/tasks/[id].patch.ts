@@ -1,15 +1,15 @@
-import { readBody } from 'h3'
-import { handleZoltaApiError } from '#server/http'
+import { handleTalredApiError } from '#server/http'
+import { validateBody } from '#server/utils/zod'
 import { projectsService } from '../../../utils/projects.service'
-import { projectIdSchema, updateTaskSchema } from '../../../utils/projects.schema'
+import { parseProjectId, updateTaskSchema } from '../../../utils/projects.schema'
 
 export default defineEventHandler(async (event) => {
   await requireAuthSession(event, 'projects')
-  const taskId = projectIdSchema.parse(getRouterParam(event, 'id'))
-  const body = updateTaskSchema.parse(await readBody(event))
+  const taskId = parseProjectId(getRouterParam(event, 'id'), 'taskId')
+  const body = await validateBody(updateTaskSchema, event)
   try {
     return await (await projectsService(event)).updateTask(taskId, body)
   } catch (error) {
-    return handleZoltaApiError(error)
+    return handleTalredApiError(error)
   }
 })

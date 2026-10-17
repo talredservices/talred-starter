@@ -28,6 +28,7 @@ export type TaskFilters = {
 
 export type ProjectCollection = { projects: Project[] }
 export type ProjectResponse = { project: Project }
+export type DeletedProjectResponse = { deleted: boolean, project_id: string }
 export type ProjectTasksResponse = { project: Project, tasks: ProjectTask[] }
 export type TaskResponse = { task: ProjectTask }
 export type DeletedTaskResponse = { deleted: boolean, task_id: string }

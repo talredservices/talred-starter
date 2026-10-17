@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "feature": "Global dashboard home and workspace directory",
+  "classification": "business",
+  "problem": "The current dashboard route is only a Workspace directory, so it does not provide a global view of the Identity Projects and Workspaces already available to an authenticated account.",
+  "actors": [
+    "Authenticated Platform account",
+    "Identity-authorized user"
+  ],
+  "invariants": [
+    "The global Identity Project directory is a live read and does not persist or mirror Identity records.",
+    "Rendering an Identity Project on Home does not link it to a Workspace or mutate Identity state.",
+    "Workspace visibility remains scoped to direct active Workspace membership.",
+    "The Workspaces navigation item routes to the existing Workspace directory; Home remains the global dashboard route."
+  ],
+  "ownership": {
+    "domain": "talred-starter/apps/platform-api PlatformWorkspace and PlatformOrganization contexts",
+    "identityResources": "talred-identity Identity API",
+    "browserTransport": "talred-starter/apps/web Nuxt BFF",
+    "runtime": "local-dev-ops"
+  },
+  "context": {
+    "boundedContext": "PlatformDashboard",
+    "outcome": "A signed-in account can see its accessible Identity Projects and Workspaces from one global Home, while a dedicated Workspaces page remains the place to browse and open Workspaces.",
+    "actors": ["Authenticated Platform account", "Identity-authorized user"],
+    "scope": "Identity Project summaries are scoped by the current user's Identity authorization. Workspace summaries are scoped by direct active Workspace membership."
+  },
+  "domain": {
+    "useCases": [
+      {
+        "name": "Read the global Home",
+        "kind": "query",
+        "preconditions": ["Caller has an authenticated Platform session", "Identity Project listing uses the current user's Identity bearer"],
+        "result": "Return the caller-authorized Identity Project summaries and accessible Workspace summaries as independent sections, preserving each section's loading, empty, access-needed, or unavailable state."
+      },
+      {
+        "name": "Browse Workspaces",
+        "kind": "query",
+        "preconditions": ["Caller has a trusted authenticated Identity subject"],
+        "result": "List active Workspaces the account can access and allow the caller to open one."
+      }
+    ],
+    "aggregates": [],
+    "entities": [],
+    "valueObjects": [],
+    "policies": [
+      "Identity remains the source of truth for Identity Project data and authorization; only the signed-in user's bearer may be used for the global project directory.",
+      "Workspace visibility remains scoped to direct active Workspace membership; global Home does not widen Workspace access.",
+      "Identity 403 and upstream failure are represented as generic access-needed or unavailable states without credentials or private Identity configuration.",
+      "Identity and Workspace sections fail independently so one upstream outage does not hide successful data from the other section."
+    ],
+    "invariants": [
+      "The global Identity Project directory is a live read and does not persist or mirror Identity records.",
+      "Rendering an Identity Project on Home does not link it to a Workspace or mutate Identity state.",
+      "The Workspaces navigation item routes to the existing Workspace directory; Home remains the global dashboard route."
+    ],
+    "events": [],
+    "readModels": [
+      {
+        "name": "GlobalHome",
+        "purpose": "Render caller-authorized Identity Project summaries and directly accessible Workspaces in separate sections.",
+        "source": "Live Identity API project listing with the caller's bearer plus the existing membership-scoped Platform Workspace directory."
+      },
+      {
+        "name": "WorkspaceDirectory",
+        "purpose": "Browse and open the caller's accessible Workspaces from a dedicated navigation item.",
+        "source": "Existing Platform Workspace list and default-workspace provisioning behavior."
+      }
+    ]
+  },
+  "boundaries": {
+    "domainOwner": "talred-starter/apps/platform-api PlatformWorkspace and PlatformOrganization contexts; read-only project directory composes the existing Identity gateway",
+    "persistence": "No new persistence; Identity Project details remain in talred-identity and Workspace membership remains in Platform API",
+    "api": "Authenticated Platform API exposes a read-only global Identity Project summary endpoint; existing Workspace list contract remains unchanged",
+    "bff": "talred-starter/apps/web server/api/platform forwards the signed-in request to the Platform API without exposing bearer credentials to browser code",
+    "client": "Starter dashboard renders a global Home with Identity Projects and Workspaces sections; /dashboard/workspaces owns the Workspace directory UI",
+    "identity": "talred-identity remains authoritative; the Platform reads project summaries using the current user's authorization and does not infer permissions from Workspace roles",
+    "runtime": "Existing local-dev-ops Platform API, Identity, and Starter web services; no new service, provider, or secret"
+  },
+  "acceptanceCriteria": [
+    "The dashboard Home shows a page title and short description, followed by distinct Identity Projects and Workspaces sections.",
+    "Identity Project summaries on Home come from a live authenticated Platform API read using the current user's bearer and contain no credentials or private configuration.",
+    "An Identity access denial or Identity outage produces a localized section state while the Workspace section can still render, and vice versa.",
+    "The Workspaces sidebar item opens /dashboard/workspaces, which retains the current directory, workspace creation, and workspace selection behavior.",
+    "Workspace cards on Home reuse the same card representation and open the selected Workspace.",
+    "English and French translations cover the Home sections and Identity loading, empty, access-needed, and unavailable states."
+  ],
+  "assumptions": [
+    {
+      "statement": "The Home Identity Projects section lists every project returned to the current user's Identity API project-list permission, including projects that are not linked to a Workspace.",
+      "blocking": false,
+      "owner": "Platform product"
+    },
+    {
+      "statement": "Global Home displays lightweight Identity Project summaries only; detailed Identity configuration remains in Identity Console.",
+      "blocking": false,
+      "owner": "Platform architecture"
+    }
+  ],
+  "decisions": [
+    "Keep Identity Projects and Workspaces as independent Home resource sections; do not imply that a Workspace owns every Identity Project shown globally.",
+    "Use live caller-authorized Identity reads and the existing membership-scoped Workspace API; do not add a local Identity projection or cross-workspace fan-out.",
+    "Keep Workspace directory navigation separate from the global Home while reusing its existing workspace cards and create flow."
+  ]
+}

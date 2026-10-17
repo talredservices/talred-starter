@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.release.example
 
 # JavaScript and Nuxt output
 node_modules/
@@ -17,16 +18,27 @@ playwright-report/
 
 # PHP, Composer, and framework runtime files
 vendor/
-storage/logs/
-storage/framework/
-bootstrap/cache/*.php
+**/storage/logs/*
+!**/storage/logs/.gitignore
+**/storage/framework/**
+!**/storage/framework/**/
+!**/storage/framework/**/.gitignore
+**/bootstrap/cache/*
+!**/bootstrap/cache/.gitignore
 *.sqlite
+audit-report.json
+.phpunit.result.cache
+.phpunit.cache/
 
 # Editor and OS files
 .DS_Store
 .idea/
 .vscode/
 .agents/
+!.agents/
+.agents/*
+!.agents/skills/
+!.agents/skills/**
 .ai/
 .claude/
 .mcp.json

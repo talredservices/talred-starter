@@ -351,6 +351,13 @@ See [vertical slices](../07-cross-cutting/vertical-slices.md), [dependency direc
 - No layer skips over its neighbor to reach a technical detail owned by another layer.
 - Every crossing converts data into the type owned by the receiving layer.
 - The public response shape is decided at the resource boundary, not inside Domain or Application.
+- Known domain failures are translated at the API boundary. With the installed attribute router, use an API-owned service adapter when a plain domain exception would otherwise be rendered as 500; keep HTTP types out of Application and Domain. See [responses](../05-presentation/responses.md#domain-failures-at-the-http-boundary).
+
+## Client navigation concepts
+
+See [client architecture](../../client/02-client/client.md#dashboard-navigation-and-transitions).
+- Nuxt Vue page transitions and browser view transitions are separate route policies; `pageTransition: false` does not disable `viewTransition`.
+- Shared dashboard shells that redirect after mount disable browser view transitions through layout-scoped global middleware to prevent overlapping visual updates from blocking already-rendered data.
 
 ## Architectural quality principles
 

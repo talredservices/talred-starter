@@ -4,7 +4,7 @@
 
 ## Authentication and identity consumer
 
-When the application uses `@zoltasoft/identity-consumer-nuxt`, keep hosted authentication and session handling in the auth layer/root session foundation. BFF routes use the server session helper and forward authenticated requests to upstream APIs. Client code consumes auth state and calls BFF routes; it does not store provider secrets or call the Identity Project directly.
+When the application uses `@talred/identity-consumer-nuxt`, keep hosted authentication and session handling in the auth layer/root session foundation. BFF routes use the server session helper and forward authenticated requests to upstream APIs. Client code consumes auth state and calls BFF routes; it does not store provider secrets or call the Identity Project directly.
 
 For a custom identity provider, preserve the same boundary: a server session/auth helper resolves the principal, BFF routes enforce required permissions, and feature composables receive only the client-safe session state. Session expiry handling and CSRF protection are separate concerns.
 
@@ -26,7 +26,7 @@ For simple CRUD/resource screens, an admin-style `useXxx` composable is acceptab
 
 ## Nuxt ↔ Identity communication flow
 
-When `@zoltasoft/identity-consumer-nuxt` is enabled, communication is server-mediated. The module registers no-store BFF endpoints for each configured application key:
+When `@talred/identity-consumer-nuxt` is enabled, communication is server-mediated. The module registers no-store BFF endpoints for each configured application key:
 
 ```text
 GET  /api/identity/<application>/auth/authorize
@@ -38,18 +38,18 @@ GET  /api/identity/<application>/account/authorize
 
 The login lifecycle is:
 
-1. Browser calls `useZoltaIdentity('<application>').login(returnTo, intent)` or navigates to the authorize endpoint.
+1. Browser calls `useTalredIdentity('<application>').login(returnTo, intent)` or navigates to the authorize endpoint.
 2. Nuxt stores a short-lived state transaction in an encrypted, HTTP-only cookie and redirects to hosted Identity.
 3. Identity authenticates/registers the user and returns a short-lived handoff code plus state to the Nuxt callback.
 4. Nuxt validates state, exchanges the code server-side, and stores the encrypted consumer session; tokens do not enter the browser URL.
-5. `useZoltaIdentitySession().refresh()` calls the session endpoint and exposes only the public user profile to Vue.
+5. `useTalredIdentitySession().refresh()` calls the session endpoint and exposes only the public user profile to Vue.
 6. A BFF route calls `requireIdentityUser(event, '<application>')` or `createIdentityApiClient(event, '<application>', options)` to obtain the current user/token and call the protected API.
 
 ```ts
 // app/composables/useAuthenticationState.ts
 export function useAuthenticationState() {
   const { csrf, headerName } = useCsrf()
-  const identity = useZoltaIdentity('starter', {
+  const identity = useTalredIdentity('starter', {
     defaultRedirect: '/dashboard',
     loginPath: '/auth/login',
     logoutHeaders: () => ({ [headerName]: csrf })
@@ -65,7 +65,7 @@ export function useAuthenticationState() {
 }
 ```
 
-On the server, `createIdentityApiClient` attaches the current access token, refreshes once after an upstream 401, retries once, and clears the consumer session if refresh fails. A browser-side `useZoltaIdentityFetch` can clear the session and begin login on 401; it must not turn 403 domain authorization failures into login redirects.
+On the server, `createIdentityApiClient` attaches the current access token, refreshes once after an upstream 401, retries once, and clears the consumer session if refresh fails. A browser-side `useTalredIdentityFetch` can clear the session and begin login on 401; it must not turn 403 domain authorization failures into login redirects.
 
 Configure a 32+ character session secret, hosted authentication URL, Identity API URL, confidential client credentials, registered callback URL, application key, cookie name, and local logout redirect in private runtime configuration. Use `SameSite=Lax`, `HttpOnly`, and `Secure` in production; reject unsafe external return paths.
 
@@ -89,6 +89,24 @@ Do not use raw `$fetch` for authenticated mutations. Keep repeated transport in 
 ## Resources, mapping, and data shape
 
 BFF resources/mappers define client-facing types: singular resource, collection, pagination, empty state, acknowledgement, and error shapes. Normalize upstream data once in the BFF. The client should not know whether a field came from Laravel, an external provider, or a merged response. Use feature-shared types when both server and client need the same shape.
+
+## Dashboard navigation and transitions
+
+Nuxt 4.5.2 controls Vue page transitions (`pageTransition`) and browser view
+transitions (`viewTransition`) independently. Disabling the former does not
+disable the latter. The installed view-transition plugin starts a browser
+transition in `router.beforeResolve` and completes its DOM update on
+`page:finish`; its finish handler also clears shared transition state.
+
+A directory that redirects after mount can start another transition before
+the first finishes. In the verified local Chrome flow, that overlap cleared
+the second transition's completion callback, leaving Chrome's visual update
+blocked until its four-second timeout despite completed requests and rendering.
+Use route metadata to opt shared dashboard shells out of browser transitions.
+The global `transitions.global.ts` middleware centralizes this policy for the
+`dashboard` layout; loading skeletons and authentication continue normally.
+Use browser request and page-lifecycle timings to distinguish this visual
+delay from network latency.
 
 ## Caching
 

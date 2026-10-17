@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "feature": "Create the first Tasks project from the empty task view",
+  "classification": "business",
+  "problem": "Authenticated users with no owned projects cannot reach task creation because the empty Tasks view has no project-creation control, even though the existing API and client create flow support it.",
+  "actors": ["Authenticated Tasks user"],
+  "invariants": [
+    "Only the project owner can list or manage the project's tasks.",
+    "A project key is unique within one owner's projects."
+  ],
+  "ownership": {
+    "domain": "Laravel TaskManagerService",
+    "browserTransport": "Starter Projects Nuxt BFF",
+    "client": "Starter Projects Nuxt layer",
+    "runtime": "local-dev-ops"
+  },
+  "context": {
+    "boundedContext": "Task Management",
+    "outcome": "An authenticated user with no projects can create an owned project and continue directly to add its first task.",
+    "actors": ["authenticated Tasks user"],
+    "scope": "The project and its tasks are scoped to the authenticated owner."
+  },
+  "domain": {
+    "useCases": [
+      {
+        "name": "Create project",
+        "kind": "command",
+        "preconditions": ["The request is authenticated and authorized for account.update.", "Name and key are valid; key is unique for this owner."],
+        "result": "A persisted project owned by the authenticated user."
+      },
+      {
+        "name": "Create first task",
+        "kind": "command",
+        "preconditions": ["The project belongs to the authenticated owner.", "Task title and priority are valid."],
+        "result": "A task persisted within the selected project and owner scope."
+      }
+    ],
+    "aggregates": [
+      { "name": "Project", "responsibility": "Own project identity, owner, name, key, description, and task association.", "consistencyBoundary": "Project owner and project key uniqueness are enforced at project persistence; task creation validates project ownership." }
+    ],
+    "entities": [
+      { "name": "ProjectTask", "identity": "UUID", "responsibility": "Represent a task belonging to an owned project." }
+    ],
+    "valueObjects": [],
+    "policies": ["The authenticated Identity principal supplies owner identity; client input cannot choose or override it."],
+    "invariants": ["Only the project owner can list or manage the project's tasks.", "A project key is unique within one owner's projects."],
+    "events": [],
+    "readModels": [
+      { "name": "Owned project collection", "purpose": "Show projects available to the authenticated owner and support empty-state rendering.", "source": "Task Management API GET /api/projects." }
+    ]
+  },
+  "boundaries": {
+    "domainOwner": "Laravel TaskManagerService owns Project and ProjectTask rules.",
+    "persistence": "TaskManagerService repositories persist projects and tasks, scoped by authenticated owner.",
+    "api": "Existing Laravel POST /api/projects and POST /api/projects/{projectId}/tasks contracts.",
+    "bff": "Existing Nuxt Projects BFF and authenticated identity fetch preserve session, authorization, and CSRF handling.",
+    "client": "apps/web/layers/projects owns the empty-state project form and navigation into the selected project's task form.",
+    "identity": "Identity authenticates the user and issues the account.update authorization context; TaskManagerService enforces owner scope.",
+    "runtime": "Existing local Talred Starter stack; no runtime or secret changes are in scope."
+  },
+  "acceptanceCriteria": [
+    "With zero owned projects, the Tasks empty state exposes a validated create-project form.",
+    "Successful creation routes to the new project's task view with the task form available.",
+    "Project create failures remain visible and do not navigate to a nonexistent project.",
+    "Existing project selection and task creation behavior remain unchanged.",
+    "Unauthenticated requests continue through the existing Identity login flow; owner identity remains server-derived."
+  ],
+  "assumptions": [
+    { "statement": "Project keys are entered by the user and follow the existing alpha_dash, 32-character, owner-unique API rule.", "blocking": false, "owner": "Tasks client" }
+  ],
+  "decisions": [
+    "Reuse the existing useProjectsOverview create command and useProjectsClient transport; do not introduce a new API contract or persistence behavior.",
+    "Keep the create form inline in the no-project empty state, then route directly to that project's task form."
+  ]
+}

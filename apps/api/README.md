@@ -1,6 +1,6 @@
-# Zoltasoft Starter API
+# Talred Starter API
 
-`apps/api` is a product-neutral Laravel host for building independently deployable services with Zolta HTTP, CQRS, and Forge. No business bounded context, endpoint, fixture, or product data is enabled by default.
+`apps/api` is the Laravel API for the Talred Tasks example. It owns the authenticated Projects and Tasks bounded context and demonstrates independently deployable services built with Talred HTTP, CQRS, Forge, and Clean Architecture.
 
 ## Local development
 
@@ -12,7 +12,7 @@ php artisan migrate
 php artisan serve
 ```
 
-Add each bounded context under `app/Services/<BoundedContext>` with `API`, `Application`, `Domain`, and `Infrastructure` layers. Zolta discovers attribute-owned routes and CQRS messages from the configured roots in `config/zolta.php`.
+Add each bounded context under `app/Services/<BoundedContext>` with `API`, `Application`, `Domain`, and `Infrastructure` layers. Talred PHP discovers attribute-owned routes and CQRS messages from the configured roots in `config/zolta.php`.
 
 When using the separately deployed Identity Project, configure the API client credentials in environment variables; keep them server-side. See the [Identity Project integration guide](../../docs/api/07-cross-cutting/identity-project-integration.md).
 
@@ -30,8 +30,8 @@ php artisan test
 Build API images from `apps/api` as the Docker build context:
 
 ```bash
-docker build -f docker/laravel/Dockerfile -t zoltasoft-starter-api .
-docker build -f docker/laravel/nginx.Dockerfile -t zoltasoft-starter-api-nginx .
+docker build -f docker/laravel/Dockerfile -t talred-starter-api .
+docker build -f docker/laravel/nginx.Dockerfile -t talred-starter-api-nginx .
 ```
 
 The PHP-FPM image owns Laravel runtime state; the Nginx image serves the public document root and forwards PHP requests to `PHP_FPM_UPSTREAM`. The Nuxt image is independent and is built from `apps/web` with `docker/nuxt/Dockerfile`.
@@ -49,3 +49,5 @@ The Starter API includes a small authenticated Projects/Tasks bounded context. I
     php artisan route:list --path=api
 
 The Nuxt client must consume this API through its BFF; browser code must not call the Laravel service directly.
+
+Projects can be permanently deleted with `DELETE /api/projects/{projectId}` by their authenticated owner. The existing foreign-key cascade removes the project's task records with it.

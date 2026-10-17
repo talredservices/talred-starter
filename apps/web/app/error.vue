@@ -21,7 +21,7 @@ useHead({
 })
 
 useSeoMeta({
-  title: () => `${title.value} · Zoltasoft Starter`,
+  title: () => `${title.value} · Talred Starter`,
   description
 })
 </script>

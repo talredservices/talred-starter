@@ -1,127 +1,85 @@
-title: Transformez un travail dispersé en <span class="text-primary">un système clair</span>
-description: Zoltasoft Starter réunit projets, validations, automatisations et connaissances dans un espace calme où chacun sait ce qui avance et ce qui demande son attention.
+title: Bâtissez votre prochain service sur une <span class="text-primary">base claire</span>
+description: Talred Services.com Starter réunit Nuxt, une API Laravel guidée par le domaine, Identity et les outils de développement local dans une base pratique.
 seo:
-  title: Zoltasoft Starter — Le système d’exploitation des équipes concentrées
-  description: Organisez les processus, automatisez le travail répétitif et comprenez la progression dans un espace flexible.
+  title: Talred Services.com Starter — Une base pour votre prochain service
+  description: Découvrez les fondations Nuxt, Laravel, Identity et développement local incluses dans Talred Services.com Starter.
 navigation: false
 
 hero:
   links:
-    - label: Commencer gratuitement
-      icon: i-lucide-arrow-right
+    - label: Gérer les projets dans Identity
       trailing: true
-      to: /saas/auth/signup
+      to: /identity
       size: xl
-    - label: Voir les tarifs
-      icon: i-lucide-wallet-cards
+    - label: Explorer l’architecture
+      icon: i-lucide-list-checks
       size: xl
       color: neutral
       variant: subtle
-      to: /saas/pricing
+      to: /about
 
-sections:
-  - title: Un espace qui s’adapte à votre équipe
-    description: Remplacez les réunions de statut et les feuilles éparpillées par une vue partagée des priorités, responsables, échéances et décisions.
-    id: features
-    orientation: horizontal
-    features:
-      - name: Espaces flexibles
-        description: Modélisez projets, demandes, campagnes ou opérations sans imposer le même processus à chaque équipe.
-        icon: i-lucide-panels-top-left
-      - name: Responsabilités claires
-        description: Associez chaque prochaine étape à une personne, une échéance et un statut visible.
-        icon: i-lucide-user-round-check
-      - name: Contexte partagé
-        description: Conservez notes, fichiers, décisions et activité auprès du travail qu’ils expliquent.
-        icon: i-lucide-messages-square
-
-  - title: Automatisez la routine. Gardez le contrôle des décisions.
-    description: Créez des règles lisibles qui orientent les demandes, préviennent les bonnes personnes et mettent les données à jour avec un historique complet.
-    orientation: horizontal
-    reverse: true
-    features:
-      - name: Constructeur visuel
-        description: Reliez déclencheurs, conditions et actions dans un parcours compréhensible par toute l’équipe.
-        icon: i-lucide-workflow
-      - name: Outils connectés
-        description: Intégrez les signaux de l’email, Slack, GitHub et des services déjà présents dans votre travail.
-        icon: i-lucide-plug-zap
-      - name: Historique inspectable
-        description: Comprenez ce qui a été exécuté, pourquoi une décision a été prise et où intervenir.
-        icon: i-lucide-history
+sections: []
 
 features:
-  title: L’essentiel d’un produit SaaS moderne
-  description: Des capacités ciblées pour collaborer, automatiser, comprendre l’activité et gérer les comptes de façon responsable.
+  title: Une base fonctionnelle pour les services full-stack
+  description: Commencez avec des frontières claires et des intégrations utiles, puis façonnez le domaine et les processus de votre produit.
   items:
-    - title: Collaboration en temps réel
-      description: Mises à jour, commentaires et mentions alignent l’équipe sans doublons ni actualisations constantes.
-      icon: i-lucide-users-round
-    - title: Intégrations utiles
-      description: Connectez les outils existants et synchronisez la source de vérité de votre équipe.
-      icon: i-lucide-blocks
-    - title: Analyses exploitables
-      description: Comprenez la charge, les cycles et les résultats grâce à des rapports orientés décision.
-      icon: i-lucide-chart-no-axes-combined
-    - title: Rôles et permissions
-      description: Définissez qui peut consulter, modifier, valider ou administrer chaque espace et processus.
-      icon: i-lucide-key-round
-    - title: Notifications ciblées
-      description: Transmettez les événements importants par email ou dans l’application sans créer de bruit.
-      icon: i-lucide-bell-ring
-    - title: Historique complet
-      description: Conservez une chronologie lisible des changements, commentaires, automatisations et actions sensibles.
-      icon: i-lucide-scroll-text
+    - title: Application Nuxt et BFF
+      description: Créez des interfaces localisées et gardez les opérations serveur du navigateur ainsi que les identifiants privés derrière le serveur Nuxt.
+      icon: i-lucide-layout-dashboard
+    - title: API Laravel organisée en couches
+      description: Gardez les règles métier dans le domaine, coordonnez les cas d’usage dans la couche application et exposez des contrats API explicites.
+      icon: i-lucide-folder-kanban
+    - title: Intégration à Identity
+      description: Reliez la connexion et les comptes à des clients d’application, tout en isolant les données d’identité de chaque démonstration.
+      icon: i-lucide-shield-check
+    - title: Stack de développement local
+      description: Lancez l’application web, les API et les services associés avec la configuration Compose documentée de l’espace de travail.
+      icon: i-simple-icons-docker
 
 trust:
-  headline: Le contrôle dès la conception
-  title: Pour les équipes qui prennent leurs données au sérieux
-  description: La sécurité et la gestion du compte appartiennent aux fondations du produit, pas à une option réservée aux grandes entreprises.
+  headline: À explorer
+  title: Partez des exemples, puis adaptez-les
+  description: Les exemples Talred Identity, Talred Tasks et Fresh SaaS montrent comment les composants du starter s’intègrent. Ce sont des références à explorer, pas un produit commercial terminé.
   items:
-    - title: Accès au moindre privilège
-      description: Les rôles et permissions explicites réservent les opérations sensibles aux bonnes personnes.
-      icon: i-lucide-shield-check
-    - title: Changements traçables
-      description: Un historique conserve les événements importants du produit et du compte pour faciliter le contrôle.
-      icon: i-lucide-file-clock
-    - title: Données portables
-      description: Exportez les données de l’espace ou supprimez définitivement un compte grâce à des contrôles explicites.
-      icon: i-lucide-database-backup
+    - title: Architecture inspectable
+      description: Suivez le code de l’interface et du BFF jusqu’aux contrats API et au comportement du domaine.
+      icon: i-lucide-file-text
+    - title: Démonstrations distinctes
+      description: Découvrez Identity, Tasks et Fresh SaaS comme des exemples ciblés aux objectifs et aux clients d’application distincts.
+      icon: i-lucide-check-circle-2
+    - title: Décisions propres au produit
+      description: Ajoutez vos règles métier, intégrations, choix de déploiement et politiques produit à cette base.
+      icon: i-lucide-orbit
 
 faq:
-  headline: Questions fréquentes
-  title: Tout ce qu’il faut pour évaluer Zoltasoft Starter
-  description: Des réponses claires sur le produit fictif et sur le modèle réutilisable présenté ici.
+  headline: À propos du Starter
+  title: Qu’est-ce qui est inclus et que reste-t-il à définir ?
+  description: Quelques repères sur la base et ses démonstrations.
   items:
-    - title: Zoltasoft Starter est-il un vrai produit commercial ?
-      description: Zoltasoft Starter est un produit fictif créé pour démontrer une expérience SaaS pensée pour la production. Le marketing, l’authentification, la traduction, le tableau de bord et les parcours de compte forment une base fonctionnelle.
-    - title: Puis-je explorer l’espace authentifié ?
-      description: Oui. Générez un compte temporaire depuis la connexion. Ses données privées sont automatiquement programmées pour suppression lorsque la session de démonstration expire.
-    - title: Le modèle prend-il en charge les thèmes clair et sombre ?
-      description: Oui. Tous les écrans publics et authentifiés partagent les mêmes jetons de design et respectent la préférence d’apparence.
-    - title: L’expérience est-elle disponible en anglais ?
-      description: Oui. La navigation, le contenu marketing, l’authentification, le tableau de bord et les paramètres sont disponibles en français et en anglais.
-    - title: Cette base peut-elle devenir un produit autonome ?
-      description: Oui. Les routes, composants, contenus et éléments de présentation propres au SaaS vivent dans une couche Nuxt indépendante, conçue pour être extraite et adaptée.
+    - title: Talred Services.com Starter est-il une application terminée ?
+      description: Non. C’est une base de développement accompagnée d’exemples fonctionnels. Vous définissez le domaine métier, les fonctions visibles et l’offre commerciale de votre application.
+    - title: Que puis-je explorer ici ?
+      description: Talred Identity illustre l’authentification et les accès partagés. Talred Tasks suit un BFF Nuxt jusqu’à une API Laravel organisée selon le DDD et l’architecture propre. Fresh SaaS montre comment associer des pages produit publiques à un tableau de bord protégé.
+    - title: Cette base publie-t-elle une grille tarifaire ?
+      description: Aucun tarif commercial n’est publié pour cette base. La page des tarifs précise ce que cette démonstration propose ou non.
+    - title: Quelles technologies sont utilisées ?
+      description: La stack actuelle comprend Nuxt, TypeScript, PHP, Laravel, Talred Identity, MySQL et Docker Compose.
 
 testimonials:
-  headline: Intention du modèle
-  title: Une histoire produit crédible, sans faux témoignages
-  description: Zoltasoft Starter démontre les sections et parcours d’un SaaS complet tout en indiquant clairement que le produit est fictif.
+  headline: Une base, pas des promesses produit
+  title: Des exemples que vous pouvez examiner
+  description: Ce site présente le starter et ses démonstrations, sans inventer de témoignages clients.
   items: []
 
 cta:
-  title: Explorez tout le parcours produit
-  description: Découvrez le produit public, créez un compte temporaire et poursuivez dans la zone authentifiée réutilisable.
+  title: Ouvrez le plan de contrôle Identity
+  description: Gérez les projets et leurs applications hébergées dans Talred Identity, ou examinez l’architecture avant d’adapter cette base.
   links:
-    - label: Ouvrir l’espace de démonstration
-      to: /saas/auth/login
+    - label: Gérer les projets dans Identity
+      to: /identity
       trailingIcon: i-lucide-arrow-right
-    - label: Comparer les offres
-      to: /saas/pricing
+    - label: Voir les démonstrations
+      to: /#demos
       variant: subtle
-      icon: i-lucide-wallet-cards
-    - label: Lire les nouveautés
-      to: /saas/changelog
-      variant: ghost
-      icon: i-lucide-history
+      icon: i-lucide-layout-dashboard

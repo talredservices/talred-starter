@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Zoltasoft Starter API'),
+    'name' => env('APP_NAME', 'Talred Starter API'),
 
     /*
     |--------------------------------------------------------------------------

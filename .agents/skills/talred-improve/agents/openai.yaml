@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred Improvement"
+  short_description: "Improve recurring delivery workflows"
+  default_prompt: "Use $talred-improve to turn verified friction into a reusable improvement."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred Feature DDD"
+  short_description: "Shape business feature contracts"
+  default_prompt: "Use $talred-feature-ddd to turn this request into a reviewable domain contract."

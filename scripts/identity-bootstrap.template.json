@@ -2,11 +2,73 @@
   "version": 2,
   "projects": {
     "starter": {
-      "name": "Zoltasoft Starter",
+      "name": "Talred Starter",
       "slug": "zoltasoft-starter",
       "description": "Local Zoltasoft Starter development project",
       "clients": {
+        "api": "Talred Services Platform API",
         "bff": "Zoltasoft Starter Nuxt BFF"
+      },
+      "registration": {
+        "mode": "invite_only",
+        "defaultRole": "member",
+        "emailVerificationRequired": false
+      },
+      "permissions": [
+        {
+          "key": "account.read",
+          "name": "Read account",
+          "description": "Read the signed-in member's account."
+        },
+        {
+          "key": "account.update",
+          "name": "Update account",
+          "description": "Update the signed-in member's account."
+        },
+        {
+          "key": "workspace.read",
+          "name": "Read workspaces",
+          "description": "Read workspaces accessible to the signed-in member."
+        },
+        {
+          "key": "workspace.write",
+          "name": "Manage workspaces",
+          "description": "Create and manage workspaces for the signed-in member."
+        }
+      ],
+      "roles": [
+        {
+          "name": "Member",
+          "slug": "member",
+          "description": "Default role for Zoltasoft Starter project members.",
+          "permissions": [
+            "account.read",
+            "account.update",
+            "workspace.read",
+            "workspace.write"
+          ]
+        }
+      ],
+      "hostedApplication": {
+        "name": "Talred Starter",
+        "key": "zoltasoft-starter",
+        "primaryClient": "bff",
+        "callbackPath": "/api/identity/starter/auth/callback",
+        "authentication": {
+          "google_enabled": false,
+          "terms_required": false,
+          "terms_url": null,
+          "privacy_url": null
+        },
+        "policyRevision": null
+      }
+    },
+    "saas": {
+      "name": "Fresh SaaS",
+      "slug": "fresh-saas",
+      "description": "Local Fresh SaaS public site and authenticated dashboard demo",
+      "clients": {
+        "bff": "Fresh SaaS Nuxt BFF"
       },
       "registration": {
         "mode": "public",
@@ -14,27 +76,46 @@
         "emailVerificationRequired": false
       },
       "permissions": [
-        { "key": "account.read", "name": "Read account", "description": "Read the signed-in member's account." },
-        { "key": "account.update", "name": "Update account", "description": "Update the signed-in member's account." }
+        {
+          "key": "account.read",
+          "name": "Read account",
+          "description": "Read the signed-in member's account."
+        },
+        {
+          "key": "account.update",
+          "name": "Update account",
+          "description": "Update the signed-in member's account."
+        }
       ],
       "roles": [
-        { "name": "Member", "slug": "member", "description": "Default role for Zoltasoft Starter project members.", "permissions": ["account.read", "account.update"] }
+        {
+          "name": "Member",
+          "slug": "member",
+          "description": "Default role for Fresh SaaS project members.",
+          "permissions": [
+            "account.read",
+            "account.update"
+          ]
+        }
       ],
       "hostedApplication": {
-        "name": "Zoltasoft Starter",
-        "key": "zoltasoft-starter",
+        "name": "Fresh SaaS",
+        "key": "zoltasoft-saas",
         "primaryClient": "bff",
-        "callbackPath": "/api/identity/starter/auth/callback",
-        "authPageSet": "starter",
-        "logo": "zoltasoft-starter.png",
-        "appearance": { "background_preset": "identity", "accent_color": "#0b7867", "welcome_text": "A neutral foundation for your applications." },
-        "authentication": { "google_enabled": false, "terms_required": false, "terms_url": null, "privacy_url": null }
+        "callbackPath": "/api/identity/saas/auth/callback",
+        "authentication": {
+          "google_enabled": false,
+          "terms_required": false,
+          "terms_url": null,
+          "privacy_url": null
+        },
+        "policyRevision": null
       }
     },
     "tasks": {
-      "name": "Zoltasoft Tasks",
+      "name": "Talred Tasks",
       "slug": "zoltasoft-tasks",
-      "description": "Local Zoltasoft Tasks task-management demo project",
+      "description": "Local Talred Tasks task-management demo project",
       "clients": {
         "api": "Zoltasoft Tasks Laravel API",
         "bff": "Zoltasoft Tasks Nuxt BFF"
@@ -45,21 +126,40 @@
         "emailVerificationRequired": false
       },
       "permissions": [
-        { "key": "account.read", "name": "Read account", "description": "Read the signed-in member's account." },
-        { "key": "account.update", "name": "Update account", "description": "Update the signed-in member's account." }
+        {
+          "key": "account.read",
+          "name": "Read account",
+          "description": "Read the signed-in member's account."
+        },
+        {
+          "key": "account.update",
+          "name": "Update account",
+          "description": "Update the signed-in member's account."
+        }
       ],
       "roles": [
-        { "name": "Member", "slug": "member", "description": "Default role for Zoltasoft Tasks project members.", "permissions": ["account.read", "account.update"] }
+        {
+          "name": "Member",
+          "slug": "member",
+          "description": "Default role for Talred Tasks project members.",
+          "permissions": [
+            "account.read",
+            "account.update"
+          ]
+        }
       ],
       "hostedApplication": {
-        "name": "Zoltasoft Tasks",
+        "name": "Talred Tasks",
         "key": "tasks-demo",
         "primaryClient": "bff",
         "callbackPath": "/api/identity/projects/auth/callback",
-        "authPageSet": "projects",
-        "logo": "zoltasoft-tasks.png",
-        "appearance": { "background_preset": "identity", "accent_color": "#4f46e5", "welcome_text": "Manage every task with clarity from one focused workspace." },
-        "authentication": { "google_enabled": false, "terms_required": false, "terms_url": null, "privacy_url": null }
+        "authentication": {
+          "google_enabled": false,
+          "terms_required": false,
+          "terms_url": null,
+          "privacy_url": null
+        },
+        "policyRevision": null
       }
     }
   }

@@ -1,8 +1,18 @@
-# Zoltasoft Starter Web
+# Talred Starter Web
 
-`apps/web` is a product-neutral Nuxt 4 foundation for applications that use Zoltasoft Identity and a Nuxt BFF. It contains shared UI/i18n packages, authentication/session plumbing, validation, error handling, caching, and the Identity consumer integration. No product pages, feature layers, demo data, or business API client are enabled by default.
+`apps/web` is the Nuxt 4 client and BFF for Talred Starter. It includes a Starter workspace app and two runnable reference experiences: Talred Tasks and Fresh SaaS. The app keeps browser-facing API calls on same-origin Nuxt routes and keeps Identity client credentials on the server.
+
+## Included experiences
+
+- **Starter workspace** (`/` and `/dashboard`): create and manage workspaces, invite members, and link Identity projects. The `/identity` action opens the configured Talred Identity control plane.
+- **Talred Tasks** (`/projects`): a task-management example with a Nuxt client/BFF, its own Identity application, and a Laravel API. Use it to trace a browser interaction through the API and domain layers.
+- **Fresh SaaS** (`/saas`): a public-site and protected-dashboard example with its own Identity project and client. Its pricing page is structural sample content; no commercial plans or prices are configured.
+
+The projects and SaaS examples have separate Identity sessions and data. The shared Identity source belongs to the canonical `identity` project; this app consumes it through the configured Identity integration.
 
 ## Setup
+
+Run these commands from `apps/web`:
 
 ```bash
 cp .env.example .env
@@ -10,19 +20,21 @@ pnpm install
 pnpm dev
 ```
 
-Configure an Identity Project confidential client in `.env` when authenticated development is needed. The client secret remains server-side; browser code talks to Nuxt `/api` BFF routes.
+Configure the Identity application clients and API endpoints in `.env` when authenticated development is needed. Client secrets remain server-side; browser code talks to the Nuxt BFF. For the full local stack, follow the repository's developer setup and initialization documentation.
 
-## Adding features
+The included legal pages are review drafts. Before deploying a derived application, replace them with accurate publisher, contact, data-use, retention, and jurisdiction-specific information. This build uses first-party authentication cookies and browser-stored display preferences; it does not configure advertising or analytics trackers.
 
-Create an independent layer under `layers/<feature>` with `app`, `server`, and (when shared) `shared` directories. Keep cross-layer foundations in the root `app`, `server`, or `shared` directories. See the [client architecture docs](../../docs/client/index.md) and [Identity Project integration](../../docs/api/07-cross-cutting/identity-project-integration.md).
+## Architecture
+
+Shared UI, localization, and Nuxt Content packages live under `packages/`. The included experiences are organized as layers under `layers/`, with client presentation, BFF routes, and shared contracts kept at their appropriate boundaries. Read the [client architecture docs](../../docs/client/index.md), [full-stack contracts](../../docs/full-stack-contracts.md), and [Identity Project integration](../../docs/api/07-cross-cutting/identity-project-integration.md) before extending those boundaries.
 
 ## Commands
 
 ```bash
 pnpm dev
 pnpm lint
-pnpm build
 pnpm test
+pnpm build
 ```
 
 ## Container
@@ -30,16 +42,11 @@ pnpm test
 Build the Nuxt runtime from `apps/web`:
 
 ```bash
-  docker build -f docker/nuxt/Dockerfile -t zoltasoft-starter-web .
+docker build -f docker/nuxt/Dockerfile -t talred-starter-web .
 ```
 
-The web image contains only the Nuxt server output. Laravel/API containers are defined and built from `apps/api`.
+The web image contains the Nuxt server output. Laravel/API containers are defined and built from `apps/api` and `apps/platform-api`; browser requests reach them through same-origin BFF routes.
 
 ## License
 
 Apache-2.0. The complete license is at the repository root.
-
-
-## Tasks product example
-
-The `layers/projects` layer is a separate task-management demo demonstrating a hosted Identity application, Nuxt BFF routes, and a Laravel API for task workspaces. Open `/projects` from the Starter root page. Initialize its local Identity client and hosted application with the repository-level `./scripts/init-stack` command before signing in.

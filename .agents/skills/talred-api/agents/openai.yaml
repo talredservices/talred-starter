@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred API"
+  short_description: "Build APIs in the Talred Starter architecture"
+  default_prompt: "Use $talred-api to extend or review a Laravel API slice in the Talred Starter architecture."

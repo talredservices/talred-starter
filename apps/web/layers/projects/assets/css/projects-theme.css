@@ -16,6 +16,7 @@
 	--ui-color-primary-900: #312e81;
 	--ui-color-primary-950: #1e1b4b;
 	--ui-primary: var(--ui-color-primary-600);
+	--ui-text-muted: #475569;
 }
 
 .dark .projects-theme {
@@ -24,4 +25,27 @@
 	--ui-bg-elevated: var(--ui-color-neutral-900);
 	--ui-bg-accented: var(--ui-color-neutral-800);
 	--ui-primary: var(--ui-color-primary-400);
+	--ui-text-muted: var(--color-gray-300);
+}
+
+.projects-theme .projects-home-features {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+	.projects-theme .projects-home-features {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.projects-theme .projects-home-features > :last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+		justify-self: center;
+		width: min(100%, calc((100% - 2rem) / 2));
+	}
+}
+
+@media (max-width: 639px) {
+	.projects-theme .projects-home-features {
+		grid-template-columns: 1fr;
+	}
 }

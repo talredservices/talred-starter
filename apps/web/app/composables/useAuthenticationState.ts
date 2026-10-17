@@ -7,10 +7,10 @@ export function useAuthenticationState() {
     }
   }
 
-  const login = async (redirect?: string | string[] | null) => {
+  const login = async (redirect?: string | string[] | null, intent: 'login' | 'register' = 'login') => {
     const destination = resolveIdentityRedirect(redirect, localePath('/dashboard'))
     await navigateTo({
-      path: localePath('/auth/login'),
+      path: localePath(intent === 'register' ? '/auth/signup' : '/auth/login'),
       query: { redirect: destination }
     })
   }

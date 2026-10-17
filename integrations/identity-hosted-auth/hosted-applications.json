@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "applications": {
+    "zoltasoft-starter": {
+      "page_set": "starter",
+      "appearance": {
+        "welcome_text": null,
+        "accent_color": "#16937d",
+        "background_preset": "emerald",
+        "design_tokens": {
+          "font_family": "Public Sans",
+          "light_background": "#f7f8f6",
+          "light_background_muted": "#eef3ef",
+          "light_card": "#ffffff",
+          "light_text": "#172033",
+          "light_muted": "#59657b",
+          "light_border": "#dce7e2",
+          "light_input_border": "#b9d4cb",
+          "light_status": "#e6f5f0",
+          "dark_background": "#020617",
+          "dark_background_muted": "#0f172a",
+          "dark_card": "#0f172a",
+          "dark_text": "#f8fafc",
+          "dark_muted": "#94a3b8",
+          "dark_border": "#1e293b",
+          "dark_input_border": "#334155",
+          "dark_status": "#1e293b",
+          "primary_50": "#effcf8",
+          "primary_100": "#d8f7ed",
+          "primary_200": "#b2eddb",
+          "primary_300": "#7dd9bd",
+          "primary_400": "#42b99d",
+          "primary_500": "#16937d",
+          "primary_600": "#0b7867",
+          "primary_700": "#096052",
+          "primary_800": "#0b4c42",
+          "primary_900": "#0b4038",
+          "primary_950": "#052a25"
+        }
+      }
+    },
+    "zoltasoft-saas": {
+      "page_set": "saas",
+      "appearance": {
+        "welcome_text": null,
+        "accent_color": "#8b5cf6",
+        "background_preset": "identity",
+        "design_tokens": {
+          "font_family": "Inter",
+          "light_background": "#faf9ff",
+          "light_background_muted": "#f3efff",
+          "light_card": "#ffffff",
+          "light_text": "#20133a",
+          "light_muted": "#6b5a86",
+          "light_border": "#e4dcf5",
+          "light_input_border": "#cfc1ea",
+          "light_status": "#f5f0ff",
+          "dark_background": "#020617",
+          "dark_background_muted": "#17102b",
+          "dark_card": "#100b1f",
+          "dark_text": "#f8fafc",
+          "dark_muted": "#94a3b8",
+          "dark_border": "#1e293b",
+          "dark_input_border": "#334155",
+          "dark_status": "#17102b",
+          "primary_50": "#f5f3ff",
+          "primary_100": "#ede9fe",
+          "primary_200": "#ddd6fe",
+          "primary_300": "#c4b5fd",
+          "primary_400": "#a78bfa",
+          "primary_500": "#8b5cf6",
+          "primary_600": "#7c3aed",
+          "primary_700": "#6d28d9",
+          "primary_800": "#5b21b6",
+          "primary_900": "#4c1d95",
+          "primary_950": "#2e1065"
+        }
+      }
+    },
+    "tasks-demo": {
+      "page_set": "projects",
+      "appearance": {
+        "welcome_text": null,
+        "accent_color": "#6366f1",
+        "background_preset": "slate",
+        "design_tokens": {
+          "font_family": "Inter",
+          "light_background": "#f7f8f6",
+          "light_background_muted": "#eef3ef",
+          "light_card": "#ffffff",
+          "light_text": "#0f172a",
+          "light_muted": "#64748b",
+          "light_border": "#e2e8f0",
+          "light_input_border": "#cbd5e1",
+          "light_status": "#eef2ff",
+          "dark_background": "#020617",
+          "dark_background_muted": "#0f172a",
+          "dark_card": "#0f172a",
+          "dark_text": "#f8fafc",
+          "dark_muted": "#94a3b8",
+          "dark_border": "#1e293b",
+          "dark_input_border": "#334155",
+          "dark_status": "#0f172a",
+          "primary_50": "#eef2ff",
+          "primary_100": "#e0e7ff",
+          "primary_200": "#c7d2fe",
+          "primary_300": "#a5b4fc",
+          "primary_400": "#818cf8",
+          "primary_500": "#6366f1",
+          "primary_600": "#4f46e5",
+          "primary_700": "#4338ca",
+          "primary_800": "#3730a3",
+          "primary_900": "#312e81",
+          "primary_950": "#1e1b4b"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Talred Client"
+  short_description: "Build Talred Nuxt clients and BFFs"
+  default_prompt: "Use $talred-client to extend a Nuxt feature layer or BFF in the Talred Starter architecture."

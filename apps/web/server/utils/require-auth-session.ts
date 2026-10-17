@@ -1,5 +1,5 @@
 import { createError, type H3Event } from 'h3'
-import { logoutIdentityApplication, requireIdentityUser } from '@zoltasoft/identity-consumer-nuxt/runtime'
+import { logoutIdentityApplication, requireIdentityUser } from '@talred/identity-consumer-nuxt/runtime'
 import type { IdentityAuthenticatedUser } from '~~/shared/types/identity-authenticated-user'
 import { isIdentitySessionExpired } from '~~/shared/utils/identity-session'
 

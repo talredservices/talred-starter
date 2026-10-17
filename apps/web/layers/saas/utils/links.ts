@@ -31,11 +31,6 @@ export function useNavLinks() {
       label: t('saas.nav.blog'),
       icon: 'i-lucide-pencil',
       to: localePath('/blog')
-    },
-    {
-      label: t('saas.nav.changelog'),
-      icon: 'i-lucide-history',
-      to: localePath('/changelog')
     }
   ]
 }
