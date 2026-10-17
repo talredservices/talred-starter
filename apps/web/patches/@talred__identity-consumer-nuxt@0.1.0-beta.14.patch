@@ -1,0 +1,83 @@
+--- a/dist/runtime/server/identity.mjs
++++ b/dist/runtime/server/identity.mjs
+@@ -5,6 +5,7 @@
+
+ const sessionMaxAge = 60 * 60 * 24 * 7;
+ const stateTtlMilliseconds = 10 * 60 * 1e3;
++const inFlightRefreshes = new Map();
+ function configurationKey(name) {
+   return name.replace(/-([a-z0-9])/gi, (_, character) => character.toUpperCase());
+ }
+@@ -15,11 +16,11 @@
+ function failConfiguration(name, reason) {
+   throw createError({ statusCode: 503, statusMessage: `Identity application [${name}] is not configured: ${reason}.` });
+ }
+-function validUrl(value, name, production) {
++function validUrl(value, name, production, privateHttpHosts = []) {
+   try {
+     const url = new URL(value);
+     if (!["http:", "https:"].includes(url.protocol)) failConfiguration(name, "URL must use HTTP or HTTPS");
+-    if (production && url.protocol !== "https:" && !["localhost", "127.0.0.1", "::1"].includes(url.hostname)) {
++    if (production && url.protocol !== "https:" && !["localhost", "127.0.0.1", "::1"].includes(url.hostname) && !privateHttpHosts.includes(url.hostname)) {
+       failConfiguration(name, "non-local URLs must use HTTPS in production");
+     }
+     return url.toString().replace(/\/$/, "");
+@@ -34,6 +35,7 @@
+   return value;
+ }
+ function identityApplication(event, name) {
++  const privateHttpHosts = String(process.env.NUXT_ZOLTA_IDENTITY_PRIVATE_HTTP_HOSTS ?? "").split(",").map((host) => host.trim().toLowerCase()).filter(Boolean);
+   const runtime = useRuntimeConfig(event).zoltaIdentity ?? {};
+   const applications = runtime.applications ?? {};
+   const application = applications[name] ?? applications[configurationKey(name)];
+@@ -43,14 +45,14 @@
+   if (missing.length > 0) failConfiguration(name, `missing ${missing.join(", ")}`);
+   if (String(runtime.sessionSecret ?? "").length < 32) failConfiguration(name, "zoltaIdentity.sessionSecret must be at least 32 characters");
+   const production = process.env.NODE_ENV === "production";
+-  const callbackUrl = validUrl(String(application.callbackUrl), name, production);
++  const callbackUrl = validUrl(String(application.callbackUrl), name, production, privateHttpHosts);
+   const demoAccount = application.features?.demoAccount === true;
+   if (demoAccount && !application.sandboxApplication) {
+     failConfiguration(name, "sandboxApplication is required when the demo account feature is enabled");
+   }
+   return {
+-    identityApiUrl: validUrl(String(application.identityApiUrl), name, production),
+-    hostedAuthUrl: validUrl(String(application.hostedAuthUrl), name, production),
++    identityApiUrl: validUrl(String(application.identityApiUrl), name, production, privateHttpHosts),
++    hostedAuthUrl: validUrl(String(application.hostedAuthUrl), name, production, privateHttpHosts),
+     clientId: String(application.clientId),
+     clientSecret: String(application.clientSecret),
+     hostedApplication: String(application.hostedApplication),
+@@ -235,13 +237,25 @@
+     throw createError({ statusCode: 401, statusMessage: "An Identity session is required." });
+   }
+   const client = tokenApplication(event, application, secure.connection ?? "primary");
+-  const response = await $fetch("/api/v1/identity/auth/refresh", {
+-    baseURL: client.identityApiUrl,
+-    method: "POST",
+-    body: { client_id: client.clientId, client_secret: client.clientSecret, refresh_token: secure.refreshToken }
+-  });
+-  await storeLogin(event, name, application, response.data, secure.connection ?? "primary");
+-  return response.data.access_token;
++  const refreshKey = `${name}:${secure.refreshToken}`;
++  let refreshPromise = inFlightRefreshes.get(refreshKey);
++  if (!refreshPromise) {
++    refreshPromise = $fetch("/api/v1/identity/auth/refresh", {
++      baseURL: client.identityApiUrl,
++      method: "POST",
++      body: { client_id: client.clientId, client_secret: client.clientSecret, refresh_token: secure.refreshToken }
++    }).then(response => response.data);
++    inFlightRefreshes.set(refreshKey, refreshPromise);
++  }
++  try {
++    const response = await refreshPromise;
++    await storeLogin(event, name, application, response, secure.connection ?? "primary");
++    return response.access_token;
++  } finally {
++    if (inFlightRefreshes.get(refreshKey) === refreshPromise) {
++      inFlightRefreshes.delete(refreshKey);
++    }
++  }
+ }
+ async function identityBrowserSession(event, name) {
+   const application = identityApplication(event, name);

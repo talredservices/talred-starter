@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { en, fr } from '@nuxt/ui/locale'
+
 const colorMode = useColorMode()
 const { locale } = useI18n()
+const uiLocale = computed(() => locale.value === 'fr' ? fr : en)
 const color = computed(() => colorMode.value === 'dark' ? '#171717' : '#ffffff')
-const title = 'Talred Starter'
-const description = 'A product-neutral Nuxt foundation for the Talred ecosystem.'
+const title = 'Talred Services.com Starter'
+const description = 'Talred PHP foundations for clean architecture, integrated with Laravel APIs, Nuxt applications, and the Talred Identity platform.'
 
 useHead({
   meta: [
@@ -28,7 +31,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp :locale="uiLocale">
     <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />

@@ -1,0 +1,25 @@
+--- a/dist/runtime/components/NuxtPicture.vue
++++ b/dist/runtime/components/NuxtPicture.vue
+@@ -24,7 +24,7 @@
+ </template>
+
+ <script setup lang="ts">
+-import type { Head } from '@unhead/vue'
++import type { Link } from '@unhead/vue'
+
+ import { computed, onMounted, ref, useAttrs } from 'vue'
+
+@@ -98,11 +98,11 @@
+ if (import.meta.server && props.preload) {
+   useHead({ link: () => {
+     const firstSource = sources.value[0]
+-    if (!firstSource) {
++    if (!firstSource || !firstSource.srcset) {
+       return []
+     }
+
+-    const link: NonNullable<Head['link']>[number] = {
++    const link: Link = {
+       rel: 'preload',
+       as: 'image',
+       imagesrcset: firstSource.srcset,

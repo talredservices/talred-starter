@@ -1,59 +1,53 @@
 <script setup lang="ts">
+import { useStarterEcosystemUrl } from '~/composables/useStarterEcosystemUrl'
+import { STARTER_REPOSITORY_URL } from '~/utils/starter-links'
+
 const copy = useSaasTemplatePresentation()
 const localePath = useLocalePath()
+const runtimeConfig = useRuntimeConfig()
+const ecosystemUrl = useStarterEcosystemUrl()
 
-const columns = computed(() => [
+const columns = computed<Array<{ label: string, children: Array<{ label: string, to: string, target?: string, rel?: string }> }>>(() => [
   {
     label: copy.value.footer.product,
     children: [
-      { label: copy.value.footer.features, to: `${localePath('/saas')}#features` },
-      { label: copy.value.navigation.pricing, to: localePath('/saas/pricing') }
+      { label: copy.value.footer.overview, to: localePath('/') },
+      { label: copy.value.footer.about, to: localePath('/about') }
     ]
   },
   {
     label: copy.value.footer.resources,
     children: [
-      { label: copy.value.navigation.changelog, to: localePath('/saas/changelog') },
-      { label: copy.value.footer.support, to: `${localePath('/saas')}#faq` }
+      { label: copy.value.footer.support, to: runtimeConfig.public.docsUrl },
+      { label: 'Talred', to: ecosystemUrl.value },
+      { label: copy.value.footer.sourceCode, to: STARTER_REPOSITORY_URL, target: '_blank', rel: 'noopener noreferrer' }
     ]
   },
   {
     label: copy.value.footer.legal,
     children: [
-      { label: copy.value.footer.terms, to: localePath('/saas/terms') },
-      { label: copy.value.footer.privacy, to: localePath('/saas/privacy') }
+      { label: copy.value.footer.terms, to: localePath('/terms') },
+      { label: copy.value.footer.privacy, to: localePath('/privacy') }
     ]
   }
 ])
 </script>
 
 <template>
-  <UFooter :ui="{ top: 'border-b border-default' }">
-    <template #top>
-      <UContainer class="max-w-7xl">
-        <UFooterColumns :columns="columns">
-          <template #right>
-            <div class="max-w-sm">
-              <SaasBrand />
-              <p class="mt-4 text-sm leading-6 text-muted">
-                {{ copy.footer.description }}
-              </p>
-            </div>
-          </template>
-        </UFooterColumns>
-      </UContainer>
+  <StarterPublicFooter
+    :columns="columns"
+    :description="copy.footer.description"
+    :maintainer="copy.footer.maintainer"
+  >
+    <template #brand>
+      <StarterBrand />
     </template>
-    <template #left>
-      <p class="text-sm text-muted">
-        Talred SaaS &copy; {{ new Date().getFullYear() }}
-      </p>
-    </template>
-    <template #right>
+    <template #actions>
       <LanguageSwitcher />
       <UColorModeButton
         color="neutral"
         variant="ghost"
       />
     </template>
-  </UFooter>
+  </StarterPublicFooter>
 </template>

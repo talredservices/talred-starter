@@ -1,127 +1,85 @@
-title: Turn scattered work into <span class="text-primary">one clear system</span>
-description: Talred services bring projects, approvals, automations, and team knowledge into one calm workspace—so everyone knows what is moving and what needs attention.
+title: Build your next service on a <span class="text-primary">clean foundation</span>
+description: Talred Services.com Starter brings together Nuxt, a domain-driven Laravel API, Identity, and local development tooling in one practical starting point.
 seo:
-  title: Talred Starter — The operating system for focused teams
-  description: Organize team workflows, automate routine work, and understand progress in one flexible workspace.
+  title: Talred Services.com Starter — A foundation for your next service
+  description: Explore the Nuxt, Laravel, Identity, and local development foundations included in Talred Services.com Starter.
 navigation: false
 
 hero:
   links:
-    - label: Start free
-      icon: i-lucide-arrow-right
+    - label: Manage projects in Identity
       trailing: true
-      to: /saas/auth/signup
+      to: /identity
       size: xl
-    - label: See pricing
-      icon: i-lucide-wallet-cards
+    - label: Explore the architecture
+      icon: i-lucide-list-checks
       size: xl
       color: neutral
       variant: subtle
-      to: /saas/pricing
+      to: /about
 
-sections:
-  - title: One workspace, shaped around your team
-    description: Replace status meetings and scattered spreadsheets with a shared view of priorities, owners, due dates, and the conversations behind every decision.
-    id: features
-    orientation: horizontal
-    features:
-      - name: Flexible workspaces
-        description: Model projects, requests, campaigns, or operations without forcing every team into the same process.
-        icon: i-lucide-panels-top-left
-      - name: Clear ownership
-        description: Give every next step an owner, deadline, and visible status so work never disappears between tools.
-        icon: i-lucide-user-round-check
-      - name: Shared context
-        description: Keep notes, files, decisions, and activity beside the work they explain.
-        icon: i-lucide-messages-square
-
-  - title: Automate the routine. Keep control of the decisions.
-    description: Build readable rules that route requests, notify the right people, and update records while preserving a complete history of every run.
-    orientation: horizontal
-    reverse: true
-    features:
-      - name: Visual automation builder
-        description: Connect triggers, conditions, and actions in a flow your whole team can understand.
-        icon: i-lucide-workflow
-      - name: Connected tools
-        description: Bring signals from email, Slack, GitHub, and the services already in your workflow.
-        icon: i-lucide-plug-zap
-      - name: Inspectable history
-        description: See what ran, why a decision was made, and where a process needs attention.
-        icon: i-lucide-history
+sections: []
 
 features:
-  title: The essentials of a modern SaaS product
-  description: A focused set of capabilities for collaboration, automation, visibility, and responsible account management.
+  title: A working foundation for full-stack services
+  description: Start with clear boundaries and useful integrations, then shape the domain and workflows your product needs.
   items:
-    - title: Real-time collaboration
-      description: Updates, comments, and mentions keep teams aligned without constant refreshes or duplicate work.
-      icon: i-lucide-users-round
-    - title: Useful integrations
-      description: Connect the tools your team already uses and keep the source of truth synchronized.
-      icon: i-lucide-blocks
-    - title: Actionable insights
-      description: Understand workload, cycle time, and completion trends with reports designed for decisions.
-      icon: i-lucide-chart-no-axes-combined
-    - title: Roles and permissions
-      description: Decide who can view, change, approve, or administer each workspace and workflow.
-      icon: i-lucide-key-round
-    - title: Focused notifications
-      description: Route important updates by email or in-app without turning every event into an interruption.
-      icon: i-lucide-bell-ring
-    - title: Complete activity history
-      description: Preserve a readable timeline of changes, comments, automations, and access-sensitive actions.
-      icon: i-lucide-scroll-text
+    - title: Nuxt application and BFF
+      description: Build localized interfaces and keep browser-facing server operations and private credentials behind the Nuxt server boundary.
+      icon: i-lucide-layout-dashboard
+    - title: Laravel API with clear layers
+      description: Keep business rules in the domain, coordinate use cases in the application layer, and expose explicit API contracts.
+      icon: i-lucide-folder-kanban
+    - title: Shared Identity integration
+      description: Connect sign-in and account flows through application clients while keeping each demo's identity data isolated.
+      icon: i-lucide-shield-check
+    - title: Local development stack
+      description: Run the web app, APIs, and supporting services through the workspace's documented Compose setup.
+      icon: i-simple-icons-docker
 
 trust:
-  headline: Control by design
-  title: Built for teams that take their data seriously
-  description: Security and account controls belong in the product foundation, not in an enterprise-only afterthought.
+  headline: Made to be explored
+  title: Start with examples, then make them yours
+  description: The included Talred Identity, Talred Tasks, and Fresh SaaS examples show how the starter pieces fit together. They are reference implementations for exploration, not a finished commercial product.
   items:
-    - title: Least-privilege access
-      description: Workspace roles and explicit permissions keep sensitive operations available only to the right people.
-      icon: i-lucide-shield-check
-    - title: Traceable changes
-      description: An activity history records meaningful product and account events for review and accountability.
-      icon: i-lucide-file-clock
-    - title: Portable account data
-      description: Export workspace data or permanently delete an account through clear self-service controls.
-      icon: i-lucide-database-backup
+    - title: Inspectable architecture
+      description: Follow the code from browser-facing UI and BFF routes through API contracts and domain behavior.
+      icon: i-lucide-file-text
+    - title: Separate demonstrations
+      description: Explore Identity, Tasks, and Fresh SaaS as focused examples with distinct purposes and application clients.
+      icon: i-lucide-check-circle-2
+    - title: Product-owned decisions
+      description: Add your business rules, integrations, deployment choices, and product policies to the foundation.
+      icon: i-lucide-orbit
 
 faq:
-  headline: Frequently asked questions
-  title: Everything you need to evaluate Talred Starter
-  description: Clear answers about the fictional product and the reusable template demonstrated here.
+  headline: About the Starter
+  title: What is included and what is yours to define?
+  description: A quick orientation to the foundation and its demonstrations.
   items:
-    - title: Is Talred Starter a real commercial product?
-      description: Talred Starter is a fictional product created to demonstrate a production-minded SaaS experience. The marketing, authentication, localization, dashboard shell, and account flows are functional template foundations.
-    - title: Can I explore the authenticated experience?
-      description: Yes. Generate a temporary demo account on the login page. Its private data is automatically scheduled for deletion when the demo session expires.
-    - title: Does the template support light and dark themes?
-      description: Yes. Every public and authenticated screen uses the same design tokens and supports light and dark appearance preferences.
-    - title: Is the experience available in French?
-      description: Yes. Navigation, marketing content, authentication, dashboard, and settings are available in English and French.
-    - title: Can this become a standalone product?
-      description: Yes. The SaaS-specific routes, components, content, and presentation logic live in an independent Nuxt layer designed to be extracted and adapted.
+    - title: Is Talred Services.com Starter a finished application?
+      description: No. It is a development foundation with working examples. You define the product domain, user-facing features, and commercial offer for your application.
+    - title: What can I explore here?
+      description: Talred Identity demonstrates shared authentication and access. Talred Tasks follows a Nuxt BFF through to a Laravel API organized with domain-driven design and clean architecture. Fresh SaaS shows how public product pages and a protected dashboard can fit together.
+    - title: Does the starter include a public price list?
+      description: No commercial pricing is published for this foundation. The pricing page explains what is and is not offered by this demo.
+    - title: Which technologies are used?
+      description: The current stack includes Nuxt, TypeScript, PHP, Laravel, Talred Identity, MySQL, and Docker Compose.
 
 testimonials:
-  headline: Template intent
-  title: A credible product story without invented social proof
-  description: Talred Starter demonstrates the sections and flows a complete SaaS needs while remaining transparent that the product is fictional.
+  headline: Foundation, not product claims
+  title: Examples you can inspect
+  description: This site describes the starter and its included demonstrations rather than presenting invented customer stories.
   items: []
 
 cta:
-  title: Explore the complete product journey
-  description: Start with the public product story, create a temporary account, and continue into the reusable authenticated shell.
+  title: Open the Identity control plane
+  description: Manage projects and their hosted applications in Talred Identity, or review the architecture before adapting the foundation to your service.
   links:
-    - label: Open the demo workspace
-      to: /saas/auth/login
+    - label: Manage projects in Identity
+      to: /identity
       trailingIcon: i-lucide-arrow-right
-    - label: Compare plans
-      to: /saas/pricing
+    - label: Browse the demos
+      to: /#demos
       variant: subtle
-      icon: i-lucide-wallet-cards
-    - label: Read the changelog
-      to: /saas/changelog
-      variant: ghost
-      icon: i-lucide-history
+      icon: i-lucide-panels-top-left

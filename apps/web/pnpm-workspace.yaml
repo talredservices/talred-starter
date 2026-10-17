@@ -11,12 +11,27 @@ allowBuilds:
   unrs-resolver: true
   vue-demi: true
 
-patchedDependencies:
-  '@zoltasoft/identity-consumer-nuxt@0.1.0-beta.13': patches/@zoltasoft__identity-consumer-nuxt@0.1.0-beta.13.patch
-
 overrides:
+  '@simple-git/argv-parser@<2.0.1': ^2.0.1
   '@tiptap/core@>=3.7.0 <3.30.5': ^3.30.5
+  '@vue/server-renderer@<3.5.42': ^3.5.42
+  brace-expansion@>=2.0.0 <2.1.7: ^2.1.7
   js-yaml@>=4.0.0 <4.3.2: ^4.3.2
+  prosemirror-view@<1.42.3: ^1.42.3
   sharp@<0.35.4: ^0.35.4
+  simple-git@<4.0.1: ^4.0.1
   svgo@>=4.0.0 <4.1.0: ^4.1.0
-  undici@<6.28.0: ^6.28.0
+  undici@<6.28.1: ^6.28.1
+
+minimumReleaseAgeExclude:
+  - '@talred/api-client@0.1.0-beta.3'
+  - '@talred/identity-consumer-nuxt@0.1.0-beta.15'
+  - '@simple-git/argv-parser@2.0.1'
+  - simple-git@4.0.1
+  - brace-expansion@2.1.7
+  - '@vue/server-renderer@3.5.42'
+  - prosemirror-view@1.42.3
+  - undici@6.28.1
+
+patchedDependencies:
+  '@nuxt/image@1.11.0': patches/nuxt-image-unhead-link.patch

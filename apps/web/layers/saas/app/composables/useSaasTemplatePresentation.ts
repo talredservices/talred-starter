@@ -1,236 +1,148 @@
 const english = {
-  brand: 'Talred SaaS',
+  brand: 'Talred Services.com Starter',
   navigation: {
-    product: 'Product',
-    pricing: 'Pricing',
-    changelog: 'Changelog',
+    home: 'Home',
+    about: 'About',
     login: 'Log in',
-    start: 'Start free',
+    github: 'GitHub',
+    start: 'Create a demo account',
     dashboard: 'Dashboard'
   },
   footer: {
-    description: 'A fictional SaaS product demonstrating a complete, reusable marketing, authentication, and dashboard foundation.',
-    product: 'Product',
+    description: 'Talred PHP foundations for clean architecture, integrated with Laravel APIs, Nuxt applications, and Talred Identity.',
+    maintainer: 'Independent full-stack developer · Talred Services maintainer',
+    product: 'Starter',
     resources: 'Resources',
     legal: 'Legal',
-    features: 'Features',
-    support: 'Support',
+    overview: 'Home',
+    about: 'About the Starter',
+    support: 'Documentation',
+    sourceCode: 'Source code',
     terms: 'Terms',
     privacy: 'Privacy'
   },
-  pricing: {
-    eyebrow: 'Simple pricing',
-    title: 'Start small. Scale when the work does.',
-    description: 'Every plan includes the complete Talred SaaS workflow. Upgrade when your team needs more automation, history, and governance.',
-    monthly: 'Monthly',
-    yearly: 'Yearly',
-    yearlySaving: 'Save 20%',
-    free: 'Free',
-    currency: '$',
-    perMonth: '/ month',
-    billedYearly: 'billed yearly',
-    action: 'Start free',
-    popular: 'Most popular',
-    plans: [
-      {
-        name: 'Starter',
-        description: 'For individuals organizing their first repeatable workflows.',
-        monthly: 0,
-        yearly: 0,
-        features: ['One workspace', 'Three active workflows', 'Core integrations', 'Seven-day activity history']
-      },
-      {
-        name: 'Growth',
-        description: 'For teams coordinating work across tools and responsibilities.',
-        monthly: 24,
-        yearly: 19,
-        popular: true,
-        features: ['Unlimited workflows', 'Automation builder', 'Team roles and permissions', 'One-year activity history', 'Priority support']
-      },
-      {
-        name: 'Scale',
-        description: 'For organizations that need control, visibility, and support.',
-        monthly: 79,
-        yearly: 63,
-        features: ['Everything in Growth', 'SAML single sign-on', 'Audit exports', 'Advanced governance', 'Dedicated onboarding']
-      }
+  about: {
+    eyebrow: 'About the Starter',
+    title: 'A foundation for services with clear boundaries',
+    description: 'Talred Services.com Starter brings together a Nuxt client and BFF, Laravel API patterns, Identity integration, and a shared local development stack.',
+    architectureTitle: 'Keep responsibilities in the right place',
+    architectureDescription: 'The starter demonstrates how presentation, transport, use cases, domain rules, persistence, and shared identity fit together.',
+    items: [
+      { title: 'Nuxt client and BFF', description: 'Build the interface and browser-facing server operations while keeping private credentials on the server.', icon: 'i-lucide-layout-dashboard' },
+      { title: 'Laravel API', description: 'Organize domain rules, application use cases, API contracts, and infrastructure adapters in explicit layers.', icon: 'i-lucide-folder-kanban' },
+      { title: 'Talred Identity', description: 'Use the shared Identity platform for authentication, accounts, membership, and access policy.', icon: 'i-lucide-shield-check' },
+      { title: 'Local development', description: 'Run the documented application and supporting services from the shared Compose workspace.', icon: 'i-simple-icons-docker' }
     ],
+    examplesTitle: 'Included examples',
+    examplesDescription: 'Identity demonstrates shared authentication. Tasks follows a domain-driven Laravel API through a Nuxt BFF, while SaaS shows public product pages and a protected dashboard.'
+  },
+  pricing: {
+    eyebrow: 'Pricing',
+    title: 'No commercial pricing is published for this foundation',
+    description: 'Talred Services.com Starter is a development foundation and set of examples. This site does not offer paid plans, hosting, or support packages.',
+    notice: 'Commercial plans have not been defined for this Starter demo. Any future hosting or support offer will need its own published scope and pricing.',
+    foundationHeading: 'Explore the foundation',
+    foundationDescription: 'Review the documentation and included demos to understand what is in the workspace before choosing how to adapt and deploy it.',
+    features: ['Nuxt application and BFF examples', 'Laravel API architecture patterns', 'Talred Identity integration', 'SaaS public pages and dashboard example', 'Local development stack'],
+    action: 'Read the documentation',
     faqTitle: 'Pricing questions',
     faq: [
-      { label: 'Can I try paid features first?', content: 'Yes. Growth starts with a 14-day trial and does not require a credit card.' },
-      { label: 'Can I change plans later?', content: 'Upgrade, downgrade, or cancel from billing settings. Changes are prorated automatically.' },
-      { label: 'What happens when the trial ends?', content: 'Your workspace returns to Starter. Your data remains available and you can upgrade at any time.' },
-      { label: 'Do you offer annual billing?', content: 'Yes. Annual billing reduces the effective monthly price by twenty percent.' }
+      { label: 'Can I buy a plan here?', content: 'No. This Starter site is an exploration of a development foundation and does not currently sell a subscription.' },
+      { label: 'Does this page include hosting or support?', content: 'No hosting or support service is offered here. Deployment and support choices belong to the application owner.' }
     ]
   },
   legal: {
-    termsTitle: 'Terms of service',
-    privacyTitle: 'Privacy policy',
-    updated: 'Template copy · July 2026',
-    notice: 'Talred SaaS is a fictional product demonstration. Replace this template copy with legal text reviewed for your company, product, and jurisdiction before launching a real service.',
+    termsTitle: 'Terms of use',
+    privacyTitle: 'Privacy information',
+    updated: 'Draft for review',
+    notice: 'This page is draft information for the Talred Services.com Starter demonstration, not a final legal policy. Confirm actual data handling, retention, contact details, and applicable terms before publishing a production service.',
     terms: [
-      { title: 'Using the service', body: 'You are responsible for the activity in your workspace and for using the service lawfully. Access may be limited when required to protect the service, other users, or the public.' },
-      { title: 'Accounts and content', body: 'You keep ownership of content you submit. You grant the service only the permissions needed to store, process, and present that content as part of the requested features.' },
-      { title: 'Demo accounts', body: 'Temporary demo accounts exist for product evaluation. They expire automatically and their associated data is scheduled for deletion, so they must not contain important or sensitive information.' },
-      { title: 'Changes and availability', body: 'Features may evolve, pause, or be removed. A production service should publish material changes and define service commitments in its commercial agreement.' }
+      { title: 'Purpose of this site', body: 'This site presents a software product demonstration and related functionality. It is provided to help visitors evaluate the experience and understand how the demonstration operates.' },
+      { title: 'Demo accounts and content', body: 'Use demonstration accounts only for evaluation. Do not submit confidential, sensitive, or business-critical information to a demo environment.' },
+      { title: 'Availability and changes', body: 'The examples and local services may change as the project evolves. No service-level or commercial commitments are made by this demonstration.' },
+      { title: 'Production use', body: 'A deployed application needs its own reviewed terms, service commitments, security controls, and operational policies before it is offered to users.' }
     ],
     privacy: [
-      { title: 'Data we process', body: 'A production deployment may process account identity, workspace content, product activity, device information, and support messages needed to operate and protect the service.' },
-      { title: 'How data is used', body: 'Data is used to provide requested features, maintain security, understand reliability, communicate service updates, and satisfy legal obligations.' },
-      { title: 'Temporary demonstrations', body: 'Demo credentials have a defined expiration. When the temporary session expires, cleanup removes the demo user and data owned by that account through the application lifecycle.' },
-      { title: 'Your controls', body: 'The product foundation supports clear account controls. A production policy should explain access, correction, export, retention, deletion, and contact rights for each supported region.' }
+      { title: 'Information processed', body: 'When you use a demonstration, the configured Identity and application services may process account details and information you submit while exploring the example.' },
+      { title: 'Cookies and browser storage', body: 'First-party session cookies keep authenticated requests associated with your sign-in. The i18n_redirected cookie stores the selected language, and browser local storage stores the color-mode choice under nuxt-color-mode. These settings support language and appearance only. The current demonstration build does not configure advertising or analytics trackers. You can change the preferences with the visible language and appearance controls or clear them in your browser site-data settings; blocking the session cookie prevents sign-in.' },
+      { title: 'Purpose and access', body: 'Information is processed to provide the requested demonstration and protect its operation. Access and data handling depend on the active local or hosted environment.' },
+      { title: 'Retention and deletion', body: 'Retention and cleanup behavior must be confirmed for the environment in use. Do not rely on a demo account for long-term storage.' },
+      { title: 'Production policy', body: 'A real deployment must publish an accurate policy describing its data, purposes, retention, user controls, contact channel, and regional requirements.' }
     ]
-  },
-  auth: {
-    demoTitle: 'Try the complete Talred SaaS demo',
-    demoDescription: 'Generate a private temporary account, sign in, and explore the authenticated SaaS shell. Demo data is scheduled for deletion when the session expires.'
-  },
-  changelog: {
-    eyebrow: 'Product updates',
-    title: 'What is new in Talred SaaS',
-    description: 'A reusable changelog pattern for communicating improvements clearly and consistently.',
-    entries: [
-      { version: '1.4.0', date: 'July 2026', title: 'Workflow templates', description: 'Save repeatable processes as templates, share them across workspaces, and control who can publish changes.', tags: ['Product', 'Teams'] },
-      { version: '1.3.0', date: 'June 2026', title: 'Automation history', description: 'Inspect every automation run with inputs, decisions, results, and retry controls in one timeline.', tags: ['Automation', 'Observability'] },
-      { version: '1.2.0', date: 'May 2026', title: 'Workspace insights', description: 'New cycle-time, workload, and completion reports help teams find friction without building spreadsheets.', tags: ['Analytics'] },
-      { version: '1.1.0', date: 'April 2026', title: 'Connected work', description: 'Slack, GitHub, Linear, and email integrations can now trigger workflows and synchronize status.', tags: ['Integrations'] }
-    ]
-  },
-  dashboard: {
-    overview: 'Overview',
-    settings: 'Settings',
-    product: 'Product website',
-    support: 'Help & support',
-    primaryNavigation: 'Talred SaaS dashboard navigation',
-    secondaryNavigation: 'Talred SaaS resource navigation',
-    search: 'Search Talred SaaS',
-    welcomeEyebrow: 'Talred SaaS workspace',
-    welcome: 'Welcome, {name}',
-    description: 'Your SaaS foundation is ready. Replace this welcome state with the product modules your next idea needs.',
-    demoNote: 'This intentionally minimal dashboard demonstrates the authenticated shell, responsive sidebar, user menu, localization, appearance controls, and account lifecycle without inventing unfinished product data.',
-    settingsTitle: 'Workspace settings',
-    settingsDescription: 'A neutral settings foundation ready for the preferences and controls of a future product.',
-    account: 'Signed-in account',
-    preferences: 'Interface preferences',
-    preferencesDescription: 'Language and appearance controls are ready to reuse across a future product.'
   }
 } as const
 
 const french = {
-  brand: 'Talred SaaS',
+  brand: 'Talred Services.com Starter',
   navigation: {
-    product: 'Produit',
-    pricing: 'Tarifs',
-    changelog: 'Nouveautés',
+    home: 'Accueil',
+    about: 'À propos',
     login: 'Connexion',
-    start: 'Commencer',
+    github: 'GitHub',
+    start: 'Créer un compte de démonstration',
     dashboard: 'Tableau de bord'
   },
   footer: {
-    description: 'Un produit SaaS fictif qui démontre une fondation complète et réutilisable : marketing, authentification et tableau de bord.',
-    product: 'Produit',
+    description: 'Des fondations Talred PHP pour une architecture propre, intégrées aux API Laravel, aux applications Nuxt et à Talred Identity.',
+    maintainer: 'Développeur full-stack indépendant · mainteneur de Talred Services',
+    product: 'Starter',
     resources: 'Ressources',
     legal: 'Légal',
-    features: 'Fonctionnalités',
-    support: 'Assistance',
+    overview: 'Accueil',
+    about: 'À propos du Starter',
+    support: 'Documentation',
+    sourceCode: 'Code source',
     terms: 'Conditions',
     privacy: 'Confidentialité'
   },
-  pricing: {
-    eyebrow: 'Tarification simple',
-    title: 'Commencez simplement. Évoluez avec votre activité.',
-    description: 'Chaque offre comprend le parcours Talred SaaS complet. Passez au niveau supérieur lorsque votre équipe a besoin de plus d’automatisation, d’historique et de gouvernance.',
-    monthly: 'Mensuel',
-    yearly: 'Annuel',
-    yearlySaving: 'Économisez 20 %',
-    free: 'Gratuit',
-    currency: '$',
-    perMonth: '/ mois',
-    billedYearly: 'facturé annuellement',
-    action: 'Commencer gratuitement',
-    popular: 'Le plus populaire',
-    plans: [
-      {
-        name: 'Starter',
-        description: 'Pour les personnes qui organisent leurs premiers processus réutilisables.',
-        monthly: 0,
-        yearly: 0,
-        features: ['Un espace de travail', 'Trois processus actifs', 'Intégrations principales', 'Sept jours d’historique']
-      },
-      {
-        name: 'Growth',
-        description: 'Pour les équipes qui coordonnent leur travail entre plusieurs outils.',
-        monthly: 24,
-        yearly: 19,
-        popular: true,
-        features: ['Processus illimités', 'Constructeur d’automatisations', 'Rôles et permissions', 'Un an d’historique', 'Assistance prioritaire']
-      },
-      {
-        name: 'Scale',
-        description: 'Pour les organisations qui exigent contrôle, visibilité et accompagnement.',
-        monthly: 79,
-        yearly: 63,
-        features: ['Tout Growth', 'Authentification SAML', 'Exports d’audit', 'Gouvernance avancée', 'Accompagnement dédié']
-      }
+  about: {
+    eyebrow: 'À propos du Starter',
+    title: 'Une base de services aux responsabilités claires',
+    description: 'Talred Services.com Starter réunit un client Nuxt et son BFF, des modèles d’API Laravel, l’intégration à Identity et une stack de développement local partagée.',
+    architectureTitle: 'Placer chaque responsabilité au bon endroit',
+    architectureDescription: 'Le starter montre comment l’interface, le transport, les cas d’usage, les règles métier, la persistance et l’identité partagée s’articulent.',
+    items: [
+      { title: 'Client Nuxt et BFF', description: 'Créez l’interface et les opérations serveur du navigateur en gardant les identifiants privés côté serveur.', icon: 'i-lucide-layout-dashboard' },
+      { title: 'API Laravel', description: 'Organisez les règles métier, les cas d’usage, les contrats API et les adaptateurs d’infrastructure en couches explicites.', icon: 'i-lucide-folder-kanban' },
+      { title: 'Talred Identity', description: 'Utilisez la plateforme Identity pour l’authentification, les comptes, les membres et les règles d’accès.', icon: 'i-lucide-shield-check' },
+      { title: 'Développement local', description: 'Lancez les applications et services associés documentés depuis l’espace Compose partagé.', icon: 'i-simple-icons-docker' }
     ],
+    examplesTitle: 'Exemples inclus',
+    examplesDescription: 'Identity illustre l’authentification partagée. Tasks suit une API Laravel guidée par le domaine à travers un BFF Nuxt, tandis que SaaS présente des pages produit publiques et un tableau de bord protégé.'
+  },
+  pricing: {
+    eyebrow: 'Tarifs',
+    title: 'Aucun tarif commercial n’est publié pour cette base',
+    description: 'Talred Services.com Starter est une base de développement accompagnée d’exemples. Ce site ne propose pas d’offres payantes, d’hébergement ni de forfaits d’assistance.',
+    notice: 'Aucune offre commerciale n’a été définie pour cette démonstration Starter. Tout futur service d’hébergement ou d’assistance devra avoir un périmètre et des tarifs publiés.',
+    foundationHeading: 'Explorer la base',
+    foundationDescription: 'Consultez la documentation et les démonstrations pour comprendre le contenu de l’espace avant de l’adapter et de le déployer.',
+    features: ['Exemples d’application Nuxt et de BFF', 'Modèles d’architecture d’API Laravel', 'Intégration à Talred Identity', 'Pages publiques et tableau de bord SaaS', 'Stack de développement local'],
+    action: 'Lire la documentation',
     faqTitle: 'Questions sur les tarifs',
     faq: [
-      { label: 'Puis-je essayer les fonctions payantes ?', content: 'Oui. Growth commence par un essai de 14 jours sans carte bancaire.' },
-      { label: 'Puis-je changer d’offre ?', content: 'Vous pouvez changer ou annuler depuis la facturation. Les modifications sont calculées au prorata.' },
-      { label: 'Que se passe-t-il après l’essai ?', content: 'Votre espace repasse à Starter. Vos données restent disponibles et vous pouvez évoluer à tout moment.' },
-      { label: 'Proposez-vous une facturation annuelle ?', content: 'Oui. La facturation annuelle réduit le prix mensuel effectif de vingt pour cent.' }
+      { label: 'Puis-je acheter une offre ici ?', content: 'Non. Ce site présente une base de développement et ne vend actuellement aucun abonnement.' },
+      { label: 'Cette page comprend-elle un hébergement ou une assistance ?', content: 'Aucun service d’hébergement ni d’assistance n’est proposé ici. Le déploiement et l’assistance relèvent du propriétaire de l’application.' }
     ]
   },
   legal: {
     termsTitle: 'Conditions d’utilisation',
-    privacyTitle: 'Politique de confidentialité',
-    updated: 'Texte modèle · Juillet 2026',
-    notice: 'Talred SaaS est une démonstration de produit fictif. Avant tout lancement réel, remplacez ce texte modèle par des conditions révisées pour votre entreprise, votre produit et votre juridiction.',
+    privacyTitle: 'Informations sur la confidentialité',
+    updated: 'Brouillon à valider',
+    notice: 'Cette page est un brouillon d’information pour la démonstration Talred Services.com Starter, et non une politique juridique définitive. Vérifiez le traitement réel des données, leur conservation, les coordonnées et les conditions applicables avant toute publication en production.',
     terms: [
-      { title: 'Utilisation du service', body: 'Vous êtes responsable de l’activité de votre espace et d’une utilisation conforme à la loi. L’accès peut être limité afin de protéger le service, les autres utilisateurs ou le public.' },
-      { title: 'Comptes et contenu', body: 'Vous restez propriétaire du contenu transmis. Vous accordez uniquement les permissions nécessaires à son stockage, son traitement et sa présentation dans les fonctions demandées.' },
-      { title: 'Comptes de démonstration', body: 'Les comptes temporaires servent à évaluer le produit. Ils expirent automatiquement et leurs données sont programmées pour suppression ; ils ne doivent donc contenir aucune information importante ou sensible.' },
-      { title: 'Évolutions et disponibilité', body: 'Les fonctions peuvent évoluer, être interrompues ou supprimées. Un service en production doit communiquer les changements importants et définir ses engagements dans son accord commercial.' }
+      { title: 'Objet de ce site', body: 'Ce site présente la démonstration d’un produit logiciel et ses fonctionnalités. Il permet aux visiteurs d’évaluer l’expérience et de comprendre le fonctionnement de la démonstration.' },
+      { title: 'Comptes et contenu de démonstration', body: 'Utilisez les comptes de démonstration uniquement pour l’évaluation. Ne transmettez aucune information confidentielle, sensible ou essentielle à l’activité dans un environnement de démonstration.' },
+      { title: 'Disponibilité et évolutions', body: 'Les exemples et services locaux peuvent évoluer avec le projet. Cette démonstration ne prend aucun engagement commercial ni de niveau de service.' },
+      { title: 'Utilisation en production', body: 'Une application déployée doit disposer de ses propres conditions, engagements de service, contrôles de sécurité et règles opérationnelles validés avant sa mise à disposition.' }
     ],
     privacy: [
-      { title: 'Données traitées', body: 'Un déploiement réel peut traiter l’identité du compte, le contenu des espaces, l’activité produit, les informations de l’appareil et les messages d’assistance nécessaires au fonctionnement et à la protection du service.' },
-      { title: 'Utilisation des données', body: 'Les données servent à fournir les fonctions demandées, maintenir la sécurité, comprendre la fiabilité, communiquer les évolutions et respecter les obligations légales.' },
-      { title: 'Démonstrations temporaires', body: 'Les identifiants de démonstration possèdent une expiration définie. À la fin de la session temporaire, le nettoyage supprime l’utilisateur de démonstration et les données qui lui appartiennent.' },
-      { title: 'Vos contrôles', body: 'La fondation prévoit des contrôles de compte explicites. Une politique réelle doit expliquer les droits d’accès, de correction, d’export, de conservation et de suppression pour chaque région prise en charge.' }
+      { title: 'Informations traitées', body: 'Lors d’une démonstration, les services Identity et applicatifs configurés peuvent traiter les détails du compte et les informations transmises pendant l’exploration.' },
+      { title: 'Cookies et stockage du navigateur', body: 'Les cookies de session internes associent les requêtes authentifiées à votre connexion. Le cookie i18n_redirected mémorise la langue choisie et le stockage local du navigateur conserve le thème sous la clé nuxt-color-mode. Ces réglages servent uniquement à la langue et à l’apparence. La version actuelle de la démonstration ne configure aucun traceur publicitaire ou analytique. Vous pouvez modifier vos choix avec les commandes de langue et d’apparence, ou les effacer dans les réglages de données du site de votre navigateur ; bloquer le cookie de session empêche la connexion.' },
+      { title: 'Finalité et accès', body: 'Les informations sont traitées pour fournir la démonstration demandée et protéger son fonctionnement. Les accès et le traitement dépendent de l’environnement local ou hébergé.' },
+      { title: 'Conservation et suppression', body: 'Les règles de conservation et de nettoyage doivent être confirmées pour l’environnement utilisé. Ne vous servez pas d’un compte de démonstration pour stocker des données à long terme.' },
+      { title: 'Politique de production', body: 'Un déploiement réel doit publier une politique exacte décrivant les données, les finalités, la conservation, les contrôles utilisateur, les coordonnées et les exigences régionales.' }
     ]
-  },
-  auth: {
-    demoTitle: 'Essayez la démonstration Talred SaaS complète',
-    demoDescription: 'Générez un compte privé temporaire, connectez-vous et explorez la zone SaaS authentifiée. Les données de démonstration sont programmées pour suppression à l’expiration de la session.'
-  },
-  changelog: {
-    eyebrow: 'Mises à jour produit',
-    title: 'Les nouveautés de Talred SaaS',
-    description: 'Un modèle de changelog réutilisable pour communiquer les améliorations clairement et régulièrement.',
-    entries: [
-      { version: '1.4.0', date: 'Juillet 2026', title: 'Modèles de processus', description: 'Enregistrez les processus récurrents, partagez-les entre espaces et contrôlez la publication des changements.', tags: ['Produit', 'Équipes'] },
-      { version: '1.3.0', date: 'Juin 2026', title: 'Historique des automatisations', description: 'Inspectez chaque exécution avec ses entrées, décisions, résultats et contrôles de relance.', tags: ['Automatisation', 'Observabilité'] },
-      { version: '1.2.0', date: 'Mai 2026', title: 'Analyses de l’espace', description: 'De nouveaux rapports sur les cycles, la charge et les résultats révèlent les frictions sans tableur.', tags: ['Analyses'] },
-      { version: '1.1.0', date: 'Avril 2026', title: 'Travail connecté', description: 'Les intégrations Slack, GitHub, Linear et email peuvent déclencher des processus et synchroniser les statuts.', tags: ['Intégrations'] }
-    ]
-  },
-  dashboard: {
-    overview: 'Vue d’ensemble',
-    settings: 'Paramètres',
-    product: 'Site du produit',
-    support: 'Aide et assistance',
-    primaryNavigation: 'Navigation du tableau de bord Talred SaaS',
-    secondaryNavigation: 'Navigation des ressources Talred SaaS',
-    search: 'Rechercher dans Talred SaaS',
-    welcomeEyebrow: 'Espace Talred SaaS',
-    welcome: 'Bienvenue, {name}',
-    description: 'Votre fondation SaaS est prête. Remplacez cet accueil par les modules nécessaires à votre prochaine idée.',
-    demoNote: 'Ce tableau de bord volontairement minimal démontre la zone authentifiée, la barre latérale responsive, le menu utilisateur, la traduction, les thèmes et le cycle de vie du compte sans inventer de fausses données produit.',
-    settingsTitle: 'Paramètres de l’espace',
-    settingsDescription: 'Une fondation de paramètres neutre, prête à accueillir les préférences et contrôles d’un futur produit.',
-    account: 'Compte connecté',
-    preferences: 'Préférences de l’interface',
-    preferencesDescription: 'Les contrôles de langue et d’apparence sont prêts à être réutilisés dans un futur produit.'
   }
 } as const
 

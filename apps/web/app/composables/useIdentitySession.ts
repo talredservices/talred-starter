@@ -6,10 +6,8 @@
  */
 export function useIdentitySession() {
   const { csrf, headerName } = useCsrf()
-  const localePath = useLocalePath()
-  const identity = useZoltaIdentity('starter', {
+  const identity = useTalredIdentity('starter', {
     defaultRedirect: '/dashboard',
-    logoutRedirect: localePath('/'),
     logoutHeaders: () => ({ [headerName]: csrf })
   })
 

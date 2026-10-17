@@ -2,38 +2,21 @@
 withDefaults(defineProps<{
   collapsed?: boolean
   brand?: string
-  icon?: string
-  logo?: string | null
+  markSize?: 'small' | 'medium'
+  variant?: 'starter' | 'saas' | 'identity' | 'tasks'
 }>(), {
   collapsed: false,
-  brand: 'Talred Starter',
-  icon: 'i-lucide-sparkles',
-  logo: null
+  brand: 'Starter',
+  markSize: 'small',
+  variant: 'starter'
 })
 </script>
 
 <template>
-  <div class="inline-flex items-center gap-2 text-highlighted">
-    <img
-      v-if="logo"
-      :src="logo"
-      alt=""
-      aria-hidden="true"
-      class="size-7 object-contain"
-    >
-    <span
-      v-else
-      class="inline-flex size-7 items-center justify-center rounded-lg bg-primary text-white shadow-sm"
-    >
-      <UIcon
-        :name="icon"
-        class="size-4"
-      />
-    </span>
-
-    <span
-      v-if="!collapsed"
-      class="text-sm font-semibold tracking-tight"
-    >{{ brand }}</span>
-  </div>
+  <TalredProductBrand
+    :collapsed="collapsed"
+    :product="brand"
+    :variant="variant"
+    :mark-size="markSize"
+  />
 </template>

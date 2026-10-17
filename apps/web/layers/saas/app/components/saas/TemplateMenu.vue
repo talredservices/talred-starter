@@ -23,9 +23,6 @@
     }, {
       label: 'Chat',
       to: 'https://chat-template.nuxt.dev/'
-    }, {
-      label: 'Changelog',
-      to: 'https://changelog-template.nuxt.dev/'
     }]"
     :content="{ align: 'start' }"
     :ui="{ content: 'min-w-fit' }"

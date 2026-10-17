@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<{
   secondaryLinks?: NavigationMenuItem[][]
   searchGroups?: CommandPaletteGroup<CommandPaletteItem>[]
   unit?: 'rem' | 'px'
+  defaultSize?: number
   collapsible?: boolean
   resizable?: boolean
   desktopCollapsed?: boolean
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<{
   secondaryLinks: () => [],
   searchGroups: () => [],
   unit: 'rem',
+  defaultSize: 15,
   collapsible: true,
   resizable: true,
   desktopCollapsed: false,
@@ -40,7 +42,10 @@ const props = withDefaults(defineProps<{
 const open = defineModel<boolean>('open', { default: false })
 
 const isDesktop = useMediaQuery('(min-width: 1024px)')
-const collapsed = ref(isDesktop.value ? props.desktopCollapsed : false)
+// Keep the initial sidebar state identical during SSR and hydration. VueUse
+// cannot know the viewport on the server, so deriving this value immediately
+// can render a different collapsed state on desktop after hydration.
+const collapsed = ref(false)
 
 watch(isDesktop, (desktop) => {
   // Avoid persisting mobile drawer state when switching to desktop.
@@ -49,17 +54,22 @@ watch(isDesktop, (desktop) => {
   }
 
   collapsed.value = desktop ? props.desktopCollapsed : false
-})
+}, { immediate: true })
 </script>
 
 <template>
-  <UDashboardGroup :unit="props.unit">
+  <UDashboardGroup
+    :unit="props.unit"
+    class="bg-default"
+  >
     <UDashboardSidebar
       :id="props.sidebarId"
       v-model:open="open"
       :collapsible="props.collapsible"
       :collapsed="collapsed"
       :resizable="props.resizable"
+      :default-size="props.defaultSize"
+      :menu="{ title: props.primaryNavigationLabel, description: props.secondaryNavigationLabel }"
       :ui="{ footer: 'lg:border-t lg:border-default' }"
     >
       <template #header="{ collapsed: sidebarCollapsed }">
@@ -121,6 +131,9 @@ watch(isDesktop, (desktop) => {
     <UDashboardSearch
       v-if="props.searchGroups.length > 0"
       :aria-label="props.searchLabel"
+      :title="props.searchLabel"
+      :description="props.primaryNavigationLabel"
+      :placeholder="props.searchLabel"
       :groups="props.searchGroups"
     />
 

@@ -1,6 +1,6 @@
 import { defineNuxtPlugin } from '#app'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const session = useIdentitySession()
   const localePath = useLocalePath()
   let expiryTimer: ReturnType<typeof setTimeout> | undefined
@@ -32,15 +32,4 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     { immediate: true }
   )
-
-  // Intercept all fetch errors
-  nuxtApp.hook('app:error', (err) => {
-    if (!err) return
-    // Check for ZoltaApiError or a generic 401 response.
-    const statusCode = err.statusCode || err.status || (err.response && err.response.status)
-    if (statusCode === 401) {
-      // Clear session and redirect to login
-      void session.clear(localePath('/auth/login'))
-    }
-  })
 })

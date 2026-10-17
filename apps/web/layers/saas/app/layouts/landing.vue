@@ -1,8 +1,21 @@
+<script setup lang="ts">
+const publicShellCopy = useStarterPublicPresentation()
+</script>
+
 <template>
-  <div class="saas-theme min-h-screen">
+  <div class="starter-product-theme min-h-screen">
+    <a
+      href="#starter-main"
+      class="starter-public-skip"
+    >{{ publicShellCopy.skip }}</a>
     <SaasAppHeader />
 
-    <UMain>
+    <StarterBetaBanner />
+
+    <UMain
+      id="starter-main"
+      tabindex="-1"
+    >
       <slot />
     </UMain>
 
