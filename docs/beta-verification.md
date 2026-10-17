@@ -62,11 +62,9 @@ source check, not a guarantee that every possible secret format is detected.
   `f5c7454`. The full repository guard passed on that committed tree with Node
   24 through the shared workspace wrapper. An earlier attempt with Node 25 failed
   because its `better-sqlite3` native addon was built for another ABI.
-- The branch push did not complete: the workspace has no working GitHub HTTPS
-  credential helper or SSH key. No PR, merge, beta tag, image publication, or
-  GitHub release exists yet. Push from an authenticated Git environment, allow
-  provider CI to pass, then follow the reviewed-`main` release gates in
-  [the release checklist](releasing.md).
+- At the time of this verification, the branch push had not completed because
+  the workspace lacked a usable GitHub CLI binary and SSH agent access. The
+  later publication update below supersedes that state.
 - No production environment was changed. Temporary verification servers and
   containers were stopped; verification database/storage volumes were retained.
 - The local stack logs mail and exposes development invitation/reset tokens;
@@ -74,3 +72,15 @@ source check, not a guarantee that every possible secret format is detected.
   security configuration remain the adopting application's responsibility.
 - The first Docker build encountered registry/font timeouts. A retry succeeded;
   fresh builds require access to the public registries, GitHub, and font service.
+
+## Publication update
+
+As of 2026-10-17T00:30:09Z, the grouped candidate was pushed to
+`codex/guard-ci-before-push-starter` at `bf2728e` and PR #9 was opened against
+`main`. The local push hook passed, including its secret/release scans, web
+lint, typecheck, tests, build and audit, API tests/audits, initializer checks,
+and Compose contract checks. GitHub Actions started for PR #9: secret scan,
+local runtime, Platform API, API, and Identity release contract checks passed;
+web and dependency-audit checks were still running. The PR is unmerged, and no
+beta tag, Starter image publication, or GitHub release exists yet. Continue
+with the gates in [the release checklist](releasing.md).
