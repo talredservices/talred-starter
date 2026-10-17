@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "feature": "Delete an owned Tasks project",
+  "classification": "business",
+  "context": {
+    "boundedContext": "Projects / Task Manager",
+    "outcome": "An authenticated project owner can permanently remove a project and its tasks after an explicit confirmation.",
+    "actors": [
+      "Authenticated project owner"
+    ],
+    "scope": "A single project owned by the authenticated user, including its project-scoped tasks"
+  },
+  "domain": {
+    "useCases": [
+      {
+        "name": "Delete an owned project",
+        "kind": "command",
+        "preconditions": [
+          "The caller has a valid authenticated Identity session.",
+          "The project exists and belongs to the authenticated owner.",
+          "The caller explicitly confirms deletion in the client.",
+          "The client clearly states that all tasks in the project will also be deleted."
+        ],
+        "result": "The project and its task records are permanently removed, or a not-found result is returned for a missing or unowned project."
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Project",
+        "responsibility": "Owns a project identity and the lifecycle boundary for project-scoped tasks.",
+        "consistencyBoundary": "Deleting the project removes its dependent tasks atomically through the existing database foreign-key cascade."
+      }
+    ],
+    "entities": [],
+    "valueObjects": [
+      {
+        "name": "ProjectId",
+        "meaning": "Stable identifier of the project selected for deletion.",
+        "rules": [
+          "The API validates the identifier as a UUID before invoking the use case."
+        ]
+      },
+      {
+        "name": "UserId",
+        "meaning": "Trusted Identity owner resolved by the API from the authenticated request.",
+        "rules": [
+          "The client cannot choose or override the owner identifier."
+        ]
+      }
+    ],
+    "policies": [
+      "Only the authenticated owner may delete a project; missing and unowned IDs share the same not-found outcome.",
+      "The client confirmation must identify the project and disclose that all associated tasks are deleted.",
+      "The API remains authoritative for ownership and deletion; client-provided task counts are informational only."
+    ],
+    "invariants": [
+      "A project delete cannot affect another owner's project.",
+      "Project task rows cannot outlive a deleted project; the existing foreign key cascades their deletion.",
+      "The UI removes the project from visible state only after the API confirms success."
+    ],
+    "events": [],
+    "readModels": [
+      {
+        "name": "Project collection",
+        "purpose": "Refresh the visible project cards after a successful delete.",
+        "source": "Authenticated project list query"
+      }
+    ]
+  },
+  "boundaries": {
+    "domainOwner": "Laravel TaskManagerService / Projects",
+    "persistence": "ProjectRepository deleteOwned operation; project task foreign key already cascades",
+    "api": "Authenticated DELETE /api/projects/{projectId} contract, UUID request validation, typed command and deleted-project response",
+    "bff": "Projects layer authenticated Nuxt BFF route with validated project ID, CSRF-protected browser mutation, and API error translation",
+    "client": "Starter Nuxt Projects dashboard card action and board context action with confirmation, pending, failure, success, and navigation states",
+    "identity": "Identity session authenticates the caller; API derives trusted owner identity and enforces owner scope",
+    "runtime": "Existing local runtime; no deployment or provider changes"
+  },
+  "acceptanceCriteria": [
+    "An owner can open a confirmation modal for a selected project from the dashboard and its task board.",
+    "The confirmation names the project and explains that every associated task will be permanently deleted.",
+    "Cancel or modal dismissal performs no write; a successful confirmed delete removes the project and cascaded tasks and updates the dashboard.",
+    "Missing or unowned project IDs cannot delete data and return the established project-not-found response.",
+    "Failed deletes remain visible as an error and keep the project selected/visible for retry.",
+    "EN/FR copy, keyboard-accessible Nuxt UI confirmation, pending lock, API tests, BFF/client checks, and browser verification cover the flow."
+  ],
+  "assumptions": [
+    {
+      "statement": "The existing project_id foreign key uses ON DELETE CASCADE, so removing a project permanently removes all associated task rows.",
+      "blocking": false,
+      "owner": "Laravel TaskManagerService"
+    },
+    {
+      "statement": "The authenticated user is the only project owner actor in the current Projects API; Identity continues to define authentication while the API enforces project ownership.",
+      "blocking": false,
+      "owner": "Projects"
+    }
+  ],
+  "problem": "The Tasks API and dashboard can create and list projects but cannot remove an owned project; owners need a safe way to retire a project and its associated task records.",
+  "actors": [
+    "Authenticated project owner"
+  ],
+  "invariants": [
+    "Only the authenticated owner can delete the project.",
+    "Deleting the project permanently cascades to its associated tasks.",
+    "The UI updates only after the API confirms successful deletion."
+  ],
+  "ownership": {
+    "domain": "Laravel TaskManagerService / Projects",
+    "browserTransport": "Starter Nuxt Projects BFF",
+    "client": "Starter Nuxt Projects layer",
+    "runtime": "Existing local-dev-ops runtime"
+  },
+  "decisions": [
+    "Use hard deletion, matching the existing project-to-task cascade and task-delete semantics; make the cascade explicit in confirmation copy.",
+    "Do not accept owner IDs or task counts as trusted API inputs.",
+    "Keep deletion in the existing Projects bounded context and do not add a new event, audit log, or undo lifecycle because none exists in this demo contract."
+  ]
+}

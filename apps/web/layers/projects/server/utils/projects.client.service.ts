@@ -1,36 +1,40 @@
 import type { H3Event } from 'h3'
-import type { ZoltaApiEnvelope, ZoltaApiFetchClient } from '@zoltasoft/api-client'
-import type { DeletedTaskResponse, Project, ProjectTask, TaskFilters } from '../../shared/types/projects'
-import { createZoltaApiClient } from '#server/utils/create-zolta-api-client'
+import type { TalredApiEnvelope, TalredApiFetchClient } from '@talred/api-client'
+import type { DeletedProjectResponse, DeletedTaskResponse, Project, ProjectTask, TaskFilters } from '../../shared/types/projects'
+import { createTalredApiClient } from '#server/utils/create-talred-api-client'
 
 type UpstreamBody = Record<string, unknown>
 
-export function projectsApi(event: H3Event): Promise<ZoltaApiFetchClient> {
-  return createZoltaApiClient(event, 'projects')
+export function projectsApi(event: H3Event): Promise<TalredApiFetchClient> {
+  return createTalredApiClient(event, 'projects')
 }
 
-export function listProjects(client: ZoltaApiFetchClient) {
-  return client<ZoltaApiEnvelope<{ projects: Project[] }>>('/api/projects')
+export function listProjects(client: TalredApiFetchClient) {
+  return client<TalredApiEnvelope<{ projects: Project[] }>>('/api/projects')
 }
 
-export function createProject(client: ZoltaApiFetchClient, body: UpstreamBody) {
-  return client<ZoltaApiEnvelope<{ project: Project }>>('/api/projects', { method: 'POST', body })
+export function createProject(client: TalredApiFetchClient, body: UpstreamBody) {
+  return client<TalredApiEnvelope<{ project: Project }>>('/api/projects', { method: 'POST', body })
 }
 
-export function listProjectTasks(client: ZoltaApiFetchClient, projectId: string, filters: TaskFilters = {}) {
-  return client<ZoltaApiEnvelope<{ project: Project, tasks: ProjectTask[] }>>(`/api/projects/${projectId}/tasks`, {
+export function deleteProject(client: TalredApiFetchClient, projectId: string) {
+  return client<TalredApiEnvelope<DeletedProjectResponse>>(`/api/projects/${projectId}`, { method: 'DELETE' })
+}
+
+export function listProjectTasks(client: TalredApiFetchClient, projectId: string, filters: TaskFilters = {}) {
+  return client<TalredApiEnvelope<{ project: Project, tasks: ProjectTask[] }>>(`/api/projects/${projectId}/tasks`, {
     query: Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== undefined && value !== ''))
   })
 }
 
-export function createTask(client: ZoltaApiFetchClient, projectId: string, body: UpstreamBody) {
-  return client<ZoltaApiEnvelope<{ task: ProjectTask }>>(`/api/projects/${projectId}/tasks`, { method: 'POST', body })
+export function createTask(client: TalredApiFetchClient, projectId: string, body: UpstreamBody) {
+  return client<TalredApiEnvelope<{ task: ProjectTask }>>(`/api/projects/${projectId}/tasks`, { method: 'POST', body })
 }
 
-export function updateTask(client: ZoltaApiFetchClient, taskId: string, body: UpstreamBody) {
-  return client<ZoltaApiEnvelope<{ task: ProjectTask }>>(`/api/tasks/${taskId}`, { method: 'PATCH', body })
+export function updateTask(client: TalredApiFetchClient, taskId: string, body: UpstreamBody) {
+  return client<TalredApiEnvelope<{ task: ProjectTask }>>(`/api/tasks/${taskId}`, { method: 'PATCH', body })
 }
 
-export function deleteTask(client: ZoltaApiFetchClient, taskId: string) {
-  return client<ZoltaApiEnvelope<DeletedTaskResponse>>(`/api/tasks/${taskId}`, { method: 'DELETE' })
+export function deleteTask(client: TalredApiFetchClient, taskId: string) {
+  return client<TalredApiEnvelope<DeletedTaskResponse>>(`/api/tasks/${taskId}`, { method: 'DELETE' })
 }

@@ -1,4 +1,4 @@
-import { handleZoltaApiError } from '#server/http'
+import { handleTalredApiError } from '#server/http'
 import { projectsService } from '../../utils/projects.service'
 
 export default defineEventHandler(async (event) => {
@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await (await projectsService(event)).list()
   } catch (error) {
-    return handleZoltaApiError(error)
+    return handleTalredApiError(error)
   }
 })

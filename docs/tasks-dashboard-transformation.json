@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "feature": "Tasks SaaS dashboard template",
+  "classification": "presentation-only",
+  "context": {
+    "boundedContext": "Projects",
+    "outcome": "Authenticated users can compare projects and inspect task status through reusable dashboard cards, tables, filters and board views.",
+    "actors": [
+      "Authenticated project member"
+    ],
+    "scope": "Existing user-authorized projects and project-scoped tasks"
+  },
+  "domain": {
+    "useCases": [],
+    "aggregates": [],
+    "entities": [],
+    "valueObjects": [],
+    "policies": [
+      "Existing Identity and API authorization remains authoritative"
+    ],
+    "invariants": [
+      "Only API-returned records contribute to displayed metrics",
+      "Filtered task summaries explicitly identify their scope"
+    ],
+    "events": [],
+    "readModels": [
+      {
+        "name": "Dashboard summary",
+        "purpose": "Compare active/archived projects and task counts",
+        "source": "Existing project collection"
+      }
+    ]
+  },
+  "boundaries": {
+    "domainOwner": "Laravel Projects service",
+    "persistence": "Existing Projects repositories; unchanged",
+    "api": "Existing Projects API contracts",
+    "bff": "Projects layer authenticated and validated routes",
+    "client": "Starter Nuxt Projects layer",
+    "identity": "Existing projects consumer session and server authorization",
+    "runtime": "Shared local-dev-ops Compose stack"
+  },
+  "acceptanceCriteria": [
+    "Overview shows accurate project metrics and searchable sortable paginated project table",
+    "Tasks offers table and board views using existing API records and write operations",
+    "Loading, empty, error, retry and submission feedback are visible",
+    "English and French labels, mobile reflow and accessible controls",
+    "Real task metrics remain API-backed; billing and activity fixtures are explicitly labeled demo data"
+  ],
+  "assumptions": [
+    {
+      "statement": "Current contracts have no timestamps, assignees or due dates; historical charts and overdue metrics are excluded",
+      "blocking": false,
+      "owner": "Projects"
+    }
+  ],
+  "decisions": [
+    "Presentation-only: no domain state, API contracts, permissions or persistence changes",
+    "Use existing Nuxt UI 4 table/card/progress/dashboard primitives",
+    "Isolate billing and activity as presentation-only fixtures, with no payment or invoice mutations. Keep overview queries to the project collection; task status metrics remain project-scoped rather than fetching every project's tasks",
+    "Keep orchestration in feature composables and reusable UI in feature components"
+  ],
+  "problem": "Tasks currently emphasizes architectural examples over reusable dashboard data views.",
+  "actors": [
+    "Authenticated project member"
+  ],
+  "invariants": [
+    "Only API-returned records contribute to displayed metrics",
+    "Filtered task summaries explicitly identify their scope"
+  ],
+  "ownership": {
+    "domain": "Laravel Projects",
+    "browserTransport": "Starter Projects Nuxt BFF",
+    "client": "Starter Projects Nuxt layer",
+    "runtime": "local-dev-ops"
+  }
+}

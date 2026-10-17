@@ -1,7 +1,7 @@
-import type { ZoltaApiEnvelope } from '@zoltasoft/api-client'
-import type { DeletedTaskResponse, Project, ProjectCollection, ProjectResponse, ProjectTask, ProjectTasksResponse, TaskResponse } from '../../shared/types/projects'
+import type { TalredApiEnvelope } from '@talred/api-client'
+import type { DeletedProjectResponse, DeletedTaskResponse, Project, ProjectCollection, ProjectResponse, ProjectTask, ProjectTasksResponse, TaskResponse } from '../../shared/types/projects'
 
-type ResponsePayload<T extends object> = ZoltaApiEnvelope<T> | T | { response?: T, data?: T }
+type ResponsePayload<T extends object> = TalredApiEnvelope<T> | T | { response?: T, data?: T }
 
 function responseData<T extends object>(payload: ResponsePayload<T>): T {
   if ('data' in payload && payload.data !== undefined) return payload.data
@@ -38,5 +38,9 @@ export function mapTaskEnvelope(envelope: ResponsePayload<{ task: ProjectTask }>
 }
 
 export function mapDeletedTaskEnvelope(envelope: ResponsePayload<DeletedTaskResponse>): DeletedTaskResponse {
+  return responseData(envelope)
+}
+
+export function mapDeletedProjectEnvelope(envelope: ResponsePayload<DeletedProjectResponse>): DeletedProjectResponse {
   return responseData(envelope)
 }

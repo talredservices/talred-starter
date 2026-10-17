@@ -1,83 +1,91 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: 'projects-landing'
-})
+import { STARTER_REPOSITORY_URL } from '~/utils/starter-links'
 
+definePageMeta({ layout: 'projects-landing' })
 const copy = useProjectsHomePresentation()
+const publicCopy = useStarterPublicPresentation()
 const localePath = useLocalePath()
+const config = useRuntimeConfig()
 const session = useProjectsIdentitySession()
-
-const heroLinks = computed(() => [
-  {
-    label: session.loggedIn.value ? copy.value.navigation.dashboard : copy.value.hero.start,
-    to: session.loggedIn.value ? localePath('/projects/dashboard') : session.authorize(localePath('/projects/dashboard')),
-    external: !session.loggedIn.value,
-    trailingIcon: 'i-lucide-arrow-right'
-  },
-  {
-    label: copy.value.hero.seeTasks,
-    to: localePath('/projects/dashboard/tasks'),
-    color: 'neutral' as const,
-    variant: 'subtle' as const
-  }
-])
-
-const ctaLinks = computed(() => [
-  {
-    label: copy.value.cta.open,
-    to: localePath('/projects/dashboard'),
-    trailingIcon: 'i-lucide-arrow-right'
-  },
-  {
-    label: copy.value.cta.tasks,
-    to: localePath('/projects/dashboard/tasks'),
-    variant: 'subtle' as const,
-    icon: 'i-lucide-list-checks'
-  }
-])
-
-useSeoMeta({
-  title: () => copy.value.hero.title,
-  description: () => copy.value.hero.description,
-  ogTitle: () => copy.value.hero.title,
-  ogDescription: () => copy.value.hero.description,
-  ogType: 'website',
-  twitterCard: 'summary'
-})
+const dashboardPath = localePath('/projects/dashboard')
+const dashboardUrl = computed(() => session.loggedIn.value ? dashboardPath : session.authorize(dashboardPath))
+useSeoMeta({ title: () => `${publicCopy.value.tasks} · Talred Starter`, description: () => publicCopy.value.tasksDescription })
 </script>
 
 <template>
-  <div>
-    <UPageHero
-      :title="copy.hero.title"
-      :description="copy.hero.description"
-      :links="heroLinks"
-    />
-
-    <UPageSection
-      id="features"
-      :title="copy.features.title"
-      :description="copy.features.description"
-      class="-mt-8 sm:-mt-12"
+  <UContainer class="starter-public">
+    <StarterPublicIntro
+      :title="publicCopy.tasks"
+      :description="publicCopy.tasksDescription"
+      :eyebrow="publicCopy.tasksEyebrow"
     >
-      <UPageGrid>
-        <UPageCard
-          v-for="item in copy.features.items"
-          :key="item.title"
-          v-bind="item"
-          spotlight
-        />
-      </UPageGrid>
-    </UPageSection>
-
-    <USeparator />
-
-    <UPageCTA
-      :title="copy.cta.title"
-      :description="copy.cta.description"
-      :links="ctaLinks"
-      variant="naked"
-      class="overflow-hidden"
-    />
-  </div>
+      <UButton
+        :to="dashboardUrl"
+        :external="!session.loggedIn.value"
+        size="lg"
+        trailing-icon="i-lucide-arrow-right"
+      >
+        {{ publicCopy.tasksOpen }}
+      </UButton>
+      <UButton
+        :to="config.public.docsUrl"
+        external
+        color="neutral"
+        variant="outline"
+        size="lg"
+      >
+        {{ publicCopy.docs }}
+      </UButton>
+      <UButton
+        :to="STARTER_REPOSITORY_URL"
+        external
+        color="neutral"
+        variant="link"
+        icon="i-simple-icons-github"
+      >
+        GitHub
+      </UButton>
+    </StarterPublicIntro>
+    <section
+      class="starter-public-section"
+      aria-labelledby="tasks-features-title"
+    >
+      <h2 id="tasks-features-title">
+        {{ publicCopy.tasksFeaturesTitle }}
+      </h2>
+      <div class="starter-public-grid projects-home-features">
+        <article
+          v-for="feature in publicCopy.tasksFeatures"
+          :key="feature.title"
+          class="starter-public-choice"
+        >
+          <UIcon
+            :name="feature.icon"
+            class="size-5 text-primary"
+            aria-hidden="true"
+          />
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </article>
+      </div>
+      <div class="starter-public-actions">
+        <UButton
+          :to="localePath('/projects/about')"
+          color="neutral"
+          variant="link"
+          class="px-0"
+          trailing-icon="i-lucide-arrow-right"
+        >
+          {{ copy.navigation.about }}
+        </UButton>
+        <UButton
+          :to="localePath('/')"
+          color="neutral"
+          variant="link"
+        >
+          Talred Starter
+        </UButton>
+      </div>
+    </section>
+  </UContainer>
 </template>

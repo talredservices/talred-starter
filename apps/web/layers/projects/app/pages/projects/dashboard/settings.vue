@@ -1,9 +1,12 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'projects-dashboard', middleware: ['projects-auth'] })
+import { identityUserInitials } from '~/utils/identity-user'
+
+// Dashboard panels render fragments and cannot participate in page transitions.
+definePageMeta({ layout: 'projects-dashboard', middleware: ['projects-auth'], pageTransition: false })
 
 const { t } = useI18n()
 const session = useProjectsIdentitySession()
-const identityAccount = useZoltaIdentity('projects')
+const identityAccount = useTalredIdentity('projects')
 const isTemporaryAccount = computed(() => Boolean(session.user.value?.isTemporary))
 
 const user = computed(() => {
@@ -18,10 +21,7 @@ const user = computed(() => {
   return {
     name,
     description: account?.email || '',
-    avatar: {
-      src: account?.avatar || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=4f46e5&color=fff`,
-      alt: name
-    }
+    avatar: { text: identityUserInitials(name), alt: name }
   }
 })
 
@@ -37,7 +37,18 @@ useSeoMeta({
     class="min-w-0 flex-1"
   >
     <template #header>
-      <UDashboardNavbar :title="t('userMenu.settings')" />
+      <DashboardPageNavbar :title="t('userMenu.settings')">
+        <template #title>
+          <span class="flex min-w-0 items-center gap-2 font-semibold text-highlighted">
+            <UIcon
+              name="i-lucide-settings-2"
+              class="size-4 shrink-0 text-primary"
+              aria-hidden="true"
+            />
+            <span class="truncate">{{ t('userMenu.settings') }}</span>
+          </span>
+        </template>
+      </DashboardPageNavbar>
     </template>
 
     <template #body>

@@ -1,13 +1,13 @@
-import { handleZoltaApiError } from '#server/http'
+import { handleTalredApiError } from '#server/http'
 import { projectsService } from '../../../utils/projects.service'
-import { projectIdSchema } from '../../../utils/projects.schema'
+import { parseProjectId } from '../../../utils/projects.schema'
 
 export default defineEventHandler(async (event) => {
   await requireAuthSession(event, 'projects')
-  const taskId = projectIdSchema.parse(getRouterParam(event, 'id'))
+  const taskId = parseProjectId(getRouterParam(event, 'id'), 'taskId')
   try {
     return await (await projectsService(event)).deleteTask(taskId)
   } catch (error) {
-    return handleZoltaApiError(error)
+    return handleTalredApiError(error)
   }
 })

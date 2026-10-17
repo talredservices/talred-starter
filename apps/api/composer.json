@@ -1,12 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "talred/zolta-starter-api",
+    "name": "talred/starter-api",
     "type": "project",
     "description": "Laravel API starter demonstrating Talred Clean Architecture and CQRS.",
     "keywords": [
         "laravel",
-        "zolta",
-        "zolta-starter",
+        "talred",
+        "talred-starter",
         "clean-architecture",
         "cqrs",
         "api",
@@ -78,8 +78,7 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan boost:update --ansi"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
