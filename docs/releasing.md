@@ -9,7 +9,7 @@ stack as production-hardened.
 
 - Release from the reviewed `main` commit after its CI run succeeds.
 - Confirm the repository contains the complete Starter tree, including the
-  standalone `docker/` setup, the host-run guide, both Laravel APIs, the Nuxt
+  standalone `docker/` setup, the host-run guide, the Tasks Laravel API, the Nuxt
   app, and Starter-owned Identity page layers.
 - Verify a clean public clone using both paths in
   [developer setup](developer-setup.md): native Identity source and standalone
@@ -46,8 +46,7 @@ never clear existing developer data to simulate a fresh installation.
 3. The `Container images` workflow currently publishes automatically on pushes
    to `main` and `develop`, and can be dispatched manually for another ref.
    For a beta tag, dispatch it for that tag after verifying the tag points to
-   the reviewed commit. It publishes the web app, Tasks API, Platform API, and
-   each API's Nginx image with the ref name and commit SHA.
+   the reviewed commit. It publishes the web app, Tasks API, and its Nginx image with the ref name and commit SHA.
 4. Wait for the image workflow to finish. Inspect the resulting manifests and
    confirm unauthenticated pulls work before announcing published images.
 5. Create GitHub release notes for the tag. Summarize supported local run

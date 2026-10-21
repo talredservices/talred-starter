@@ -6,7 +6,6 @@
       "slug": "zoltasoft-starter",
       "description": "Local Zoltasoft Starter development project",
       "clients": {
-        "api": "Talred Services Platform API",
         "bff": "Zoltasoft Starter Nuxt BFF"
       },
       "registration": {
@@ -24,16 +23,6 @@
           "key": "account.update",
           "name": "Update account",
           "description": "Update the signed-in member's account."
-        },
-        {
-          "key": "workspace.read",
-          "name": "Read workspaces",
-          "description": "Read workspaces accessible to the signed-in member."
-        },
-        {
-          "key": "workspace.write",
-          "name": "Manage workspaces",
-          "description": "Create and manage workspaces for the signed-in member."
         }
       ],
       "roles": [
@@ -43,9 +32,7 @@
           "description": "Default role for Zoltasoft Starter project members.",
           "permissions": [
             "account.read",
-            "account.update",
-            "workspace.read",
-            "workspace.write"
+            "account.update"
           ]
         }
       ],

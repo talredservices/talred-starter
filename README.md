@@ -4,7 +4,7 @@ Talred Starter is an open-source reference for building understandable PHP servi
 
 The public brand is Talred. PHP technical namespaces and existing Identity application keys retain their established compatibility names; the Nuxt integrations use the published `@talred/*` packages.
 
-The repository includes working Workspace, Fresh SaaS, and Tasks examples. Follow a request from Nuxt through its BFF to the API and domain layers, with authentication and each application's business data kept in their owning services. The code and documentation aim to be clear for developers and AI agents to navigate.
+The repository includes a deliberately empty Starter account dashboard, Fresh SaaS, and Tasks examples. Follow a request from Nuxt through its BFF to the API and domain layers, with authentication and each application's business data kept in their owning services. The code and documentation aim to be clear for developers and AI agents to navigate.
 
 ## First beta
 
@@ -18,13 +18,12 @@ Local native/Docker results and their limits are recorded in
 
 ## Composition
 
-- `apps/web` — the Nuxt 4 client and BFF, with the workspace, Fresh SaaS, and Tasks examples.
+- `apps/web` — the Nuxt 4 client and BFF, with the empty Starter dashboard, Fresh SaaS, and Tasks examples.
 - `apps/api` — the Laravel 13 Tasks API, demonstrating `talred/php`, Clean Architecture, and CQRS.
-- `apps/platform-api` — the workspace organization and Identity resource API, with its isolated `talred_platform` persistence boundary.
 - `identity-release.json` — the external Talred Identity image contract.
 - `runtime/identity` — local configuration for the isolated Identity instance; no implementation source.
 
-Identity remains authoritative for Identity Projects, Clients, Applications, authentication, and authorization. The Platform example stores workspace membership and references to Identity Projects; it does not grant Identity access. Nuxt pages call their BFF routes, and each BFF calls the API that owns the operation.
+Identity remains authoritative for Identity Projects, Clients, Applications, authentication, and authorization. The Starter Home intentionally has no workspace or Identity directory data; the standalone Tasks example continues to use its own Nuxt BFF and Laravel API.
 
 ## Quick start
 
@@ -54,7 +53,7 @@ For the shared workspace runtime and verification commands, follow the [develope
 ### Native PHP and Node servers
 
 Clone the public `identity` repository alongside `talred-starter`, prepare the
-three Laravel apps and two Nuxt apps, and run `./scripts/init-stack --host`.
+Identity and Tasks Laravel apps with their Nuxt clients, and run `./scripts/init-stack --host`.
 The [native setup guide](docs/developer-setup.md#run-a-fresh-public-clone-without-docker)
 lists the requirements and every command. Docker and `local-dev-ops` are not
 required for this path.

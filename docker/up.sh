@@ -95,7 +95,6 @@ dotenv_default LOCAL_GID "$(id -g)"
 dotenv_default MYSQL_ROOT_PASSWORD "$(random_hex 32)"
 dotenv_default IDENTITY_APP_KEY "base64:$(openssl rand -base64 32 | tr -d '\n')"
 dotenv_default STARTER_API_APP_KEY "base64:$(openssl rand -base64 32 | tr -d '\n')"
-dotenv_default PLATFORM_API_APP_KEY "base64:$(openssl rand -base64 32 | tr -d '\n')"
 dotenv_default STARTER_IDENTITY_OWNER_PASSWORD "$(random_hex 32)"
 dotenv_default STARTER_IDENTITY_CONSOLE_CLIENT_ID "$(random_uuid)"
 dotenv_default STARTER_IDENTITY_CONSOLE_CLIENT_SECRET "$(random_hex 32)"
@@ -124,7 +123,7 @@ rm -rf "$pull_config"
 trap - EXIT
 if [[ "$skip_build" != true ]]; then
   printf 'Building the Starter apps and the Identity Console with Starter auth layers...\n'
-  compose build identity-console starter-api platform-api web
+  compose build identity-console starter-api web
 fi
 printf 'Starting isolated databases and the Identity API/Console...\n'
 compose up -d --no-build --wait --wait-timeout 180 mysql redis
@@ -134,12 +133,11 @@ compose run --rm provisioner
 printf 'Applying the generated Identity onboarding configuration...\n'
 compose up -d --no-build --wait --wait-timeout 180 identity-api identity-nginx
 printf 'Starting the Starter apps...\n'
-compose up -d --no-build --wait --wait-timeout 300 identity-console starter-api platform-api web
+compose up -d --no-build --wait --wait-timeout 300 identity-console starter-api web
 
 printf '\nTalred Starter is ready.\n'
 printf 'Starter:        http://localhost:%s\n' "$(dotenv_get STARTER_WEB_PORT)"
 printf 'Identity:       http://localhost:%s/admin/sign-in\n' "$(dotenv_get IDENTITY_CONSOLE_PORT)"
 printf 'Identity API:   http://localhost:%s\n' "$(dotenv_get IDENTITY_API_PORT)"
 printf 'Tasks API:      http://localhost:%s\n' "$(dotenv_get STARTER_API_PORT)"
-printf 'Platform API:   http://localhost:%s\n' "$(dotenv_get PLATFORM_API_PORT)"
 printf 'Run ./docker/credentials.sh to display the local Identity Console owner credentials.\n'

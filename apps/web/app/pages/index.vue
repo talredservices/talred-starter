@@ -7,12 +7,10 @@ const copy = useStarterPublicPresentation()
 const localePath = useLocalePath()
 const config = useRuntimeConfig()
 const ecosystemUrl = useStarterEcosystemUrl()
-const identityUrl = new URL('/admin/projects', config.public.identityAuthUrl).toString()
 const demos = computed(() => [
-  { title: copy.value.workspace, description: copy.value.workspaceDescription, to: localePath('/dashboard'), external: false, icon: 'i-lucide-panels-top-left' },
+  { title: copy.value.starterHome, description: copy.value.starterHomeDescription, to: localePath('/dashboard'), external: false, icon: 'i-lucide-panels-top-left' },
   { title: copy.value.tasks, description: copy.value.tasksDescription, to: localePath('/projects'), external: false, icon: 'i-lucide-list-checks' },
-  { title: copy.value.saas, description: copy.value.saasDescription, to: localePath('/saas'), external: false, icon: 'i-lucide-layout-dashboard' },
-  { title: copy.value.identity, description: copy.value.identityDescription, to: identityUrl, external: true, icon: 'i-lucide-shield-check' }
+  { title: copy.value.saas, description: copy.value.saasDescription, to: localePath('/saas'), external: false, icon: 'i-lucide-layout-dashboard' }
 ])
 useSeoMeta({ title: () => `${copy.value.title} · Talred Starter`, description: () => copy.value.description, ogTitle: () => copy.value.title, ogDescription: () => copy.value.description })
 </script>
@@ -86,6 +84,39 @@ useSeoMeta({ title: () => `${copy.value.title} · Talred Starter`, description: 
       <p class="mt-8 text-xs text-muted">
         {{ copy.demoNotice }}
       </p>
+      <article class="starter-public-identity">
+        <div class="starter-public-identity-copy">
+          <p class="starter-public-identity-kicker">
+            {{ copy.identity }}
+          </p>
+          <h3>{{ copy.identityShowcaseTitle }}</h3>
+          <p class="starter-public-identity-description">
+            {{ copy.identityShowcaseDescription }}
+          </p>
+          <ul class="starter-public-identity-features">
+            <li
+              v-for="feature in copy.identityFeatures"
+              :key="feature"
+            >
+              <UIcon
+                name="i-lucide-check"
+                class="size-4 shrink-0 text-teal-300"
+                aria-hidden="true"
+              />
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="starter-public-identity-art">
+          <img
+            src="/images/talred-identity-laptop-zoom.png"
+            :alt="copy.identityImageAlt"
+            width="1774"
+            height="887"
+            loading="lazy"
+          >
+        </div>
+      </article>
     </section>
     <section
       class="starter-public-section"

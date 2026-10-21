@@ -126,7 +126,7 @@ const createFirstProject = async () => {
         </div>
         <UContainer
           v-if="!projectId"
-          class="w-full max-w-none px-4 py-10 sm:px-6 lg:px-8"
+          class="py-10"
         >
           <div
             v-if="pending"
@@ -232,7 +232,7 @@ const createFirstProject = async () => {
           </div>
           <div
             v-else
-            class="mx-auto w-full max-w-4xl space-y-6"
+            class="w-full max-w-4xl space-y-6"
           >
             <div>
               <p class="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -286,10 +286,10 @@ const createFirstProject = async () => {
 
         <UContainer
           v-else-if="pending"
-          class="w-full max-w-none px-4 py-10 sm:px-6 lg:px-8"
+          class="py-10"
           aria-busy="true"
         >
-          <div class="mx-auto max-w-5xl space-y-4">
+          <div class="max-w-5xl space-y-4">
             <UCard
               v-for="index in 3"
               :key="index"
@@ -301,7 +301,7 @@ const createFirstProject = async () => {
 
         <UContainer
           v-else-if="projectId && projectUnavailable"
-          class="w-full max-w-none px-4 py-10 sm:px-6 lg:px-8"
+          class="py-10"
         >
           <UCard
             class="mx-auto max-w-xl text-center"
@@ -334,9 +334,9 @@ const createFirstProject = async () => {
 
         <UContainer
           v-else-if="project"
-          class="w-full max-w-none px-4 py-6 sm:px-6 sm:py-8 lg:px-8"
+          class="py-6 sm:py-8"
         >
-          <div class="mx-auto w-full max-w-[1500px] space-y-7">
+          <div class="w-full space-y-7">
             <section class="flex flex-col gap-4 border-b border-default pb-5 sm:flex-row sm:items-center sm:justify-between">
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">

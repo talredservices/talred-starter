@@ -4,13 +4,22 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 
+run_with_stack_paused() {
+  local wrapper="$root/../local-dev-ops/scripts/with-stack-paused"
+  if [[ -x "$wrapper" ]]; then
+    "$wrapper" -- "$@"
+  else
+    "$@"
+  fi
+}
+
 web() {
   cd "$root/apps/web"
   CI=true pnpm install --frozen-lockfile
-  pnpm lint
+  run_with_stack_paused pnpm lint
   pnpm test
   node "$root/scripts/tests/audit-web-dependencies.test.mjs"
-  pnpm build
+  run_with_stack_paused pnpm build
   pnpm run audit
 }
 
@@ -42,7 +51,6 @@ fast() {
   web
   python3 "$root/scripts/validate-identity-release.py"
   php_app apps/api
-  php_app apps/platform-api
 }
 
 case "${1:-pre-push}" in

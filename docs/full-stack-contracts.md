@@ -29,34 +29,9 @@ For every cross-stack change, inspect and update the affected points:
 
 A change is incomplete when one representation changes without tracing its consumers.
 
-## Workspace resource contract
+## Current full-stack examples
 
-Workspaces own typed references to externally managed resources. The current
-resource type is `identity_project`; the Platform API stores only its Identity
-Project id and link provenance. `GET /api/platform/v1/workspaces/{workspaceId}/overview`
-returns `resources.identity_projects` with live, caller-authorized summaries.
-Available projects are listed at
-`GET /api/platform/v1/workspaces/{workspaceId}/resources/identity-projects/available`;
-link and unlink use `POST` and `DELETE` under
-`/workspaces/{workspaceId}/resources/identity-projects`. Workspace owner/admin
-roles control only these Platform links and never add Identity permissions.
-The Identity Console remains responsible for Identity Project configuration
-and lifecycle.
-
-The global Starter Home also reads
-`GET /api/platform/v1/identity-projects`, a read-only directory of Identity
-Project summaries visible to the current user's Identity bearer. It does not
-depend on Workspace links and does not persist a local Identity projection.
-The Home renders this directory independently from the existing membership-
-scoped Workspace list; Identity failures do not suppress Workspace results.
-`/dashboard/workspaces` remains the dedicated Workspace directory and creation
-flow.
-
-The Home application directory reads the Identity-hosted application URLs and
-resolves the Starter's bundled demo destinations consistently with Identity
-Console: Fresh SaaS opens `/saas`, Tasks opens `/projects`, and the Starter app
-opens the site root. The Identity `application_url` remains the base origin;
-these demo route prefixes are presentation destinations, not callback URLs.
+The Starter Home is an authenticated empty shell and has no workspace or Platform API contract. The Tasks layer demonstrates the full Nuxt BFF to Tasks API path; Identity remains the owner of account, project, client, and hosted-application administration.
 
 ## Contract-testing pattern
 

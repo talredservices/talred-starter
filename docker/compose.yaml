@@ -24,8 +24,6 @@ x-identity-environment: &identity-environment
   IDENTITY_EXPOSE_DEVELOPMENT_TOKENS: "true"
   IDENTITY_HOSTED_APPLICATIONS_TOKEN: ${STARTER_IDENTITY_HOSTED_APPLICATIONS_TOKEN:-}
   IDENTITY_HOSTED_AUTH_PAGE_SETS: default,starter,saas,projects
-  PLATFORM_ONBOARDING_CLIENT_ID: ${STARTER_PLATFORM_API_IDENTITY_CLIENT_ID:-}
-  PLATFORM_LOGIN_IDENTITY_PROJECT: zoltasoft-starter
   IDENTITY_PROJECT_DELETION_GRACE_DAYS: 30
   IDENTITY_PROTECTED_PROJECT_SLUGS: identity-console
   MAIL_MAILER: log
@@ -245,65 +243,6 @@ services:
       starter-api-init:
         condition: service_completed_successfully
 
-  platform-api-init:
-    image: ${COMPOSE_PROJECT_NAME:-talred-starter}-platform-api:local
-    working_dir: /var/www/html
-    entrypoint: ["zolta-api-entrypoint"]
-    command: ["php", "artisan", "migrate", "--force"]
-    restart: "no"
-    environment: &platform-api-environment
-      APP_NAME: Talred Platform API
-      APP_ENV: ${APP_ENV:-local}
-      APP_DEBUG: ${APP_DEBUG:-true}
-      APP_KEY: ${PLATFORM_API_APP_KEY:-}
-      APP_URL: http://localhost:${PLATFORM_API_PORT:-8400}
-      DB_CONNECTION: mysql
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_DATABASE: talred_platform
-      DB_USERNAME: ${MYSQL_USER:-starter}
-      DB_PASSWORD: ${MYSQL_PASSWORD:-}
-      SESSION_DRIVER: database
-      CACHE_STORE: database
-      QUEUE_CONNECTION: database
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-  platform-api:
-    image: ${COMPOSE_PROJECT_NAME:-talred-starter}-platform-api:local
-    build:
-      context: ../apps/platform-api
-      dockerfile: docker/laravel/Dockerfile
-    working_dir: /var/www/html
-    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000", "--no-reload"]
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:${PLATFORM_API_PORT:-8400}:8000"
-    environment:
-      <<: *platform-api-environment
-      IDENTITY_API_URL: http://identity-nginx
-      IDENTITY_PROJECT: zoltasoft-starter
-      IDENTITY_CLIENT_ID: ${STARTER_PLATFORM_API_IDENTITY_CLIENT_ID:-}
-      IDENTITY_CLIENT_SECRET: ${STARTER_PLATFORM_API_IDENTITY_CLIENT_SECRET:-}
-      IDENTITY_SANDBOX_API_URL: http://identity-nginx
-      IDENTITY_SANDBOX_PROJECT: zoltasoft-starter
-      STARTER_PUBLIC_URL: http://localhost:${STARTER_WEB_PORT:-3300}
-    volumes:
-      - platform-api-storage:/var/www/html/storage
-    healthcheck:
-      test: ["CMD-SHELL", "php -r 'exit(@fsockopen(\"127.0.0.1\", 8000) === false ? 1 : 0);'"]
-      interval: 5s
-      timeout: 5s
-      retries: 30
-    depends_on:
-      mysql:
-        condition: service_healthy
-      identity-nginx:
-        condition: service_started
-      platform-api-init:
-        condition: service_completed_successfully
-
   web:
     image: ${COMPOSE_PROJECT_NAME:-talred-starter}-web:local
     build:
@@ -340,7 +279,6 @@ services:
       NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET: ${STARTER_PROJECTS_IDENTITY_CLIENT_SECRET:-}
       NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CALLBACK_URL: http://localhost:${STARTER_WEB_PORT:-3300}/api/identity/projects/auth/callback
       ZOLTA_STARTER_API_URL: http://starter-api:8000
-      ZOLTA_PLATFORM_API_URL: http://platform-api:8000
     ports:
       - "127.0.0.1:${STARTER_WEB_PORT:-3300}:3000"
     healthcheck:
@@ -353,12 +291,9 @@ services:
         condition: service_healthy
       starter-api:
         condition: service_healthy
-      platform-api:
-        condition: service_healthy
 
 volumes:
   mysql-data:
   redis-data:
   identity-storage:
   starter-api-storage:
-  platform-api-storage:

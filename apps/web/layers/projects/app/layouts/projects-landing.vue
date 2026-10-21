@@ -54,7 +54,7 @@ const footerColumns = computed(() => [
     >{{ publicShellCopy.skip }}</a>
     <UHeader
       :menu="{ title: 'Navigation', description: 'Talred Tasks' }"
-      :ui="{ container: 'max-w-6xl' }"
+      :ui="{}"
     >
       <template #toggle="{ open, toggle }">
         <UButton

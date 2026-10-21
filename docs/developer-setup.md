@@ -19,7 +19,7 @@ From the repository root, run:
 
 The setup creates a mode-restricted, ignored root `.env`, generates local
 database and session secrets, pulls the content-addressed public Identity
-Server and Nginx images, and builds the two APIs, Nuxt app, and Starter-specific
+Server and Nginx images, and builds the Tasks API, Nuxt app, and Starter-specific
 Identity Console. The Console build fetches the matching public Identity
 commit and compiles the bundled Starter, Fresh SaaS, and Tasks auth page layers
 into that image. No Identity source checkout or sibling workspace repository
@@ -34,8 +34,7 @@ invitation tokens are enabled only in this loopback-only local stack.
 
 Open the Starter at `http://localhost:3300`, the Identity Console at
 `http://localhost:3201/admin/sign-in`, the Identity API at
-`http://localhost:8201`, the Tasks API at `http://localhost:8300`, and the
-Platform API at `http://localhost:8400`. `./docker/credentials.sh` displays
+`http://localhost:8201`, the Tasks API at `http://localhost:8300`. `./docker/credentials.sh` displays
 the generated Identity owner credentials locally. Keep the root `.env` private;
 it contains passwords, database credentials, client secrets, and session keys.
 
@@ -75,8 +74,8 @@ php artisan migrate
 php artisan serve --host=127.0.0.1 --port=8100
 ```
 
-From the directory that contains `talred-local`, prepare both Starter APIs in
-another terminal. Each API uses its own SQLite database and application key:
+From the directory that contains `talred-local`, prepare the Tasks API in
+another terminal. It uses its own SQLite database and application key:
 
 ```bash
 cd talred-local/talred-starter/apps/api
@@ -86,12 +85,6 @@ php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
 
-cd ../platform-api
-composer install
-cp .env.example .env
-php artisan key:generate
-touch database/database.sqlite
-php artisan migrate
 ```
 
 Install the Nuxt dependencies and initialize the local Identity projects. The
@@ -104,12 +97,6 @@ projects, and writes generated credentials to ignored mode-600 environment
 files. It also configures Identity to compile the Starter-owned hosted-auth
 pages from the sibling Starter checkout.
 
-Workspace invitations use Identity's generic onboarding endpoint. The
-initializer selects the Starter login project and explicitly authorizes its
-Platform API client through `PLATFORM_LOGIN_IDENTITY_PROJECT` and
-`PLATFORM_ONBOARDING_CLIENT_ID` in the isolated Identity configuration. The
-Console owner credential stays in local setup configuration; runtime workspace
-invitations use only the dedicated Platform API client.
 
 From the directory that contains `talred-local`, run:
 
@@ -124,11 +111,9 @@ cd ../..
 
 The command expects Identity at `../identity`. If you keep it elsewhere, set
 `ZOLTA_IDENTITY_SOURCE_ROOT` to its absolute path. Host mode uses ports 8100
-(Identity API), 3100 (Identity Console), 8300 (Tasks API), 8400 (Platform API),
-and 3300 (Starter web). Override the URLs with the corresponding
-`ZOLTA_IDENTITY_API_URL`, `ZOLTA_IDENTITY_CONSOLE_URL`,
-`ZOLTA_STARTER_API_URL`, `ZOLTA_PLATFORM_API_URL`, or
-`ZOLTA_STARTER_SITE_URL` environment variable before initialization if needed.
+(Identity API), 3100 (Identity Console), 8300 (Tasks API), and 3300 (Starter web).
+Override the URLs with `ZOLTA_IDENTITY_API_URL`, `ZOLTA_IDENTITY_CONSOLE_URL`,
+`ZOLTA_STARTER_API_URL`, or `ZOLTA_STARTER_SITE_URL` before initialization if needed.
 
 Restart Identity's API process after initialization so it loads the generated
 hosted-application token and page-set allowlist. Run the four remaining
@@ -140,9 +125,6 @@ cd talred-local/identity && pnpm exec nuxt dev --host 127.0.0.1 --port 3100
 
 # Tasks API
 cd talred-local/talred-starter/apps/api && php artisan serve --host=127.0.0.1 --port=8300
-
-# Platform API
-cd talred-local/talred-starter/apps/platform-api && php artisan serve --host=127.0.0.1 --port=8400
 
 # Starter web and BFF
 cd talred-local/talred-starter/apps/web && pnpm exec nuxt dev --host 127.0.0.1 --port 3300
@@ -168,7 +150,7 @@ then start only the Starter services and their declared dependencies:
 ```bash
 test -f .env || cp .env.example .env
 docker compose up -d --build --wait --wait-timeout 180 \
-  starter-identity-console starter-api platform-api zolta-starter-web
+  starter-identity-console starter-api zolta-starter-web
 ```
 
 Compose initializes the isolated Identity database and provisions the Starter,
@@ -184,14 +166,13 @@ run it after starting the Compose stack; it writes host `.env.starter` files and
 can contain credentials from another local Identity instance.
 
 Open the Nuxt app at `http://localhost:3300`. The Starter Identity Console is
-at `http://localhost:3201`; the Tasks API and workspace API are at
-`http://localhost:8300` and `http://localhost:8400` respectively. The web
-container mounts `apps/web` for Nuxt hot reload. Rebuild either Laravel API
+at `http://localhost:3201`; the Tasks API is at `http://localhost:8300`. The web
+container mounts `apps/web` for Nuxt hot reload. Rebuild the Tasks API
 after changing its source:
 
 ```bash
 cd local-dev-ops/local
-docker compose up -d --build --force-recreate --no-deps starter-api platform-api
+docker compose up -d --build --force-recreate --no-deps starter-api
 ```
 
 The full local stack setup, environment ownership, and operational safeguards
@@ -201,15 +182,11 @@ are documented in [`local-dev-ops/local/README.md`](../../local-dev-ops/local/RE
 
 | Example | Source | Request path |
 | --- | --- | --- |
-| Workspace resources | `apps/web/app/pages/dashboard`, `apps/web/server/api/platform`, `apps/platform-api` | Nuxt page → authenticated Nuxt BFF → Platform API → Identity API for permitted Identity reads |
 | Tasks | `apps/web/layers/projects`, `apps/api` | Nuxt page → Projects BFF → Laravel Tasks API |
 | Fresh SaaS | `apps/web/layers/saas` and its separate Identity application | Nuxt experience → its BFF and Identity application |
 | Identity Console and authentication | Canonical `identity` sibling project | Identity Console/BFF → Identity API |
 
 Identity owns Identity Projects, Clients, Applications, authentication, and
-Identity authorization. Workspace membership controls access to the Starter's
-workspace organization only. Workspaces link Identity Projects directly as
-typed resources; Identity still decides whether the signed-in user may see
 each project's details. Identity lifecycle operations remain in Identity
 Console.
 
@@ -242,7 +219,7 @@ cd apps/web
 ../../../local-dev-ops/scripts/with-stack-paused -- pnpm build
 ```
 
-The complete Starter CI command validates the web app, both Laravel APIs,
+The complete Starter CI command validates the web app and Tasks API,
 Identity release metadata, and tracked-secret policy:
 
 ```bash

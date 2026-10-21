@@ -52,7 +52,7 @@ const footerColumns = computed(() => [
     >{{ publicShellCopy.skip }}</a>
     <UHeader
       :menu="{ title: 'Navigation', description: t('freshSaas.brandName') }"
-      :ui="{ root: 'border-b border-default bg-elevated/90 backdrop-blur', container: 'max-w-6xl' }"
+      :ui="{ root: 'border-b border-default bg-elevated/90 backdrop-blur' }"
     >
       <template #toggle="{ open, toggle }">
         <UButton

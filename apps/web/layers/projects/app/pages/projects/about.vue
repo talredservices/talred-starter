@@ -9,7 +9,7 @@ useSeoMeta({ title: () => copy.value.tasksAboutTitle, description: () => copy.va
 </script>
 
 <template>
-  <UContainer class="starter-public starter-public-narrative">
+  <UContainer class="starter-public">
     <StarterPublicIntro
       :title="copy.tasksAboutTitle"
       :description="copy.tasksAboutIntro"

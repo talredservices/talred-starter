@@ -18,8 +18,7 @@ be converted into blanket audit suppression. Security workflow failures must
 propagate instead of being hidden after uploading a report. Registry outages
 are incomplete verification, not successful security checks.
 
-Run Composer audits for each API independently; identical manifests do not
-guarantee identical locks. The beta audit found advisories affecting Laravel,
+Run the Tasks API Composer audit against its lockfile. The beta audit found advisories affecting Laravel,
 CommonMark, Flysystem, HttpFoundation, and YAML. Both locks were updated to
 patched compatible releases. Keep optional development tooling updates out of
 mandatory Composer hooks: `boost:update` was unavailable in this installation
@@ -50,13 +49,6 @@ secret only when its saved client ID matches the provisioned client. Rotate
 only when that matching local secret is unavailable; rotating every client
 on each setup run invalidates running consumers and triggers needless reloads.
 Verify repeat initialization preserves generated environment content.
-
-Provisioning a Platform API client does not automatically authorize Identity's
-generic onboarding endpoint. Set `PLATFORM_ONBOARDING_CLIENT_ID` and
-`PLATFORM_LOGIN_IDENTITY_PROJECT` for the isolated Identity runtime. Docker
-must apply these generated values after provisioning and before application
-verification. Verify an actual workspace invitation and revocation; workspace
-creation alone does not cover this integration.
 
 The production Console uses Secure cookies. Browsers treat `localhost` as a
 trustworthy origin, whereas common HTTP test clients reject Secure cookies on

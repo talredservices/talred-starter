@@ -19,9 +19,9 @@ defineProps<{
 </script>
 
 <template>
-  <UFooter :ui="{ top: 'border-b border-default', container: 'max-w-6xl' }">
+  <UFooter :ui="{ top: 'border-b border-default' }">
     <template #top>
-      <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="app-container">
         <UFooterColumns :columns="columns">
           <template #right>
             <div class="w-full min-w-0 max-w-sm">

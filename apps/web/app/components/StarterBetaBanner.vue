@@ -11,7 +11,7 @@ const description = computed(() => locale.value === 'fr'
     <UAlert
       color="warning"
       variant="subtle"
-      class="mx-auto max-w-6xl border-0 bg-transparent px-4 py-3 sm:px-6 lg:px-8"
+      class="app-container border-0 bg-transparent py-3"
     >
       <template #leading>
         <div class="flex size-8 items-center justify-center">
