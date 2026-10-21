@@ -37,7 +37,7 @@ useSeoMeta({
 
     <template #body>
       <UContainer class="w-full py-8 sm:py-10">
-        <div class="mx-auto w-full max-w-4xl space-y-6">
+        <div class="w-full max-w-4xl space-y-6">
           <header>
             <h1 class="text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
               {{ t('starterDashboard.settingsTitle') }}

@@ -84,3 +84,8 @@ local runtime, Platform API, API, and Identity release contract checks passed;
 web and dependency-audit checks were still running. The PR is unmerged, and no
 beta tag, Starter image publication, or GitHub release exists yet. Continue
 with the gates in [the release checklist](releasing.md).
+
+
+## Current scope update (2026-10-17)
+
+The Starter Platform API and workspace dashboard have since been removed. The authenticated Starter Home is intentionally empty. Current setup and release contracts include only the Tasks API; the historical beta evidence above records the earlier candidate and remains as an audit trail.

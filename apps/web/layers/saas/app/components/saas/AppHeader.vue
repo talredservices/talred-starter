@@ -33,10 +33,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 </script>
 
 <template>
-  <UHeader
-    :ui="{ container: 'max-w-6xl' }"
-    class="border-b border-default bg-default"
-  >
+  <UHeader class="border-b border-default bg-default">
     <template #toggle="{ open, toggle }">
       <UButton
         :aria-label="open ? publicCopy.closeMenu : publicCopy.openMenu"

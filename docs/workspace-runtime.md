@@ -20,7 +20,7 @@ docker compose --env-file local-dev-ops/local/.env \
   --env-file talred-starter/runtime/identity/.env.release \
   -f local-dev-ops/local/compose.yaml \
   -f local-dev-ops/local/compose.identity-release.yaml \
-  up -d starter-identity-api starter-identity-console zolta-starter-web starter-api platform-api
+  up -d starter-identity-api starter-identity-console zolta-starter-web starter-api
 ```
 
 Keep the same two environment files and Compose files for subsequent release-mode operations. To build a local Identity release from source instead, run `identity/scripts/build-local-release talred-starter/runtime/identity/.env.release` before Compose; this replaces the local selection with local image IDs. Use the base Compose file alone to select canonical-source development mode. Existing project IDs, callbacks, database, and runtime volumes are preserved.

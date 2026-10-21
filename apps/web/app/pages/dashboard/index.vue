@@ -1,83 +1,30 @@
 <script setup lang="ts">
-import type { PlatformIdentityApplication, PlatformIdentityProject, PlatformWorkspace } from '~~/shared/types/platform'
-import { identityApplicationLaunchUrl } from '~/utils/identity-application-links'
-
+// Dashboard panels render fragments and cannot participate in page transitions.
 definePageMeta({ layout: 'dashboard', middleware: ['auth'], pageTransition: false })
 
 const { t } = useI18n()
 const localePath = useLocalePath()
 const runtimeConfig = useRuntimeConfig()
-const client = usePlatformClient()
+const session = useIdentitySession()
 
-const workspaces = ref<PlatformWorkspace[]>([])
-const identityApplications = ref<PlatformIdentityApplication[]>([])
-const identityApplicationAvailability = ref('available')
-const identityProjects = ref<PlatformIdentityProject[]>([])
-const identityAvailability = ref('available')
-const workspacesLoading = ref(true)
-const identityApplicationsLoading = ref(true)
-const identityProjectsLoading = ref(true)
-const workspaceError = ref(false)
-const identityApplicationsError = ref(false)
-const identityProjectsError = ref(false)
+const name = computed(() => session.user.value?.name || session.user.value?.username || t('userMenu.authenticatedUser'))
+const identityConsoleUrl = new URL('/admin/projects', runtimeConfig.public.identityAuthUrl).toString()
 
-const identityConsoleUrl = (projectId?: string) => new URL(
-  projectId ? `/admin/projects/${projectId}` : '/admin/projects',
-  runtimeConfig.public.identityAuthUrl
-).toString()
-const applicationLaunchUrl = (application: PlatformIdentityApplication) => identityApplicationLaunchUrl(application)
+const products = computed(() => [
+  { key: 'tasks', title: t('starterDashboard.productTasks'), description: t('starterDashboard.productTasksDescription'), icon: 'i-lucide-list-checks', to: localePath('/projects'), action: t('starterDashboard.openProduct') },
+  { key: 'saas', title: t('starterDashboard.productSaas'), description: t('starterDashboard.productSaasDescription'), icon: 'i-lucide-panels-top-left', to: localePath('/saas'), action: t('starterDashboard.openProduct') },
+  ...(!session.user.value?.isTemporary
+    ? [{ key: 'identity', title: t('starterDashboard.productIdentity'), description: t('starterDashboard.productIdentityDescription'), icon: 'i-lucide-shield-check', to: identityConsoleUrl, external: true, action: t('starterDashboard.openConsole') }]
+    : []),
+  { key: 'docs', title: t('starterDashboard.productDocs'), description: t('starterDashboard.productDocsDescription'), icon: 'i-lucide-book-open-text', to: String(runtimeConfig.public.docsUrl), external: true, action: t('starterDashboard.openDocs') }
+])
 
-async function loadWorkspaces() {
-  workspaceError.value = false
-  try {
-    let collection = await client.list()
-    if (!collection.workspaces.some(workspace => workspace.is_default)) {
-      await client.ensureDefault()
-      collection = await client.list({ force: true })
-    }
-    workspaces.value = collection.workspaces
-  } catch {
-    workspaceError.value = true
-  } finally {
-    workspacesLoading.value = false
-  }
-}
-
-async function loadIdentityProjects() {
-  identityProjectsError.value = false
-  try {
-    const directory = await client.identityProjectDirectory()
-    identityAvailability.value = directory.availability
-    identityProjects.value = directory.projects
-  } catch {
-    identityAvailability.value = 'unavailable'
-    identityProjects.value = []
-    identityProjectsError.value = true
-  } finally {
-    identityProjectsLoading.value = false
-  }
-}
-
-async function loadIdentityApplications() {
-  identityApplicationsError.value = false
-  try {
-    const directory = await client.identityApplicationDirectory()
-    identityApplicationAvailability.value = directory.availability
-    identityApplications.value = directory.applications
-  } catch {
-    identityApplicationAvailability.value = 'unavailable'
-    identityApplications.value = []
-    identityApplicationsError.value = true
-  } finally {
-    identityApplicationsLoading.value = false
-  }
-}
-
-onMounted(() => {
-  void loadWorkspaces()
-  void loadIdentityApplications()
-  void loadIdentityProjects()
-})
+const capabilities = [
+  { key: 'architecture', icon: 'i-lucide-layers-3', title: t('starterDashboard.capabilityArchitectureTitle'), description: t('starterDashboard.capabilityArchitectureDescription') },
+  { key: 'api', icon: 'i-lucide-route', title: t('starterDashboard.capabilityApiTitle'), description: t('starterDashboard.capabilityApiDescription') },
+  { key: 'identity', icon: 'i-lucide-shield-check', title: t('starterDashboard.capabilityIdentityTitle'), description: t('starterDashboard.capabilityIdentityDescription') },
+  { key: 'client', icon: 'i-lucide-panels-top-left', title: t('starterDashboard.capabilityClientTitle'), description: t('starterDashboard.capabilityClientDescription') }
+]
 
 useSeoMeta({
   title: () => `${t('starterDashboard.home')} · ${t('starterDashboard.brand')}`,
@@ -86,7 +33,10 @@ useSeoMeta({
 </script>
 
 <template>
-  <UDashboardPanel id="starter-home">
+  <UDashboardPanel
+    id="starter-home"
+    class="min-w-0 flex-1"
+  >
     <template #header>
       <DashboardPageNavbar>
         <template #title>
@@ -94,6 +44,7 @@ useSeoMeta({
             <UIcon
               name="i-lucide-layout-dashboard"
               class="size-4 text-primary"
+              aria-hidden="true"
             />
             {{ t('starterDashboard.home') }}
           </div>
@@ -102,339 +53,105 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <UContainer class="w-full max-w-none px-4 py-6 sm:px-6 lg:px-8">
-        <div class="mx-auto w-full max-w-6xl space-y-9">
-          <header>
-            <h1 class="text-3xl font-semibold tracking-tight text-highlighted">
-              {{ t('starterDashboard.globalHomeTitle') }}
+      <UContainer class="py-6">
+        <div class="w-full space-y-10">
+          <header class="space-y-2">
+            <h1 class="text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
+              {{ t('starterDashboard.welcome', { name }) }}
             </h1>
-            <p class="mt-2 max-w-3xl text-sm leading-6 text-muted">
-              {{ t('starterDashboard.globalHomeDescription') }}
+            <p class="max-w-3xl text-sm leading-6 text-muted">
+              {{ t('starterDashboard.welcomeDescription') }}
             </p>
           </header>
 
           <section
             class="space-y-4"
-            aria-labelledby="home-applications-heading"
+            aria-labelledby="starter-products-title"
           >
             <div>
               <h2
-                id="home-applications-heading"
+                id="starter-products-title"
                 class="text-xl font-semibold text-highlighted"
               >
-                {{ t('starterDashboard.applications') }}
+                {{ t('starterDashboard.productsTitle') }}
               </h2>
-              <p class="mt-1 text-sm text-muted">
-                {{ t('starterDashboard.homeApplicationsDescription') }}
+              <p class="mt-1 text-sm leading-6 text-muted">
+                {{ t('starterDashboard.productsDescription') }}
               </p>
             </div>
-
-            <div
-              v-if="identityApplicationsLoading"
-              class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
-              aria-busy="true"
-            >
-              <USkeleton
-                v-for="item in 3"
-                :key="item"
-                class="h-44 rounded-xl"
-              />
-            </div>
-            <UAlert
-              v-else-if="identityApplicationAvailability !== 'available' || identityApplicationsError"
-              :color="identityApplicationAvailability === 'access_needed' ? 'warning' : 'error'"
-              variant="subtle"
-              :title="identityApplicationAvailability === 'access_needed' ? t('starterDashboard.identityApplicationAccessNeeded') : t('starterDashboard.identityUnavailable')"
-              :description="identityApplicationAvailability === 'access_needed' ? t('starterDashboard.identityApplicationAccessNeededDescription') : t('starterDashboard.identityApplicationDirectoryUnavailable')"
-            />
-            <div
-              v-else-if="identityApplications.length"
-              class="grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              <UPageCard
-                v-for="application in identityApplications"
-                :key="application.id"
-                variant="subtle"
-                class="h-full min-w-0"
+            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <UCard
+                v-for="product in products"
+                :key="product.key"
+                variant="outline"
+                class="h-full"
               >
-                <div class="flex h-full min-h-40 flex-col gap-4">
-                  <div class="flex items-start justify-between gap-3">
-                    <div class="flex min-w-0 items-start gap-3">
-                      <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <UIcon
-                          name="i-lucide-panels-top-left"
-                          class="size-4"
-                        />
-                      </span>
-                      <div class="min-w-0">
-                        <h3 class="truncate font-semibold text-highlighted">
-                          {{ application.name }}
-                        </h3>
-                        <p class="mt-1 truncate text-sm text-muted">
-                          {{ application.project.name }}
-                        </p>
-                      </div>
-                    </div>
-                    <UBadge
-                      :label="application.status"
-                      :color="application.status === 'active' ? 'success' : 'neutral'"
-                      variant="subtle"
+                <div class="flex h-full flex-col items-start">
+                  <span class="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <UIcon
+                      :name="product.icon"
+                      class="size-5"
+                      aria-hidden="true"
                     />
-                  </div>
-
-                  <div class="min-w-0 space-y-1 text-xs text-muted">
-                    <p
-                      v-if="application.key"
-                      class="truncate font-mono"
-                    >
-                      {{ application.key }}
-                    </p>
-                    <p class="truncate">
-                      {{ application.project.mode }} · {{ application.project.status }}
-                    </p>
-                    <p
-                      v-if="applicationLaunchUrl(application)"
-                      class="truncate"
-                      :title="applicationLaunchUrl(application) || undefined"
-                    >
-                      {{ applicationLaunchUrl(application) }}
-                    </p>
-                  </div>
-
-                  <div class="mt-auto flex flex-wrap items-center gap-2 border-t border-default pt-3">
-                    <UButton
-                      v-if="applicationLaunchUrl(application)"
-                      :to="applicationLaunchUrl(application) || undefined"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      size="xs"
-                      color="primary"
-                      variant="soft"
-                      trailing-icon="i-lucide-arrow-up-right"
-                    >
-                      {{ t('starterDashboard.openApplication') }}
-                    </UButton>
-                    <UButton
-                      :to="identityConsoleUrl(application.project.id)"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      size="xs"
-                      color="neutral"
-                      variant="ghost"
-                      trailing-icon="i-lucide-arrow-up-right"
-                    >
-                      {{ t('starterDashboard.openIdentityConsole') }}
-                    </UButton>
-                  </div>
-                </div>
-              </UPageCard>
-            </div>
-            <UPageCard
-              v-else
-              variant="subtle"
-            >
-              <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 class="font-semibold text-highlighted">
-                    {{ t('starterDashboard.noAccessibleApplicationsTitle') }}
+                  </span>
+                  <h3 class="mt-4 font-semibold text-highlighted">
+                    {{ product.title }}
                   </h3>
-                  <p class="mt-1 text-sm text-muted">
-                    {{ t('starterDashboard.noAccessibleApplicationsDescription') }}
+                  <p class="mt-2 flex-1 text-sm leading-6 text-muted">
+                    {{ product.description }}
                   </p>
+                  <UButton
+                    :to="product.to"
+                    :external="product.external"
+                    :target="product.external ? '_blank' : undefined"
+                    :rel="product.external ? 'noopener noreferrer' : undefined"
+                    color="neutral"
+                    variant="link"
+                    trailing-icon="i-lucide-arrow-up-right"
+                    class="mt-4 px-0"
+                  >
+                    {{ product.action }}
+                    <span class="sr-only">: {{ product.title }}</span>
+                  </UButton>
                 </div>
-                <UButton
-                  :to="identityConsoleUrl()"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="neutral"
-                  variant="outline"
-                  trailing-icon="i-lucide-arrow-up-right"
-                >
-                  {{ t('starterDashboard.openIdentityConsole') }}
-                </UButton>
-              </div>
-            </UPageCard>
+              </UCard>
+            </div>
           </section>
 
           <section
             class="space-y-4"
-            aria-labelledby="home-identity-projects-heading"
+            aria-labelledby="starter-capabilities-title"
           >
             <div>
               <h2
-                id="home-identity-projects-heading"
+                id="starter-capabilities-title"
                 class="text-xl font-semibold text-highlighted"
               >
-                {{ t('starterDashboard.identityProjects') }}
+                {{ t('starterDashboard.capabilitiesTitle') }}
               </h2>
-              <p class="mt-1 text-sm text-muted">
-                {{ t('starterDashboard.homeIdentityProjectsDescription') }}
+              <p class="mt-1 text-sm leading-6 text-muted">
+                {{ t('starterDashboard.capabilitiesDescription') }}
               </p>
             </div>
-
-            <div
-              v-if="identityProjectsLoading"
-              class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
-              aria-busy="true"
-            >
-              <USkeleton
-                v-for="item in 3"
-                :key="item"
-                class="h-44 rounded-xl"
-              />
-            </div>
-            <UAlert
-              v-else-if="identityAvailability !== 'available' || identityProjectsError"
-              color="warning"
-              variant="subtle"
-              :title="identityAvailability === 'access_needed' ? t('starterDashboard.identityAccessNeeded') : t('starterDashboard.identityUnavailable')"
-              :description="identityAvailability === 'access_needed' ? t('starterDashboard.identityAccessNeededDescription') : t('starterDashboard.identityProjectDirectoryUnavailable')"
-            />
-            <div
-              v-else-if="identityProjects.length"
-              class="grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              <UPageCard
-                v-for="project in identityProjects"
-                :key="project.id"
+            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <UCard
+                v-for="capability in capabilities"
+                :key="capability.key"
                 variant="subtle"
-                class="h-full min-w-0"
               >
-                <div class="flex h-full min-h-40 flex-col gap-4">
-                  <div class="flex items-start justify-between gap-3">
-                    <div class="min-w-0">
-                      <h3 class="truncate font-semibold text-highlighted">
-                        {{ project.name || project.slug || t('starterDashboard.identityProject') }}
-                      </h3>
-                      <p
-                        v-if="project.slug"
-                        class="mt-1 truncate font-mono text-xs text-muted"
-                      >
-                        {{ project.slug }}
-                      </p>
-                    </div>
-                    <UBadge
-                      :label="project.status || 'unknown'"
-                      :color="project.status === 'active' ? 'success' : 'neutral'"
-                      variant="subtle"
-                    />
-                  </div>
-
-                  <div class="mt-auto border-t border-default pt-3">
-                    <UButton
-                      :to="identityConsoleUrl(project.id)"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      size="xs"
-                      color="neutral"
-                      variant="ghost"
-                      trailing-icon="i-lucide-arrow-up-right"
-                    >
-                      {{ t('starterDashboard.openIdentityConsole') }}
-                    </UButton>
-                  </div>
-                </div>
-              </UPageCard>
-            </div>
-            <UPageCard
-              v-else
-              variant="subtle"
-            >
-              <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 class="font-semibold text-highlighted">
-                    {{ t('starterDashboard.noAccessibleIdentityProjectsTitle') }}
-                  </h3>
-                  <p class="mt-1 text-sm text-muted">
-                    {{ t('starterDashboard.noAccessibleIdentityProjectsDescription') }}
-                  </p>
-                </div>
-                <UButton
-                  :to="identityConsoleUrl()"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="neutral"
-                  variant="outline"
-                  trailing-icon="i-lucide-arrow-up-right"
-                >
-                  {{ t('starterDashboard.openIdentityConsole') }}
-                </UButton>
-              </div>
-            </UPageCard>
-          </section>
-
-          <section
-            class="space-y-4"
-            aria-labelledby="home-workspaces-heading"
-          >
-            <div class="flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h2
-                  id="home-workspaces-heading"
-                  class="text-xl font-semibold text-highlighted"
-                >
-                  {{ t('starterDashboard.workspaces') }}
-                </h2>
-                <p class="mt-1 text-sm text-muted">
-                  {{ t('starterDashboard.homeWorkspacesDescription') }}
+                <UIcon
+                  :name="capability.icon"
+                  class="size-5 text-primary"
+                  aria-hidden="true"
+                />
+                <h3 class="mt-3 font-medium text-highlighted">
+                  {{ capability.title }}
+                </h3>
+                <p class="mt-1 text-sm leading-6 text-muted">
+                  {{ capability.description }}
                 </p>
-              </div>
-              <UButton
-                :to="localePath('/dashboard/workspaces')"
-                color="neutral"
-                variant="ghost"
-                trailing-icon="i-lucide-arrow-right"
-              >
-                {{ t('starterDashboard.viewAllWorkspaces') }}
-              </UButton>
+              </UCard>
             </div>
-
-            <div
-              v-if="workspacesLoading"
-              class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
-              aria-busy="true"
-            >
-              <USkeleton
-                v-for="item in 3"
-                :key="item"
-                class="h-52 rounded-xl"
-              />
-            </div>
-            <UAlert
-              v-else-if="workspaceError"
-              color="error"
-              variant="subtle"
-              :title="t('starterDashboard.workspaceServiceUnavailable')"
-              :description="t('starterDashboard.workspaceServiceUnavailable')"
-            />
-            <div
-              v-else-if="workspaces.length"
-              class="grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              <PlatformWorkspaceCard
-                v-for="workspace in workspaces"
-                :key="workspace.id"
-                :workspace="workspace"
-              />
-            </div>
-            <UPageCard
-              v-else
-              variant="subtle"
-            >
-              <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 class="font-semibold text-highlighted">
-                    {{ t('starterDashboard.noWorkspacesTitle') }}
-                  </h3>
-                  <p class="mt-1 text-sm text-muted">
-                    {{ t('starterDashboard.noWorkspacesDescription') }}
-                  </p>
-                </div>
-                <UButton :to="localePath('/dashboard/workspaces')">
-                  {{ t('starterDashboard.viewAllWorkspaces') }}
-                </UButton>
-              </div>
-            </UPageCard>
           </section>
         </div>
       </UContainer>

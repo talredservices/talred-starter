@@ -5,6 +5,7 @@ const open = ref(false)
 const route = useRoute()
 const localePath = useLocalePath()
 const runtimeConfig = useRuntimeConfig()
+const session = useIdentitySession()
 const { t } = useI18n()
 
 const identityConsoleUrl = computed(() => {
@@ -26,14 +27,6 @@ const primaryLinks = computed<NavigationMenuItem[][]>(() => [[
   }
 ], [
   {
-    label: t('starterDashboard.workspaces'),
-    icon: 'i-lucide-panels-top-left',
-    to: localePath('/dashboard/workspaces'),
-    active: route.path === localePath('/dashboard/workspaces') || route.path.startsWith(`${localePath('/dashboard/workspaces')}/`),
-    onSelect: closeSidebar
-  }
-], [
-  {
     label: t('starterDashboard.settings'),
     icon: 'i-lucide-settings',
     to: localePath('/dashboard/settings'),
@@ -42,28 +35,35 @@ const primaryLinks = computed<NavigationMenuItem[][]>(() => [[
   }
 ]])
 
-const secondaryLinks = computed<NavigationMenuItem[][]>(() => [[
-  {
-    label: t('starterDashboard.product'),
-    icon: 'i-lucide-house',
-    to: localePath('/'),
-    onSelect: closeSidebar
-  },
-  {
-    label: t('starterDashboard.support'),
-    icon: 'i-lucide-circle-help',
-    to: runtimeConfig.public.docsUrl,
-    target: '_blank',
-    onSelect: closeSidebar
-  },
-  {
-    label: t('starterDashboard.identityConsole'),
-    icon: 'i-lucide-shield-check',
-    to: identityConsoleUrl.value,
-    target: '_blank',
-    onSelect: closeSidebar
+const secondaryLinks = computed<NavigationMenuItem[][]>(() => {
+  const links: NavigationMenuItem[] = [
+    {
+      label: t('starterDashboard.product'),
+      icon: 'i-lucide-house',
+      to: localePath('/'),
+      onSelect: closeSidebar
+    },
+    {
+      label: t('starterDashboard.support'),
+      icon: 'i-lucide-circle-help',
+      to: runtimeConfig.public.docsUrl,
+      target: '_blank',
+      onSelect: closeSidebar
+    }
+  ]
+
+  if (!session.user.value?.isTemporary) {
+    links.push({
+      label: t('starterDashboard.identityConsole'),
+      icon: 'i-lucide-shield-check',
+      to: identityConsoleUrl.value,
+      target: '_blank',
+      onSelect: closeSidebar
+    })
   }
-]])
+
+  return [links]
+})
 </script>
 
 <template>

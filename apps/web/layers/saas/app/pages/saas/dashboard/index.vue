@@ -11,6 +11,7 @@ const name = computed(() => {
   const user = session.user.value as { name?: string, username?: string } | null
   return user?.name || user?.username || 'there'
 })
+const isTemporaryAccount = computed(() => Boolean((session.user.value as { isTemporary?: boolean } | null)?.isTemporary))
 
 const welcome = computed(() => t('dashboard.welcome', { name: name.value }))
 const identityConsoleUrl = new URL('/admin/projects', runtimeConfig.public.identityAuthUrl).toString()
@@ -20,7 +21,7 @@ const products = computed(() => [
   { key: 'saas', title: t('dashboard.productSaas'), description: t('dashboard.productSaasDescription'), icon: 'i-lucide-layout-dashboard', to: localePath('/saas') },
   { key: 'identity', title: t('dashboard.productIdentity'), description: t('dashboard.productIdentityDescription'), icon: 'i-lucide-shield-check', to: identityConsoleUrl, external: true },
   { key: 'docs', title: t('dashboard.productDocs'), description: t('dashboard.productDocsDescription'), icon: 'i-lucide-book-open-text', to: String(runtimeConfig.public.docsUrl), external: true }
-])
+].filter(product => !(isTemporaryAccount.value && product.key === 'identity')))
 
 useSeoMeta({
   title: () => `${t('dashboard.home')} · ${t('dashboard.brand')}`,
@@ -45,8 +46,8 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <UContainer class="w-full max-w-none px-4 py-6 sm:px-6 lg:px-8">
-        <div class="mx-auto w-full max-w-7xl space-y-10">
+      <UContainer class="py-6">
+        <div class="w-full max-w-(--ui-container) space-y-10">
           <header class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h1 class="flex items-center gap-3 text-3xl font-semibold tracking-tight text-highlighted sm:text-4xl">

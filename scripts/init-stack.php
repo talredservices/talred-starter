@@ -50,7 +50,6 @@ $identityServer = $root . '/runtime/identity/server';
 $identityServerEnv = $identityServer . '/.env.starter';
 $identityConsoleEnv = $identityConsole . '/.env.starter';
 $apiEnv = $root . '/apps/api/.env';
-$platformApiEnv = $root . '/apps/platform-api/.env';
 $webEnv = $root . '/apps/web/.env';
 
 $env = static function (string $key, ?string $fallback = null): ?string {
@@ -129,19 +128,22 @@ $removeEnvKeys = static function (?string $path, array $keys): void {
 };
 $removeEnvKeys($identityServerEnv, ['ZOLTA_AGENT_EMAIL', 'ZOLTA_AGENT_PASSWORD']);
 $removeEnvKeys($opsEnv, ['STARTER_IDENTITY_AGENT_EMAIL', 'STARTER_IDENTITY_AGENT_PASSWORD']);
-$removeEnvKeys($composeEnvPath, ['STARTER_IDENTITY_AGENT_EMAIL', 'STARTER_IDENTITY_AGENT_PASSWORD']);
+$removeEnvKeys($composeEnvPath, ['STARTER_IDENTITY_AGENT_EMAIL', 'STARTER_IDENTITY_AGENT_PASSWORD', 'STARTER_PLATFORM_API_IDENTITY_CLIENT_ID', 'STARTER_PLATFORM_API_IDENTITY_CLIENT_SECRET', 'PLATFORM_APP_KEY', 'PLATFORM_DB_PASSWORD']);
+$removeEnvKeys($opsEnv, ['STARTER_PLATFORM_API_IDENTITY_CLIENT_ID', 'STARTER_PLATFORM_API_IDENTITY_CLIENT_SECRET', 'PLATFORM_ONBOARDING_CLIENT_ID', 'PLATFORM_LOGIN_IDENTITY_PROJECT', 'PLATFORM_APP_KEY', 'PLATFORM_DB_PASSWORD']);
+$removeEnvKeys($identityServerEnv, ['PLATFORM_ONBOARDING_CLIENT_ID', 'PLATFORM_LOGIN_IDENTITY_PROJECT']);
+if ($hostMode) {
+    $removeEnvKeys($identityServerRoot . '/.env', ['PLATFORM_ONBOARDING_CLIENT_ID', 'PLATFORM_LOGIN_IDENTITY_PROJECT']);
+}
 
 $identityUrl = rtrim($env('ZOLTA_IDENTITY_API_URL', $hostMode ? 'http://127.0.0.1:8100' : 'http://127.0.0.1:8201'), '/');
 $identityPublicApiUrl = rtrim($env('ZOLTA_IDENTITY_PUBLIC_API_URL', $identityUrl), '/');
 $hostedAuthUrl = rtrim($env('ZOLTA_IDENTITY_CONSOLE_URL', $hostMode ? 'http://127.0.0.1:3100' : 'http://127.0.0.1:3201'), '/');
 $appUrl = rtrim($env('ZOLTA_STARTER_SITE_URL', 'http://localhost:3300'), '/');
 $starterApiUrl = rtrim($env('ZOLTA_STARTER_API_URL', $hostMode ? 'http://127.0.0.1:8300' : 'http://starter-api:8000'), '/');
-$platformApiUrl = rtrim($env('ZOLTA_PLATFORM_API_URL', $hostMode ? 'http://127.0.0.1:8400' : 'http://platform-api:8000'), '/');
 $ownerEmail = $env('ZOLTA_IDENTITY_OWNER_EMAIL', 'owner@example.com');
 $ownerName = $env('ZOLTA_IDENTITY_OWNER_NAME', 'Local Installation Owner');
 $opsValues = $opsEnv !== null ? $readEnv($opsEnv) : [];
 $existingApiEnv = $readEnv($apiEnv);
-$existingPlatformApiEnv = $readEnv($platformApiEnv);
 $existingWebEnv = $readEnv($webEnv);
 $storedHostedToken = $existingSecret($opsValues['STARTER_IDENTITY_HOSTED_APPLICATIONS_TOKEN'] ?? ($readEnv($identityServerEnv)['IDENTITY_HOSTED_APPLICATIONS_TOKEN'] ?? null));
 $hostedToken = $env('ZOLTA_IDENTITY_HOSTED_APPLICATIONS_TOKEN', $storedHostedToken ?? base64_encode(random_bytes(32)));
@@ -344,7 +346,6 @@ foreach ($projectConfigurations as $projectKey => $configuration) {
             $client = $created['data']['client'] ?? $created['data'] ?? null;
         } elseif (!isset($client['client_secret'])) {
             $localClient = match ($projectKey . '.' . $clientKey) {
-                'starter.api' => ['id' => $existingPlatformApiEnv['IDENTITY_CLIENT_ID'] ?? null, 'secret' => $existingPlatformApiEnv['IDENTITY_CLIENT_SECRET'] ?? null],
                 'tasks.api' => ['id' => $existingApiEnv['IDENTITY_CLIENT_ID'] ?? null, 'secret' => $existingApiEnv['IDENTITY_CLIENT_SECRET'] ?? null],
                 default => ['id' => $existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_' . strtoupper($projectKey === 'tasks' ? 'projects' : $projectKey) . '_CLIENT_ID'] ?? null, 'secret' => $existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_' . strtoupper($projectKey === 'tasks' ? 'projects' : $projectKey) . '_CLIENT_SECRET'] ?? null],
             };
@@ -435,13 +436,11 @@ $starter = $provisioned['starter'];
 $saas = $provisioned['saas'];
 $tasks = $provisioned['tasks'];
 $starterBff = $starter['clients']['bff'];
-$starterApi = $starter['clients']['api'] ?? throw new RuntimeException('Starter Identity must provision an API client for the Platform API.');
 $saasBff = $saas['clients']['bff'];
 $tasksApi = $tasks['clients']['api'];
 $tasksBff = $tasks['clients']['bff'];
-$writeEnv($identityServerEnv, ['APP_URL' => $identityPublicApiUrl, 'IDENTITY_CONSOLE_URL' => $hostedAuthUrl, 'ZOLTA_BOOTSTRAP_OWNER_EMAIL' => $ownerEmail, 'ZOLTA_BOOTSTRAP_OWNER_PASSWORD' => $ownerPassword, 'IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken, 'PLATFORM_ONBOARDING_CLIENT_ID' => $starterApi['id'], 'PLATFORM_LOGIN_IDENTITY_PROJECT' => $starter['project']['slug']]);
+$writeEnv($identityServerEnv, ['APP_URL' => $identityPublicApiUrl, 'IDENTITY_CONSOLE_URL' => $hostedAuthUrl, 'ZOLTA_BOOTSTRAP_OWNER_EMAIL' => $ownerEmail, 'ZOLTA_BOOTSTRAP_OWNER_PASSWORD' => $ownerPassword, 'IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken]);
 $writeEnv($apiEnv, ['APP_URL' => $starterApiUrl, 'IDENTITY_API_URL' => $identityUrl, 'IDENTITY_PROJECT' => $tasks['project']['slug'], 'IDENTITY_CLIENT_ID' => $tasksApi['id'], 'IDENTITY_CLIENT_SECRET' => $tasksApi['client_secret'] ?? ($existingApiEnv['IDENTITY_CLIENT_SECRET'] ?? ''), 'IDENTITY_SANDBOX_API_URL' => $identityUrl, 'IDENTITY_SANDBOX_PROJECT' => $tasks['project']['slug']]);
-$writeEnv($platformApiEnv, ['APP_URL' => $platformApiUrl, 'STARTER_PUBLIC_URL' => $appUrl, 'IDENTITY_API_URL' => $identityUrl, 'IDENTITY_PROJECT' => $starter['project']['slug'], 'IDENTITY_CLIENT_ID' => $starterApi['id'], 'IDENTITY_CLIENT_SECRET' => $starterApi['client_secret'] ?? ($existingPlatformApiEnv['IDENTITY_CLIENT_SECRET'] ?? ''), 'IDENTITY_SANDBOX_API_URL' => $identityUrl, 'IDENTITY_SANDBOX_PROJECT' => $starter['project']['slug']]);
 $writeEnv($webEnv, [
     'ZOLTA_STARTER_SITE_URL' => $appUrl,
     'NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_IDENTITY_API_URL' => $identityUrl,
@@ -463,11 +462,11 @@ $writeEnv($webEnv, [
     'NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET' => $tasksBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET'] ?? ($existingWebEnv['ZOLTA_PROJECTS_IDENTITY_CLIENT_SECRET'] ?? '')),
     'NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CALLBACK_URL' => $appUrl . $tasks['application']['callbackPath'],
     'ZOLTA_STARTER_API_URL' => $starterApiUrl,
-    'ZOLTA_PLATFORM_API_URL' => $platformApiUrl,
+    'NUXT_IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken,
     'NUXT_TALRED_IDENTITY_SESSION_SECRET' => $existingSecret($existingWebEnv['NUXT_TALRED_IDENTITY_SESSION_SECRET'] ?? $existingWebEnv['NUXT_ZOLTA_IDENTITY_SESSION_SECRET'] ?? null) ?? base64_encode(random_bytes(32)),
     'NUXT_SESSION_PASSWORD' => $existingSecret($existingWebEnv['NUXT_SESSION_PASSWORD'] ?? null) ?? base64_encode(random_bytes(32)),
 ]);
-$generatedIdentityEnv = ['STARTER_IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken, 'STARTER_IDENTITY_OWNER_EMAIL' => $ownerEmail, 'STARTER_IDENTITY_OWNER_PASSWORD' => $ownerPassword, 'STARTER_IDENTITY_CONSOLE_CLIENT_ID' => $consoleClientId, 'STARTER_IDENTITY_CONSOLE_CLIENT_SECRET' => $consoleClientSecret, 'STARTER_IDENTITY_CLIENT_ID' => $starterBff['id'], 'STARTER_IDENTITY_CLIENT_SECRET' => $starterBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_SECRET'] ?? ''), 'STARTER_SAAS_IDENTITY_CLIENT_ID' => $saasBff['id'], 'STARTER_SAAS_IDENTITY_CLIENT_SECRET' => $saasBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_CLIENT_SECRET'] ?? ''), 'STARTER_PROJECTS_IDENTITY_CLIENT_ID' => $tasksBff['id'], 'STARTER_PROJECTS_IDENTITY_CLIENT_SECRET' => $tasksBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET'] ?? ''), 'STARTER_PROJECTS_API_IDENTITY_CLIENT_ID' => $tasksApi['id'], 'STARTER_PROJECTS_API_IDENTITY_CLIENT_SECRET' => $tasksApi['client_secret'] ?? ($existingApiEnv['IDENTITY_CLIENT_SECRET'] ?? ''), 'STARTER_PLATFORM_API_IDENTITY_CLIENT_ID' => $starterApi['id'], 'STARTER_PLATFORM_API_IDENTITY_CLIENT_SECRET' => $starterApi['client_secret'] ?? ($existingPlatformApiEnv['IDENTITY_CLIENT_SECRET'] ?? ''), 'STARTER_IDENTITY_CONSOLE_SESSION_PASSWORD' => $env('STARTER_IDENTITY_CONSOLE_SESSION_PASSWORD', $env('NUXT_SESSION_PASSWORD', ''))];
+$generatedIdentityEnv = ['STARTER_IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken, 'STARTER_IDENTITY_OWNER_EMAIL' => $ownerEmail, 'STARTER_IDENTITY_OWNER_PASSWORD' => $ownerPassword, 'STARTER_IDENTITY_CONSOLE_CLIENT_ID' => $consoleClientId, 'STARTER_IDENTITY_CONSOLE_CLIENT_SECRET' => $consoleClientSecret, 'STARTER_IDENTITY_CLIENT_ID' => $starterBff['id'], 'STARTER_IDENTITY_CLIENT_SECRET' => $starterBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_SECRET'] ?? ''), 'STARTER_SAAS_IDENTITY_CLIENT_ID' => $saasBff['id'], 'STARTER_SAAS_IDENTITY_CLIENT_SECRET' => $saasBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_CLIENT_SECRET'] ?? ''), 'STARTER_PROJECTS_IDENTITY_CLIENT_ID' => $tasksBff['id'], 'STARTER_PROJECTS_IDENTITY_CLIENT_SECRET' => $tasksBff['client_secret'] ?? ($existingWebEnv['NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET'] ?? ''), 'STARTER_PROJECTS_API_IDENTITY_CLIENT_ID' => $tasksApi['id'], 'STARTER_PROJECTS_API_IDENTITY_CLIENT_SECRET' => $tasksApi['client_secret'] ?? ($existingApiEnv['IDENTITY_CLIENT_SECRET'] ?? ''), 'STARTER_IDENTITY_CONSOLE_SESSION_PASSWORD' => $env('STARTER_IDENTITY_CONSOLE_SESSION_PASSWORD', $env('NUXT_SESSION_PASSWORD', ''))];
 if ($opsEnv !== null) {
     $writeEnv($opsEnv, $generatedIdentityEnv);
 }
@@ -497,11 +496,9 @@ if ($hostMode) {
         'IDENTITY_CONSOLE_URL' => $hostedAuthUrl,
         'IDENTITY_HOSTED_APPLICATIONS_TOKEN' => $hostedToken,
         'IDENTITY_HOSTED_AUTH_PAGE_SETS' => $identityHostedAuthPageSets,
-        'PLATFORM_ONBOARDING_CLIENT_ID' => $starterApi['id'],
-        'PLATFORM_LOGIN_IDENTITY_PROJECT' => $starter['project']['slug'],
     ]);
     $writeEnv($identityConsoleRootEnv, $consoleEnvironment);
     fwrite(STDOUT, "Configured the public Identity source checkout for the Starter's hosted-auth integration.\n");
 }
 fwrite(STDOUT, "Talred Starter local Identity projects initialized.\n");
-fwrite(STDOUT, "Configured separate Starter, Fresh SaaS, and Tasks projects, API/BFF clients, Identity-hosted applications, roles, permissions, and local env files.\n");
+fwrite(STDOUT, "Configured separate Starter, Fresh SaaS, and Tasks projects, BFF/API clients, Identity-hosted applications, roles, permissions, and local env files.\n");

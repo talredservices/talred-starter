@@ -30,12 +30,6 @@ jobs:
           - image: zolta-starter-api-nginx
             dockerfile: apps/api/docker/laravel/nginx.Dockerfile
             context: apps/api
-          - image: zolta-starter-platform-api
-            dockerfile: apps/platform-api/docker/laravel/Dockerfile
-            context: apps/platform-api
-          - image: zolta-starter-platform-api-nginx
-            dockerfile: apps/platform-api/docker/laravel/nginx.Dockerfile
-            context: apps/platform-api
     steps:
       - uses: actions/checkout@v7
 

@@ -1,10 +1,10 @@
 # Talred Starter Web
 
-`apps/web` is the Nuxt 4 client and BFF for Talred Starter. It includes a Starter workspace app and two runnable reference experiences: Talred Tasks and Fresh SaaS. The app keeps browser-facing API calls on same-origin Nuxt routes and keeps Identity client credentials on the server.
+`apps/web` is the Nuxt 4 client and BFF for Talred Starter. It includes an authenticated Starter Home with links to its product examples and a static overview of the architecture patterns they demonstrate, alongside runnable reference experiences: Talred Tasks and Fresh SaaS. The app keeps browser-facing API calls on same-origin Nuxt routes and keeps Identity client credentials on the server.
 
 ## Included experiences
 
-- **Starter workspace** (`/` and `/dashboard`): create and manage workspaces, invite members, and link Identity projects. The `/identity` action opens the configured Talred Identity control plane.
+- **Starter Home** (`/dashboard`): an authenticated welcome page introducing the included products, documentation, and architecture capabilities. It is presentation-only and does not fetch platform workspace data. Identity administration remains in the separate Talred Identity Console.
 - **Talred Tasks** (`/projects`): a task-management example with a Nuxt client/BFF, its own Identity application, and a Laravel API. Use it to trace a browser interaction through the API and domain layers.
 - **Fresh SaaS** (`/saas`): a public-site and protected-dashboard example with its own Identity project and client. Its pricing page is structural sample content; no commercial plans or prices are configured.
 
@@ -45,7 +45,7 @@ Build the Nuxt runtime from `apps/web`:
 docker build -f docker/nuxt/Dockerfile -t talred-starter-web .
 ```
 
-The web image contains the Nuxt server output. Laravel/API containers are defined and built from `apps/api` and `apps/platform-api`; browser requests reach them through same-origin BFF routes.
+The web image contains the Nuxt server output. Laravel/API containers are defined and built from `apps/api`; browser requests reach them through same-origin BFF routes.
 
 ## License
 

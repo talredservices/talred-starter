@@ -20,7 +20,7 @@ const notice = computed(() => props.productName
 </script>
 
 <template>
-  <UContainer class="starter-public starter-public-narrative">
+  <UContainer class="starter-public">
     <StarterPublicIntro
       :title="policy.title"
       :description="notice"

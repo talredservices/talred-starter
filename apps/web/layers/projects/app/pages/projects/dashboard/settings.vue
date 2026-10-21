@@ -52,8 +52,8 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <UContainer class="w-full max-w-none py-8 sm:py-10">
-        <div class="mx-auto w-full max-w-4xl space-y-6">
+      <UContainer class="py-8 sm:py-10">
+        <div class="w-full max-w-4xl space-y-6">
           <header>
             <h1 class="text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
               {{ t('projects.settings.title') }}

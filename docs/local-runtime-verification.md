@@ -572,3 +572,58 @@
 
 - Target/root: `/home/redouane/projects/talredservices/talred-starter`; actor: current Codex session. Started the documented native Nuxt development command under Node 24 on `127.0.0.1:3300` for Starter, SaaS, and Tasks. Existing Identity/API servers were retained; no Docker operations.
 - Verification: `/`, `/en/saas`, and `/en/projects` each returned HTTP 200. This startup check did not repeat authenticated workflow tests.
+
+## 2026-10-18T03:03:57Z — Prevent temporary demo links to shared Identity administration
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; actor: interactive Codex session.
+- Changes: dashboard and workspace Identity project cards no longer link temporary sessions to the shared Identity admin. The Starter dashboard sidebar and SaaS/Tasks dashboard product cards also omit their shared-console links for temporary sessions. Starter dashboard copy explains that Identity administration is isolated and the shared admin console is unavailable to this account. No project IDs or console destinations are rewritten to another Identity database.
+- Verification: focused ESLint for the five changed Vue files passed; English/French locale JSON parsing and scoped `git diff --check` passed. The active browser dashboard rendered the temporary demo message, kept the `zoltasoft-starter-sandbox` project card, and exposed no Identity Console navigation or project action.
+- Limitations: no automated tests, build, or navigation into an admin console was run. The standalone per-visitor Identity demo has its own database and is not mapped to this Starter sandbox project, so this change deliberately prevents the unsafe shared-admin redirect without claiming that those are the same Identity installation.
+
+## 2026-10-18T03:38:02Z — Start public Starter Docker stack
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; actor: interactive Codex session.
+- Runtime: stopped the previously running shared Talred Compose project and isolated Identity demo in the default Docker context; preserved their containers and volumes. Started the public Starter's isolated `talred-starter` Compose project in Docker Desktop's `desktop-linux` context. Pulled the pinned public Identity Server/Nginx images, created the Starter-owned MySQL/Redis/Identity storage volumes, ran Identity provisioning and both API migrations, and started the Console, Tasks API, Platform API, and web app. The default Docker context has no running containers; only the public Starter's eight services are running in `desktop-linux`.
+- Build: prepared local config with `./docker/up.sh --prepare-only`; built both API images through `local-dev-ops/scripts/with-stack-paused`. Built the Identity Console and web images sequentially through the wrapper after parallel Nuxt builds exceeded Docker Desktop memory. No source files were changed for this runtime operation.
+- Verification: all eight long-running Starter services report healthy/running in Compose. Identity Console `/admin/sign-in`, Identity API `/up`, Tasks API `/up`, and Platform API `/up` returned HTTP 200. Starter `/en/dashboard` returned HTTP 302, confirming the web server handled the request and redirected it to the sign-in flow. The Identity pins and app images are present in Docker Desktop's context.
+- Limitations: `./docker/up.sh --no-build` could not complete as a single command because its temporary `DOCKER_CONFIG` selected the `default` context for image pulls while the user's active Docker Desktop context is `desktop-linux`; the saved GHCR credentials also returned `denied`. Pulled the pinned public images anonymously into `desktop-linux` while preserving its context metadata, then completed the script's declared startup steps with `--pull never`. No browser walkthrough, automated application tests, or production actions were performed.
+
+## 2026-10-18T03:52:52Z — Remove Starter workspaces and Platform API
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session.
+- Changes: removed the Platform API source, workspace dashboard/settings/invitation pages, Platform BFF endpoints and client contracts, Identity directory reads, workspace permissions/client provisioning, Docker services/image setup, and current feature transformation documents. `/dashboard` is now an authenticated empty shell. Removed Platform sandbox workspace seeding and kept the Tasks sample project/task flow.
+- Runtime: stopped the public Starter stack for the web rebuild; removed its Platform API and initializer containers and the local Platform API image; rebuilt web; restarted the remaining Identity, Tasks, data, and web services in Docker Desktop `desktop-linux`. No external provider was used. Existing database/storage volumes and local SQLite/storage data were retained.
+- Verification: Nuxt Docker production build succeeded. Standalone, shared, and sandbox-overlay Compose configurations passed; changed PHP and shell files parsed; JSON configs parsed; both repository `git diff --check` passed. Web, Identity Console/API, and Tasks API returned HTTP 200; unauthenticated `/en/dashboard` returned the expected 302; removed Platform BFF and workspace URLs returned 404. All seven long-running Starter services are healthy/running, and no Platform API container or image remains.
+- Limitations: no automated test suites were run. Nuxt build emitted the existing localhost site-config warning and non-fatal bundler timing/dependency warnings. Legacy Platform database/storage state was preserved by request-level data-preservation policy and is no longer mounted by an active service.
+
+## 2026-10-18T04:01:53Z — Add Starter dashboard welcome page
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session.
+- Changes: replaced the empty authenticated Starter Home with a localized welcome header, a product/resource launch grid, and a capabilities grid for clean architecture, Laravel APIs/CQRS, Identity, and Nuxt/BFF patterns. Temporary demo accounts do not see the shared Identity Console link. Updated the web README.
+- Runtime: rebuilt `talred-starter-web:local` with `../local-dev-ops/scripts/with-stack-paused -- docker compose --env-file .env -f docker/compose.yaml build web`, then restarted the Starter Compose stack. Existing data volumes were preserved.
+- Verification: Nuxt production image build succeeded; focused ESLint passed after `nuxt prepare`; English and French translation JSON parsed; all seven long-running Compose services report running/healthy (Identity Nginx has no health check). `/` returned HTTP 200 and unauthenticated `/en/dashboard` returned HTTP 302 to login.
+- Limitations: the Compose `up --wait` command exited nonzero because the one-shot provisioner completed successfully and exited; the long-running services are healthy. No authenticated browser walkthrough or automated test suite was run. Build warnings include the existing localhost site-config warning and non-fatal bundled dependency/timing warnings.
+
+## 2026-10-18T04:07:48Z — Simplify Starter welcome header
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session.
+- Change: removed the welcome panel styling, eyebrow, and Settings button; retained only the personalized title and short description above the existing product and capability grids.
+- Runtime: rebuilt the `talred-starter-web:local` image with the stack-aware wrapper and restarted the Starter Compose services; volumes were preserved.
+- Verification: focused ESLint passed; image build succeeded; all long-running Starter services are running/healthy; `/` returned HTTP 200 and unauthenticated `/en/dashboard` returned HTTP 302. The authenticated dashboard was refreshed in Chrome and visually checked.
+- Limitations: Compose `up --wait` reported the successful exit of the one-shot provisioner as a nonzero command result; health inspection confirmed all long-running services were healthy. Build emitted existing localhost site-config and non-fatal bundler warnings.
+
+## 2026-10-18T04:13:57Z — Switch Starter from Docker to host development servers
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session. Identity source remains owned by `/home/redouane/projects/talredservices/identity`.
+- Runtime: stopped and removed the standalone Starter Compose containers and network with `./docker/down.sh`; its named volumes and ignored credentials were preserved. Started Identity API (`8100`), Identity Console (`3100`), Tasks API (`8300`), and Starter Nuxt/BFF (`3300`) using the documented host-run commands. Used Node `24.19.0` and process-only URL overrides so the Starter and Tasks API point at the host services instead of Docker DNS names. No source or persistent environment files were changed.
+- Verification: Identity API `/up`, Identity Console `/admin/sign-in`, Tasks API `/up`, and Starter `/` returned HTTP 200. Unauthenticated `/en/dashboard` returned the expected HTTP 302; the existing authenticated dashboard session loaded in the in-app browser. The Docker shutdown script reported success and preserved volumes.
+- Limitations: automated tests and a fresh login flow were not run. Nuxt dev servers reported a non-fatal DevTools/Vite hook warning and an auto-generated OG image secret notice.
+
+## 2026-10-18T04:21:14Z — Fix native Starter Identity authorization configuration
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session. Identity source remains owned by `/home/redouane/projects/talredservices/identity`.
+- Cause: Starter's host initializer did not write `NUXT_IDENTITY_HOSTED_APPLICATIONS_TOKEN` to the Nuxt BFF environment. The browser's 401 was from the BFF's authorization-intent request to native Identity. The web env also still had Docker-only upstream URLs (`identity-nginx` and `starter-api`), which caused connection failures after a plain host restart.
+- Changes: updated `scripts/init-stack.php` to include the hosted-app token in `apps/web/.env`; ran the documented idempotent `./scripts/init-stack --host` reconciliation, which regenerated Starter's local client/app settings and native URLs. Local-only ignored env files were updated with mode 0600; no source secrets were added.
+- Runtime: restarted Identity API (8100), Identity Console (3100), Tasks API (8300), and Starter Nuxt/BFF (3300) after initialization.
+- Verification: PHP syntax check and scoped `git diff --check` passed. Each service health/page endpoint returned HTTP 200. Starter's authorization endpoint now redirects to the Identity hosted login route (HTTP 302); following the redirect returned HTTP 200. No automated test suite was run.
+- Limitations: the user login was not submitted; the verified outcome is successful authorization-intent creation and redirect, not authenticated account access. Existing Nuxt development warnings remain non-fatal.

@@ -32,10 +32,33 @@
 }
 
 :root {
+	/* Shared page, header, and footer container width for the Starter Nuxt app. */
+	--ui-container: 80rem;
+	--app-container-gutter: 1rem;
 	--ui-bg: #f7f8f6;
 	--ui-bg-muted: #eef3ef;
 	--ui-bg-elevated: #ffffff;
 	--ui-bg-accented: var(--ui-color-neutral-100);
+}
+
+@media (min-width: 40rem) {
+	:root {
+		--app-container-gutter: 1.5rem;
+	}
+}
+
+@media (min-width: 64rem) {
+	:root {
+		--app-container-gutter: 2rem;
+	}
+}
+
+/* Use for custom layout wrappers; UContainer already consumes --ui-container. */
+.app-container {
+	width: 100%;
+	max-width: var(--ui-container);
+	margin-inline: auto;
+	padding-inline: var(--app-container-gutter);
 }
 
 html,
@@ -250,7 +273,7 @@ body {
 }
 
 
-.starter-public { max-width: 72rem; padding-bottom: 4rem; }
+.starter-public { padding-bottom: 4rem; }
 .starter-public-intro { max-width: 64rem; padding-block: clamp(3rem, 7vw, 5rem); }
 .starter-public-kicker { color: var(--ui-primary); font-size: .75rem; font-weight: 600; letter-spacing: .06em; }
 .starter-public-intro h1 { margin-top: 1rem; max-width: 60rem; font-size: clamp(2.25rem, 4.2vw, 3.5rem); font-weight: 600; line-height: 1.12; letter-spacing: -.045em; text-wrap: balance; }
@@ -263,8 +286,19 @@ body {
 .starter-public-choice { border-top: 1px solid var(--ui-border); padding-top: 1.5rem; min-width: 0; }
 .starter-public-choice h3 { margin-top: 1rem; font-size: 1.125rem; font-weight: 600; }
 .starter-public-choice p { max-width: 28rem; margin-top: .75rem; font-size: .875rem; color: var(--ui-text-muted); line-height: 1.8; }
+.starter-public-identity { display: grid; grid-template-columns: minmax(17rem, .82fr) minmax(0, 1.18fr); margin-top: 3rem; overflow: hidden; border: 1px solid #1c3445; border-radius: 1.25rem; background: #07121f; color: #effbfa; }
+.starter-public-identity-copy { align-self: center; padding: clamp(1.5rem, 4vw, 3.25rem); }
+.starter-public-identity-kicker { color: #42d7c2; font-size: .8rem; font-weight: 650; }
+.starter-public-identity-copy h3 { max-width: 28rem; margin-top: 1rem; font-size: clamp(1.65rem, 3vw, 2.35rem); font-weight: 600; line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
+.starter-public-identity-description { max-width: 32rem; margin-top: 1rem; color: #b7c9d3; font-size: .95rem; line-height: 1.8; }
+.starter-public-identity-features { display: grid; gap: .8rem; margin-top: 1.5rem; color: #e0ecef; font-size: .875rem; }
+.starter-public-identity-features li { display: flex; align-items: flex-start; gap: .65rem; }
+.starter-public-identity-features li > :first-child { margin-top: .2rem; color: #42d7c2; }
+.starter-public-identity-art { display: flex; align-items: center; min-width: 0; padding: clamp(1rem, 2.5vw, 2rem); background: radial-gradient(ellipse at 55% 48%, rgba(32, 111, 120, .2), transparent 68%); }
+.starter-public-identity-art img { display: block; width: 100%; height: auto; border: 1px solid #263b4b; border-radius: .8rem; box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .28); }
 .starter-public-list { margin-top: 2rem; }.starter-public-list div { display: grid; grid-template-columns: 13rem minmax(0, 1fr); gap: 1rem; padding-block: 1.25rem; border-top: 1px solid var(--ui-border); font-size: .875rem; line-height: 1.8; }.starter-public-list dt { font-weight: 600; }.starter-public-list dd { color: var(--ui-text-muted); }
-.starter-public-narrative { max-width: 54rem; }.starter-public-story { max-width: 44rem; padding-bottom: 3rem; color: var(--ui-text-muted); line-height: 1.9; }.starter-public-story p + p { margin-top: 1.5rem; }
+.starter-public-story { max-width: 44rem; padding-bottom: 3rem; color: var(--ui-text-muted); line-height: 1.9; }.starter-public-story p + p { margin-top: 1.5rem; }
+@media (max-width: 767px) { .starter-public-identity { grid-template-columns: 1fr; }.starter-public-identity-copy { padding-bottom: 1rem; }.starter-public-identity-art { padding-top: 1rem; } }
 @media (max-width: 639px) { .starter-public-grid, .starter-public-list div { grid-template-columns: 1fr; }.starter-public { padding-bottom: 2rem; } }
 
 .starter-public-skip { position: fixed; top: -6rem; left: 1rem; z-index: 100; background: var(--ui-bg); color: var(--ui-text-highlighted); padding: .75rem 1rem; border: 1px solid var(--ui-border); border-radius: .375rem; }
