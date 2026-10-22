@@ -5,6 +5,7 @@
 !.env.release.example
 
 # JavaScript and Nuxt output
+.pnpm-store/
 node_modules/
 .nuxt/
 .output/

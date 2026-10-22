@@ -18,6 +18,11 @@ be converted into blanket audit suppression. Security workflow failures must
 propagate instead of being hidden after uploading a report. Registry outages
 are incomplete verification, not successful security checks.
 
+On 2026-10-22, the Starter dependency audit found Nuxt GHSA-vjh5-4x84-xrqp in
+the Nuxt 4.6.0 lockfile. Nuxt 4.6.2 fixes case-insensitive matching for
+server-side route rules. Keep `nuxt` and the resolved lockfile at 4.6.2 or
+newer; do not approve this runtime advisory as a tooling exception.
+
 Run the Tasks API Composer audit against its lockfile. The beta audit found advisories affecting Laravel,
 CommonMark, Flysystem, HttpFoundation, and YAML. Both locks were updated to
 patched compatible releases. Keep optional development tooling updates out of
