@@ -1,3 +1,5 @@
+import type { OutputChunk, Plugin } from 'rollup'
+
 const starterIdentityApplication = {
   mode: 'hosted',
   identityApiUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_IDENTITY_API_URL ?? 'http://localhost:8100',
@@ -47,30 +49,32 @@ const viteAllowedHosts = [
     .filter(Boolean)
 ]
 
+const starterRuntimeDependencyBoundary: Plugin = {
+  name: 'starter-runtime-dependency-boundary',
+  generateBundle(_options, bundle) {
+    if (process.env.NODE_ENV === 'development') return
+    const excludedPackages = ['braces', 'listhen', 'node-forge']
+    const chunks = Object.values(bundle).filter((output): output is OutputChunk => output.type === 'chunk')
+    const modules = chunks.flatMap(chunk => Object.keys(chunk.modules))
+    const references = [...modules, ...chunks.flatMap(chunk => chunk.imports)]
+    for (const reference of references) {
+      const normalized = reference.replaceAll('\\', '/').replaceAll('\0', '').split('?')[0] ?? ''
+      if (excludedPackages.some(name => normalized === name || normalized.includes(`/node_modules/${name}/`) || normalized.startsWith(`${name}/`))) {
+        this.error(`Build tooling must not enter the Starter runtime: ${reference}`)
+      }
+    }
+    this.emitFile({
+      type: 'asset',
+      fileName: 'starter-runtime-dependencies.json',
+      source: JSON.stringify({ version: 1, moduleCount: modules.length, excludedPackages })
+    })
+  }
+}
+
 export default defineNuxtConfig({
   nitro: {
     rollupConfig: {
-      plugins: [{
-        name: 'starter-runtime-dependency-boundary',
-        generateBundle(_options, bundle) {
-          if (process.env.NODE_ENV === 'development') return
-          const excludedPackages = ['braces', 'listhen', 'node-forge']
-          const chunks = Object.values(bundle).filter(output => output.type === 'chunk')
-          const modules = chunks.flatMap(chunk => Object.keys(chunk.modules))
-          const references = [...modules, ...chunks.flatMap(chunk => chunk.imports)]
-          for (const reference of references) {
-            const normalized = reference.replaceAll('\\', '/').replaceAll('\0', '').split('?')[0] ?? ''
-            if (excludedPackages.some(name => normalized === name || normalized.includes(`/node_modules/${name}/`) || normalized.startsWith(`${name}/`))) {
-              this.error(`Build tooling must not enter the Starter runtime: ${reference}`)
-            }
-          }
-          this.emitFile({
-            type: 'asset',
-            fileName: 'starter-runtime-dependencies.json',
-            source: JSON.stringify({ version: 1, moduleCount: modules.length, excludedPackages })
-          })
-        }
-      }]
+      plugins: [starterRuntimeDependencyBoundary]
     }
   },
   extends: [
