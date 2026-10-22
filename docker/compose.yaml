@@ -156,7 +156,7 @@ services:
         condition: service_started
 
   provisioner:
-    image: php:8.3-cli-alpine
+    image: php:8.3.36-cli-alpine
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     working_dir: /workspace
     restart: "no"

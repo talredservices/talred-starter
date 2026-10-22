@@ -5,7 +5,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --no-scripts
 
-FROM php:8.3-fpm-alpine
+FROM php:8.3.36-fpm-alpine
 
 RUN apk add --no-cache $PHPIZE_DEPS linux-headers icu-dev libzip-dev oniguruma-dev \
     && docker-php-ext-install bcmath intl mbstring pdo_mysql zip \
