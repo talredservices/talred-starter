@@ -96,7 +96,7 @@
           "terms_url": null,
           "privacy_url": null
         },
-        "policyRevision": null
+        "policyRevision": "talredservices-terms-v1"
       }
     },
     "tasks": {
@@ -146,7 +146,7 @@
           "terms_url": null,
           "privacy_url": null
         },
-        "policyRevision": null
+        "policyRevision": "talredservices-terms-v1"
       }
     }
   }

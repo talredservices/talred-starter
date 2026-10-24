@@ -7,6 +7,8 @@ const starterIdentityApplication = {
   clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_ID ?? '',
   clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_SECRET ?? '',
   hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_HOSTED_APPLICATION ?? 'zoltasoft-starter',
+  sandboxApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_SANDBOX_APPLICATION ?? '',
+  features: { demoAccount: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_FEATURES_DEMO_ACCOUNT === 'true' },
   callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CALLBACK_URL ?? 'http://localhost:3300/api/identity/starter/auth/callback',
   sessionCookie: 'zolta-starter-identity-session',
   defaultRedirect: '/dashboard',
@@ -20,6 +22,8 @@ const saasIdentityApplication = {
   clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_CLIENT_ID ?? process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_ID ?? '',
   clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_CLIENT_SECRET ?? process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_CLIENT_SECRET ?? '',
   hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_HOSTED_APPLICATION ?? 'zoltasoft-saas',
+  sandboxApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_SANDBOX_APPLICATION ?? '',
+  features: { demoAccount: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_FEATURES_DEMO_ACCOUNT === 'true' },
   callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_CALLBACK_URL ?? 'http://localhost:3300/api/identity/saas/auth/callback',
   sessionCookie: 'zolta-saas-identity-session',
   defaultRedirect: '/saas/dashboard',
@@ -33,10 +37,45 @@ const projectsIdentityApplication = {
   clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_ID ?? '',
   clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CLIENT_SECRET ?? '',
   hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_HOSTED_APPLICATION ?? 'tasks-demo',
+  sandboxApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_SANDBOX_APPLICATION ?? '',
+  features: { demoAccount: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_FEATURES_DEMO_ACCOUNT === 'true' },
   callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_CALLBACK_URL ?? 'http://localhost:3300/api/identity/projects/auth/callback',
   sessionCookie: 'zolta-projects-identity-session',
   defaultRedirect: '/projects/dashboard',
   logoutRedirect: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_LOGOUT_REDIRECT ?? '/projects'
+}
+
+const starterSandboxIdentityApplication = {
+  ...starterIdentityApplication,
+  clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_SANDBOX_CLIENT_ID ?? '',
+  clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_SANDBOX_CLIENT_SECRET ?? '',
+  hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_SANDBOX_HOSTED_APPLICATION ?? 'zoltasoft-starter',
+  callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_SANDBOX_CALLBACK_URL ?? 'http://localhost:3300/api/identity/starter/auth/callback',
+  sessionCookie: 'zolta-starter-identity-session-sandbox',
+  features: { demoAccount: false },
+  sandboxApplication: ''
+}
+
+const saasSandboxIdentityApplication = {
+  ...saasIdentityApplication,
+  clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_SANDBOX_CLIENT_ID ?? '',
+  clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_SANDBOX_CLIENT_SECRET ?? '',
+  hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_SANDBOX_HOSTED_APPLICATION ?? 'zoltasoft-saas',
+  callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_SAAS_SANDBOX_CALLBACK_URL ?? 'http://localhost:3300/api/identity/saas/auth/callback',
+  sessionCookie: 'zolta-saas-identity-session-sandbox',
+  features: { demoAccount: false },
+  sandboxApplication: ''
+}
+
+const projectsSandboxIdentityApplication = {
+  ...projectsIdentityApplication,
+  clientId: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_SANDBOX_CLIENT_ID ?? '',
+  clientSecret: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_SANDBOX_CLIENT_SECRET ?? '',
+  hostedApplication: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_SANDBOX_HOSTED_APPLICATION ?? 'tasks-demo',
+  callbackUrl: process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_PROJECTS_SANDBOX_CALLBACK_URL ?? 'http://localhost:3300/api/identity/projects/auth/callback',
+  sessionCookie: 'zolta-projects-identity-session-sandbox',
+  features: { demoAccount: false },
+  sandboxApplication: ''
 }
 
 const viteAllowedHosts = [
@@ -146,10 +185,13 @@ export default defineNuxtConfig({
         'starter': starterIdentityApplication,
         'zoltasoft-starter': starterIdentityApplication,
         'starter-demo': starterIdentityApplication,
+        starterSandbox: starterSandboxIdentityApplication,
         'saas': saasIdentityApplication,
         'zoltasoft-saas': saasIdentityApplication,
+        saasSandbox: saasSandboxIdentityApplication,
         'projects': projectsIdentityApplication,
-        'tasks-demo': projectsIdentityApplication
+        'tasks-demo': projectsIdentityApplication,
+        projectsSandbox: projectsSandboxIdentityApplication
       }
     }
   },

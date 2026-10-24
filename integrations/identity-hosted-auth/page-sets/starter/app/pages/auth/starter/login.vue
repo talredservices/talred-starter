@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import DefaultLoginPage from '#layers/auth/default-pages/app/pages/auth/login.vue'
+import IdentityHostedLoginPage from '#layers/auth/default-pages/app/components/IdentityHostedLoginPage.vue'
 
 definePageMeta({ layout: 'identity-auth', middleware: 'identity-live-auth' })
 </script>
 
 <template>
-  <StarterAuthShell :page="DefaultLoginPage" />
+  <StarterAuthShell :page="IdentityHostedLoginPage" />
 </template>
