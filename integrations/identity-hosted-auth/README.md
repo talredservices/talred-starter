@@ -5,9 +5,11 @@ configuration. The Identity project remains a generic authentication service;
 it reads the hosted application's name, page-set slug, and validated appearance
 from its own hosted-application record.
 
-`hosted-applications.json` is the presentation source of truth for this
-repository's examples. The local initializer synchronizes its page-set and
-appearance values through Identity's hosted-application API. Identity only
+`hosted-applications.json` is the hosted-auth configuration source of truth for
+this repository's examples. The local initializer synchronizes its page-set,
+appearance, and policy-revision values through Identity's hosted-application
+API. Increment a policy revision when linked terms or privacy text changes so
+consent records remain tied to the version users accepted. Identity only
 renders a custom page set when the selected host has compiled that layer and
 enabled the slug; otherwise it falls back to its generic auth pages.
 

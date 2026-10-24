@@ -41,6 +41,7 @@
     },
     "zoltasoft-saas": {
       "page_set": "saas",
+      "policy_revision": "talredservices-terms-v1",
       "appearance": {
         "welcome_text": null,
         "accent_color": "#8b5cf6",
@@ -79,6 +80,7 @@
     },
     "tasks-demo": {
       "page_set": "projects",
+      "policy_revision": "talredservices-terms-v1",
       "appearance": {
         "welcome_text": null,
         "accent_color": "#6366f1",
