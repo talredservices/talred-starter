@@ -1,5 +1,13 @@
 # Automation execution log
 
+## 2026-10-27T03:48:26Z — Full local Starter release guard
+
+- Target/root: `talred-starter`; actor: current Codex session; release branch `codex/full-local-staging-20261026`.
+- Action/method: ran `./scripts/ci pre-push` with Node 24 and temporary PHP SQLite modules extracted under `/tmp`; no host package was installed. Preserved the unrelated untracked `apps/platform-api/` data outside the release commit.
+- Verification: guard passed release-tree/secret scans, shell and PHP checks, frozen pnpm install, ESLint/typecheck, four web tests, three dependency-audit tests, Nuxt production build, seven API tests, and Composer audit. The `with-stack-paused` wrapper restored the original 16 running services on Docker context `default`.
+- Runtime/providers: local stack only; no account, provider, or staging changes. No branch was pushed and nothing was deployed.
+- Limitation: Nuxt Site Config continues to warn that the local `http://localhost:3300` URL is not a production URL; the build and guard pass.
+
 
 ## 2026-10-26T05:42:13Z — Preserve Nuxt auth navigation and Back
 
