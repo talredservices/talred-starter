@@ -14,6 +14,9 @@ stack as production-hardened.
 - Verify a clean public clone using both paths in
   [developer setup](developer-setup.md): native Identity source and standalone
   Docker. Use disposable local data for this check.
+- Keep the Starter Nuxt image build context at the repository root so the
+  Dockerfile includes both `apps/web` and
+  `integrations/identity-hosted-auth/brand`.
 - Run the repository checks (`./scripts/ci pre-push`) through
   `../local-dev-ops/scripts/with-stack-paused --` in the canonical workspace.
   The wrapper protects the shared workspace Compose services; it does not

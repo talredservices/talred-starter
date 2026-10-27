@@ -627,3 +627,10 @@
 - Runtime: restarted Identity API (8100), Identity Console (3100), Tasks API (8300), and Starter Nuxt/BFF (3300) after initialization.
 - Verification: PHP syntax check and scoped `git diff --check` passed. Each service health/page endpoint returned HTTP 200. Starter's authorization endpoint now redirects to the Identity hosted login route (HTTP 302); following the redirect returned HTTP 200. No automated test suite was run.
 - Limitations: the user login was not submitted; the verified outcome is successful authorization-intent creation and redirect, not authenticated account access. Existing Nuxt development warnings remain non-fatal.
+
+## 2026-10-27T09:38:54Z — Complete Starter pre-push guard under Node 24
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; local session.
+- Action/method: ran `nvm exec 24.19.0 ./scripts/ci pre-push`. Host PHP `8.5.4-0ubuntu1.5` had `pdo_sqlite`, `sqlite3`, and `gd` loaded after installing the matching SQLite extension package.
+- Verification: guard passed. Frozen pnpm install; web lint/typecheck; 4 web tests and 3 dependency-policy tests; Nuxt production build; dependency audit; release/secret/config checks; Composer validation/install/audit; API tests (7 tests, 19 assertions). The stack-pause wrapper restored the same 16 containers, verified running with `docker --context default ps`. No provider, image publication, push, or deployment action occurred.
+- Limitations: build/install emitted non-fatal localhost site-config and dependency bundler warnings. The guard does not establish GitHub workflow, registry, or staging readiness. Existing untracked `apps/platform-api/` was preserved.

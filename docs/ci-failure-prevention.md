@@ -46,6 +46,13 @@ contexts. Root ignore patterns must cover nested applications. Check a
 candidate created from the working tree, including newly added source files,
 before release; scanning only HEAD does not cover untracked candidate files.
 
+The Starter Nuxt image must use the repository root as its Docker context. Its
+`nuxt.config.ts` extends `integrations/identity-hosted-auth/brand`, outside
+`apps/web`; an `apps/web`-only context can still produce an image while omitting
+the shared brand components. Keep the Dockerfile's explicit copies of both
+`apps/web` and that integration layer, and verify the rendered header in the
+deployed image.
+
 ## Setup verification
 
 Use independent temporary directories, database files, Compose project names,

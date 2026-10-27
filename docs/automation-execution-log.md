@@ -49,3 +49,11 @@
 - Verification: the branded pending state appeared before the forms loaded; both forms rendered in light and dark modes. No auth credentials were submitted.
 - Runtime/providers: existing local Starter web and Identity Console; no service restart, Docker operation, provider change, or deployment.
 - Limitation: no build or automated test suite was run in this browser verification pass.
+
+### 2026-10-27T11:46:21Z — Include shared auth branding in the Starter image
+
+- Status: local pre-push guard passed; publication is pending.
+- Target/root: `talred-starter`; actor: current Codex session; branch `codex/starter-brand-image-context-20261027`.
+- Action/method: changed the Starter Nuxt image to build from the repository root and explicitly copy the public app plus its shared hosted-auth branding integration. Updated the image workflow and release/runtime guidance to match that context.
+- Verification: pre-push guard passed with Node 24.19.0: candidate scan, PHP syntax/configuration, frozen install, lint/typecheck, four web tests, three dependency-policy tests, Nuxt production build (42 MB / 15.3 MB gzip), Composer validation/audit, and seven Tasks API tests (19 assertions). Docker Compose used context `default`; the wrapper restored the 13 services it found running.
+- Limitations: no push or staging deployment has occurred yet.

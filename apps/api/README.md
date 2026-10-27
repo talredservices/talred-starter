@@ -34,7 +34,7 @@ docker build -f docker/laravel/Dockerfile -t talred-starter-api .
 docker build -f docker/laravel/nginx.Dockerfile -t talred-starter-api-nginx .
 ```
 
-The PHP-FPM image owns Laravel runtime state; the Nginx image serves the public document root and forwards PHP requests to `PHP_FPM_UPSTREAM`. The Nuxt image is independent and is built from `apps/web` with `docker/nuxt/Dockerfile`.
+The PHP-FPM image owns Laravel runtime state; the Nginx image serves the public document root and forwards PHP requests to `PHP_FPM_UPSTREAM`. The Nuxt image is independent and is built from the repository root with `apps/web/docker/nuxt/Dockerfile`, so its shared hosted-auth brand layer is included.
 
 ## License
 
