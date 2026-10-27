@@ -1,5 +1,14 @@
 # CI failure prevention
 
+## 2026-10-26 — Preserve the outgoing Nuxt document during auth navigation
+
+Nuxt 4.6.2 stops its app scope before external `navigateTo` document navigation.
+That removes Nuxt UI's head-managed colors while the outgoing page remains
+visible; Back can restore the stopped app. Keep the version-scoped
+`apps/web/patches/nuxt-preserve-document-scope.patch` and pnpm lock hash in sync.
+The patch removes only this premature stop. Check hosted login, logout, and
+browser Back in both themes before removing it on a Nuxt upgrade.
+
 ## Reproducible web installation
 
 Use Node 24 and the pnpm version declared in `apps/web/package.json`. A native

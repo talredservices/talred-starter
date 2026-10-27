@@ -4,7 +4,6 @@ export function useAuthenticatedFetch() {
 
   return useTalredIdentityFetch('starter', {
     defaultRedirect: localePath('/dashboard'),
-    loginPath: localePath('/auth/login'),
     logoutHeaders: () => ({ [headerName]: csrf })
   })
 }

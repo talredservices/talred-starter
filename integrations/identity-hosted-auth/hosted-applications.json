@@ -4,6 +4,8 @@
     "zoltasoft-starter": {
       "page_set": "starter",
       "appearance": {
+        "brand_name": "Talred Services.com",
+        "brand_badge": "Starter",
         "welcome_text": null,
         "accent_color": "#16937d",
         "background_preset": "emerald",
@@ -43,6 +45,8 @@
       "page_set": "saas",
       "policy_revision": "talredservices-terms-v1",
       "appearance": {
+        "brand_name": "Talred Services.com",
+        "brand_badge": "SaaS",
         "welcome_text": null,
         "accent_color": "#8b5cf6",
         "background_preset": "identity",
@@ -82,6 +86,8 @@
       "page_set": "projects",
       "policy_revision": "talredservices-terms-v1",
       "appearance": {
+        "brand_name": "Talred Services.com",
+        "brand_badge": "Tasks",
         "welcome_text": null,
         "accent_color": "#6366f1",
         "background_preset": "slate",

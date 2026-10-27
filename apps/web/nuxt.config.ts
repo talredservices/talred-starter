@@ -1,4 +1,5 @@
 import type { OutputChunk, Plugin } from 'rollup'
+import { fileURLToPath } from 'node:url'
 
 const starterIdentityApplication = {
   mode: 'hosted',
@@ -78,6 +79,8 @@ const projectsSandboxIdentityApplication = {
   sandboxApplication: ''
 }
 
+const hostedBrandLayer = fileURLToPath(new URL('../../integrations/identity-hosted-auth/brand', import.meta.url))
+
 const viteAllowedHosts = [
   'localhost',
   '127.0.0.1',
@@ -120,6 +123,7 @@ export default defineNuxtConfig({
     './layers/dashboard',
     './layers/saas',
     './layers/projects',
+    hostedBrandLayer,
     './packages/i18n',
     './packages/nuxt-content',
     './packages/ui'
@@ -174,10 +178,10 @@ export default defineNuxtConfig({
     public: {
       siteUrl: process.env.ZOLTA_STARTER_SITE_URL ?? 'http://localhost:3300',
       zoltasoftSiteUrl: process.env.NUXT_PUBLIC_ZOLTASOFT_SITE_URL
-        ?? (process.env.NODE_ENV === 'development' ? 'http://localhost:3000/en' : 'https://dev-app.talredservices.com/en'),
+        ?? (process.env.NODE_ENV === 'development' ? 'http://localhost:3000/en' : 'https://talredservices.com/en'),
       identityAuthUrl: process.env.NUXT_PUBLIC_IDENTITY_AUTH_URL ?? process.env.NUXT_TALRED_IDENTITY_APPLICATIONS_STARTER_HOSTED_AUTH_URL ?? 'http://localhost:3201',
       docsUrl: process.env.NUXT_PUBLIC_DOCS_URL
-        ?? (process.env.NODE_ENV === 'development' ? 'http://localhost:3200' : 'https://dev-docs.talredservices.com')
+        ?? (process.env.NODE_ENV === 'development' ? 'http://localhost:3200' : 'https://talredservices.com')
     },
     talredIdentity: {
       sessionSecret: process.env.NUXT_TALRED_IDENTITY_SESSION_SECRET ?? '',
@@ -185,13 +189,13 @@ export default defineNuxtConfig({
         'starter': starterIdentityApplication,
         'zoltasoft-starter': starterIdentityApplication,
         'starter-demo': starterIdentityApplication,
-        starterSandbox: starterSandboxIdentityApplication,
+        'starterSandbox': starterSandboxIdentityApplication,
         'saas': saasIdentityApplication,
         'zoltasoft-saas': saasIdentityApplication,
-        saasSandbox: saasSandboxIdentityApplication,
+        'saasSandbox': saasSandboxIdentityApplication,
         'projects': projectsIdentityApplication,
         'tasks-demo': projectsIdentityApplication,
-        projectsSandbox: projectsSandboxIdentityApplication
+        'projectsSandbox': projectsSandboxIdentityApplication
       }
     }
   },

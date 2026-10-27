@@ -74,22 +74,7 @@ function applicationPath(): string {
         external
         class="rounded-lg focus-visible:outline-2 focus-visible:outline-primary"
       >
-        <div class="inline-flex items-center gap-2 font-semibold tracking-[-0.04em] text-highlighted">
-          <IdentityAuthBrandMark
-            :logo-url="brand?.presentation.logoUrl"
-            :accent-color="brand?.presentation.accentColor"
-            size="header"
-          />
-          <span class="flex flex-col justify-center gap-0 leading-none">
-            <span class="text-xl leading-none">Talred</span>
-            <span class="translate-x-4 text-[0.625rem] leading-none font-medium tracking-[0.04em]">
-              <span class="text-highlighted">Services</span><span class="text-primary">.com</span>
-            </span>
-          </span>
-          <span class="mt-0.5 ml-4 inline-flex rounded-full border border-primary/25 bg-primary/10 px-1.5 py-0.5 text-[0.625rem] leading-none font-semibold tracking-wide text-primary">
-            {{ brand?.presentation.productName ?? 'SaaS' }}
-          </span>
-        </div>
+        <TalredProductBrand product="SaaS" variant="saas" />
       </NuxtLink>
     </template>
 
