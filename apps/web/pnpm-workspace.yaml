@@ -36,4 +36,5 @@ minimumReleaseAgeExclude:
   - undici@6.28.1
 
 patchedDependencies:
+  'nuxt@4.6.2': patches/nuxt-preserve-document-scope.patch
   '@nuxt/image@1.11.0': patches/nuxt-image-unhead-link.patch
