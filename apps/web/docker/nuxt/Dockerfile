@@ -3,12 +3,13 @@ FROM node:24-alpine AS build
 WORKDIR /app
 RUN corepack enable
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages ./packages
-COPY patches ./patches
+COPY apps/web/package.json apps/web/pnpm-lock.yaml apps/web/pnpm-workspace.yaml ./
+COPY apps/web/packages ./packages
+COPY apps/web/patches ./patches
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY apps/web/ ./
+COPY integrations/identity-hosted-auth/brand /integrations/identity-hosted-auth/brand
 RUN pnpm build
 
 FROM node:24-alpine

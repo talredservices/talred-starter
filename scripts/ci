@@ -47,7 +47,7 @@ fast() {
   php -l scripts/init-stack.php
   ./scripts/init-stack --help
   bash -n scripts/init-stack docker/up.sh docker/down.sh docker/credentials.sh docker/mysql/initialize-databases.sh
-  docker compose --env-file docker/.env.example --env-file runtime/identity/.env.release.example -f docker/compose.yaml config --quiet
+  docker --context default compose --env-file docker/.env.example --env-file runtime/identity/.env.release.example -f docker/compose.yaml config --quiet
   web
   python3 "$root/scripts/validate-identity-release.py"
   php_app apps/api

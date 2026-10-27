@@ -39,10 +39,11 @@ pnpm build
 
 ## Container
 
-Build the Nuxt runtime from `apps/web`:
+Build the Nuxt runtime from the repository root. The image needs the shared
+hosted-auth brand layer under `integrations/` as well as the Nuxt app:
 
 ```bash
-docker build -f docker/nuxt/Dockerfile -t talred-starter-web .
+docker build -f apps/web/docker/nuxt/Dockerfile -t talred-starter-web .
 ```
 
 The web image contains the Nuxt server output. Laravel/API containers are defined and built from `apps/api`; browser requests reach them through same-origin BFF routes.

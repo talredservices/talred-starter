@@ -23,7 +23,7 @@ jobs:
         include:
           - image: zolta-starter-web
             dockerfile: apps/web/docker/nuxt/Dockerfile
-            context: apps/web
+            context: .
           - image: zolta-starter-api
             dockerfile: apps/api/docker/laravel/Dockerfile
             context: apps/api
