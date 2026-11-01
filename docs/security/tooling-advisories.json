@@ -2,20 +2,45 @@
   "version": 1,
   "exceptions": [
     {
-      "ghsa": "GHSA-86w9-cpqp-85rv",
-      "package": "node-forge",
-      "version": "1.4.0",
-      "via": "listhen",
-      "expires": "2026-11-15",
-      "reason": "Development HTTPS certificate generation only; signature verification is not used by Starter. Excluded from the production Rollup graph and traced runtime packages."
-    },
-    {
       "ghsa": "GHSA-vfj7-8cjw-p6xm",
       "package": "braces",
       "version": "3.0.3",
       "via": "micromatch",
       "expires": "2026-11-15",
       "reason": "Build tooling processes repository-controlled glob patterns. Excluded from the production Rollup graph and traced runtime packages."
+    },
+    {
+      "ghsa": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "versions": ["4.3.1"],
+      "pathSuffixes": [">@rollup/plugin-node-resolve>deepmerge"],
+      "expires": "2026-11-15",
+      "reason": "Nitro uses deepmerge through its Rollup node resolver at build time. The advisory lists 4.3.2 as fixed, but the configured npm registry currently returns 4.3.1 as the latest published version. The package is excluded from the production Rollup graph and traced runtime packages."
+    },
+    {
+      "ghsa": "GHSA-3g3m-2fjr-6pw4",
+      "package": "glob",
+      "versions": ["10.5.0", "13.0.6"],
+      "pathSuffixes": [">@vercel/nft>glob", ">archiver-utils>glob"],
+      "expires": "2026-11-15",
+      "reason": "Nitro file tracing and archiver use vulnerable glob 13 and 10 versions at build time; the patched release is in the incompatible glob 14 line. Both versions are excluded from the production Rollup graph and traced runtime packages."
+    },
+    {
+      "ghsa": "GHSA-g3hv-75wg-m249",
+      "package": "minimatch",
+      "versions": ["5.1.9", "9.0.9", "10.2.6"],
+      "pathSuffixes": [
+        ">@nuxt/content>minimatch",
+        ">eslint>@eslint/config-array>minimatch",
+        ">@eslint-community/eslint-utils>eslint>minimatch",
+        ">@typescript-eslint/typescript-estree>minimatch",
+        ">@vercel/nft>glob>minimatch",
+        ">vite-plugin-checker>eslint>minimatch",
+        ">archiver-utils>glob>minimatch",
+        ">archiver>readdir-glob>minimatch"
+      ],
+      "expires": "2026-11-15",
+      "reason": "Nuxt Content, ESLint tooling, Nitro file tracing, and archiver resolve minimatch 5, 9, and 10 at build time; the patched release is in the incompatible minimatch 11 line. All versions are excluded from the production Rollup graph and traced runtime packages."
     }
   ]
 }
