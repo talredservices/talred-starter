@@ -634,3 +634,26 @@
 - Action/method: ran `nvm exec 24.19.0 ./scripts/ci pre-push`. Host PHP `8.5.4-0ubuntu1.5` had `pdo_sqlite`, `sqlite3`, and `gd` loaded after installing the matching SQLite extension package.
 - Verification: guard passed. Frozen pnpm install; web lint/typecheck; 4 web tests and 3 dependency-policy tests; Nuxt production build; dependency audit; release/secret/config checks; Composer validation/install/audit; API tests (7 tests, 19 assertions). The stack-pause wrapper restored the same 16 containers, verified running with `docker --context default ps`. No provider, image publication, push, or deployment action occurred.
 - Limitations: build/install emitted non-fatal localhost site-config and dependency bundler warnings. The guard does not establish GitHub workflow, registry, or staging readiness. Existing untracked `apps/platform-api/` was preserved.
+
+## 2026-11-01T04:43:51Z — Add a favicon to the Starter web app
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter/apps/web`; actor: current Codex session.
+- Action/method: added an app-wide SVG icon link in `app/app.vue`, reusing the existing public Talred mark at `/branding/talred-mark.svg`. The live page head was inspected and had no icon link.
+- Verification: `pnpm run lint:js` and `git diff --check` passed; the referenced public SVG exists. No tests, typecheck, build, install, service/runtime, provider, or deployment actions were run.
+- Limitation: this source change is local and unpublished; the live URL will show the icon after deployment.
+
+## 2026-11-01T05:16:52Z — Production release attempt blocked by dependency audit
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; actor: current Codex session.
+- Action/method: ran `nvm exec 24.19.0 ./scripts/ci pre-push`. Frozen install, secret/release-tree scans, lint/typecheck, four web tests, three dependency-audit unit tests, and the Nuxt production build passed. The guard stopped at `pnpm run audit`.
+- Verification: the artifact audit found new unreviewed advisories, including `GHSA-gcqx-w48m-w2h4` for `deepmerge@4.3.1` and high-severity Vue I18n `11.4.9` advisories. The checked `.output/server` manifest includes `@intlify/core` and `@intlify/core-base`; no new production image was published.
+- Production gate: the runbook requires fast and full qualification on a self-hosted runner labeled `qualification`. The current organization Runners page has no self-hosted runners registered. No push, image publication, release candidate, or deployment was performed.
+- Limitation: the favicon remains local and uncommitted. Resolve the audited dependency findings and provision the required qualification runner before continuing this release.
+
+## 2026-11-01T05:36:49Z — Pass Starter release guard for the favicon candidate
+
+- Target/root: `/home/redouane/projects/talredservices/talred-starter`; actor: current Codex session.
+- Changes: added the shared Talred mark as the Starter app favicon, patched audited Vue I18n, Node-forge, Nuxt, and Symfony dependencies, and bounded temporary build-tool advisory exceptions to reviewed dependency paths excluded from the production bundle.
+- Verification: `nvm exec 24.19.0 ./scripts/ci pre-push` passed, including frozen install, JS lint/typecheck, four audit-policy tests, Nuxt production build and artifact audit, seven Laravel tests (19 assertions), Composer audit, release/secret scans, and Compose validation. Docker context `default` was used; the stack-pause wrapper found no running shared services to stop.
+- Qualification: fast and full qualification are explicitly waived for `production-20261101-favicons`; no qualification run is claimed.
+- Limitations: a non-fatal existing `http://localhost:3300` Nuxt Site Config warning remains. Source is not yet merged or deployed; provider CI and image publication remain pending.

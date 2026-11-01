@@ -9,6 +9,9 @@ const title = 'Talred Services.com Starter'
 const description = 'Talred PHP foundations for clean architecture, integrated with Laravel APIs, Nuxt applications, and the Talred Identity platform.'
 
 useHead({
+  link: [
+    { rel: 'icon', type: 'image/svg+xml', href: '/branding/talred-mark.svg' }
+  ],
   meta: [
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },

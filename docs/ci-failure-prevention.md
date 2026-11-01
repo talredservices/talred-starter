@@ -1,5 +1,28 @@
 # CI failure prevention
 
+## 2026-11-01 — Keep published runtime packages patched and guard toolchain-only audit findings
+
+Both the Starter Laravel API and shared Identity server lock Symfony MIME at
+v7.4.22 after their PHP 8.3 Composer audits reported `CVE-2026-45070` in
+v7.4.19 and v7.4.18 respectively. Keep both project lockfiles on the fixed
+7.4 line and verify each with `composer audit --locked`.
+
+The production audit found Vue I18n 11.4.9 in Starter's shipped server bundle,
+Node-forge 1.4.0, and Nuxt 4.6.2. Pin the Vue I18n family to 11.4.14, update
+Node-forge to 1.4.1, and keep Nuxt on the patched 4.6.3 release while carrying
+the existing document-scope patch forward. Recheck that patch when upgrading
+Nuxt again.
+
+The refreshed registry audit still reports deepmerge 4.3.1, glob 10.5.0 and
+13.0.6, and minimatch 5.1.9, 9.0.9, and 10.2.6 through Nitro, Nuxt Content,
+ESLint, and archive tooling. The configured npm registry returns deepmerge
+4.3.1 as its latest version despite the advisory listing 4.3.2 as fixed; glob
+and minimatch fixes require newer major versions than the current toolchain
+selects. These exact paths are recorded in `docs/security/tooling-advisories.json`.
+The Nitro Rollup guard, generated runtime evidence, and artifact scanner must
+continue to reject all six package names from production output. Revisit the
+exceptions by 2026-11-15; never broaden them to an advisory-wide ignore.
+
 ## 2026-10-26 — Preserve the outgoing Nuxt document during auth navigation
 
 Nuxt 4.6.2 stops its app scope before external `navigateTo` document navigation.

@@ -5,28 +5,34 @@ import { readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const excludedPackages = ['braces', 'listhen', 'node-forge']
+export const excludedPackages = ['braces', 'deepmerge', 'glob', 'listhen', 'minimatch', 'node-forge']
 
 export function checkAudit(report, policy, today = new Date().toISOString().slice(0, 10)) {
   assert.equal(policy.version, 1, 'Unsupported dependency exception policy')
   assert.ok(report.metadata?.vulnerabilities && report.advisories && !report.error, 'Incomplete registry audit response')
   const accepted = []
   for (const advisory of Object.values(report.advisories)) {
-    const exception = policy.exceptions.find(item => advisory.url === `https://github.com/advisories/${item.ghsa}`)
-    assert.ok(exception, `Unreviewed dependency advisory: ${advisory.url}`)
-    assert.ok(today <= exception.expires, `Dependency exception expired: ${exception.ghsa}`)
-    assert.equal(advisory.module_name, exception.package, 'Advisory package changed')
+    const exceptions = policy.exceptions.filter(item => advisory.url === `https://github.com/advisories/${item.ghsa}`)
+    assert.ok(exceptions.length, `Unreviewed dependency advisory: ${advisory.url}`)
+    const packageExceptions = exceptions.filter(item => item.package === advisory.module_name)
+    assert.ok(packageExceptions.length, 'Advisory package changed')
     assert.ok(advisory.findings?.length, 'Audit finding has no dependency paths')
     for (const finding of advisory.findings) {
-      assert.equal(finding.version, exception.version, 'Exception does not cover this installed version')
       assert.ok(finding.paths?.length, 'Audit finding has no dependency paths')
-      assert.ok(finding.paths.every(path => path.endsWith(`>${exception.via}>${exception.package}`)), 'Vulnerable dependency is used outside reviewed tooling')
+      const exception = packageExceptions.find(item => {
+        const suffixes = item.pathSuffixes ?? [`>${item.via}>${item.package}`]
+        return finding.paths.every(path => suffixes.some(suffix => path.endsWith(suffix)))
+      })
+      assert.ok(exception, 'Vulnerable dependency is used outside reviewed tooling')
+      const versions = exception.versions ?? [exception.version]
+      assert.ok(versions.includes(finding.version), 'Exception does not cover this installed version')
+      assert.ok(today <= exception.expires, `Dependency exception expired: ${exception.ghsa}`)
     }
-    accepted.push(exception.ghsa)
+    accepted.push(exceptions[0].ghsa)
   }
   const reported = Object.values(report.metadata.vulnerabilities).reduce((sum, count) => sum + count, 0)
   assert.equal(reported, Object.keys(report.advisories).length, 'Audit totals do not match the advisory report')
-  return accepted
+  return [...new Set(accepted)]
 }
 
 export function checkRuntime(serverRoot) {
@@ -35,6 +41,8 @@ export function checkRuntime(serverRoot) {
   assert.ok(evidence.moduleCount > 0, 'Production module graph is empty')
   assert.deepEqual(evidence.excludedPackages, excludedPackages, 'Production exclusion policy differs from the audit policy')
   const visited = new Set()
+  const packageNames = excludedPackages.join('|')
+  const importPattern = new RegExp(`(?:from\\s*|import\\s*\\(|require\\s*\\()\\s*['"](?:${packageNames})(?:/|['"])`)
   const scan = (directory) => {
     const real = realpathSync(directory)
     assert.ok(real === serverRoot || real.startsWith(`${serverRoot}/`), 'Runtime dependency escapes the production artifact')
@@ -54,7 +62,7 @@ export function checkRuntime(serverRoot) {
       }
       else if (/\.(?:mjs|cjs|js)$/.test(entry.name)) {
         const code = readFileSync(path, 'utf8')
-        assert.ok(!/(?:from\s*|import\s*\(|require\s*\()\s*['"](?:braces|listhen|node-forge)(?:\/|['"])/.test(code), `Excluded tooling import in production: ${path}`)
+        assert.ok(!importPattern.test(code), `Excluded tooling import in production: ${path}`)
       }
     }
   }

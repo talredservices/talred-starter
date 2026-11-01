@@ -30,6 +30,30 @@ test('rejects new advisories, changed versions, and incomplete registry response
   assert.throws(() => checkAudit({ error: 'offline' }, policy), /Incomplete/)
 })
 
+test('accepts multiple exact build-tool paths and versions for one reviewed advisory', () => {
+  const multiPolicy = { version: 1, exceptions: [{
+    ghsa: 'GHSA-multi',
+    package: 'minimatch',
+    versions: ['10.2.6', '9.0.9'],
+    pathSuffixes: ['>@nuxt/content>minimatch', '>archiver-utils>glob>minimatch'],
+    expires: '2026-11-15'
+  }] }
+  const multiReport = {
+    metadata: { vulnerabilities: { moderate: 1 } },
+    advisories: { 1: {
+      module_name: 'minimatch',
+      url: 'https://github.com/advisories/GHSA-multi',
+      findings: [
+        { version: '10.2.6', paths: ['.>@nuxt/content>minimatch'] },
+        { version: '9.0.9', paths: ['.>nitropack>archiver-utils>glob>minimatch'] }
+      ]
+    } }
+  }
+  assert.deepEqual(checkAudit(multiReport, multiPolicy, '2026-11-01'), ['GHSA-multi'])
+  multiReport.advisories[1].findings[1].paths = ['.>application>minimatch']
+  assert.throws(() => checkAudit(multiReport, multiPolicy, '2026-11-01'), /outside reviewed tooling/)
+})
+
 test('fails when a vulnerable package is traced into the production artifact', () => {
   const root = mkdtempSync(join(tmpdir(), 'starter-runtime-audit-'))
   try {
@@ -39,7 +63,7 @@ test('fails when a vulnerable package is traced into the production artifact', (
     mkdirSync(join(root, 'node_modules/ipx'), { recursive: true })
     writeFileSync(join(root, 'node_modules/ipx/package.json'), JSON.stringify({ name: 'ipx', dependencies: { listhen: '1.10.1' } }))
     checkRuntime(root) // A pruned upstream manifest can still list its unused CLI dependency.
-    writeFileSync(join(root, 'node_modules/ipx/index.mjs'), "import forge from 'node-forge';")
+    writeFileSync(join(root, 'node_modules/ipx/index.mjs'), "import matcher from 'minimatch'; import merge from 'deepmerge';")
     assert.throws(() => checkRuntime(root), /tooling import/)
     rmSync(join(root, 'node_modules/ipx/index.mjs'))
     mkdirSync(join(root, 'node_modules/braces'), { recursive: true })

@@ -95,7 +95,7 @@ const starterRuntimeDependencyBoundary: Plugin = {
   name: 'starter-runtime-dependency-boundary',
   generateBundle(_options, bundle) {
     if (process.env.NODE_ENV === 'development') return
-    const excludedPackages = ['braces', 'listhen', 'node-forge']
+    const excludedPackages = ['braces', 'deepmerge', 'glob', 'listhen', 'minimatch', 'node-forge']
     const chunks = Object.values(bundle).filter((output): output is OutputChunk => output.type === 'chunk')
     const modules = chunks.flatMap(chunk => Object.keys(chunk.modules))
     const references = [...modules, ...chunks.flatMap(chunk => chunk.imports)]
